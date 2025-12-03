@@ -1,0 +1,140 @@
+Este projeto é para o desenvolvimento de um website que junta três websites num só (praia do norte, carsurd e nazare qualifica).
+Vou passar a explicar o que são estes websites. A Nazaré Qualifica é uma empresa municipal que oferece uma data de serviços no
+concelho da Nazaré. Faz parte do Grupo municipal (Câmara municipal da nazaré, serviços municipalizados, nazaré qualifica).
+
+A Nazaré Qualifica é uma empresa municipal do concelho da Nazaré focada na     
+  gestão e desenvolvimento de infraestruturas e serviços locais que promovem o   
+  turismo, o desporto e a economia da região.                                    
+                                                                                 
+  De acordo com o website, as suas principais áreas de atuação e                 
+  responsabilidades incluem:                                                     
+                                                                                 
+   * Gestão do Forte de S. Miguel Arcanjo: Um marco histórico importante e ponto 
+     privilegiado para a observação das ondas gigantes (Canhão da Nazaré).       
+   * Centro de Alto Rendimento de Surf (Carsurf): Gestão deste equipamento       
+     destinado ao treino e apoio a atletas de surf de alto nível.               
+   * Estacionamento: Gestão do parque de estacionamento subterrâneo da Nazaré.  
+   * Área de Localização Empresarial (ALE) de Valado dos Frades: Desenvolvimento
+     desta zona para potenciar o crescimento socioeconómico e a fixação de      
+     empresas.                                                                  
+   * Contraordenações: Gestão de processos de contraordenação relacionados com  
+     os serviços sob a sua alçada.                                              
+                                                                                
+  Em suma, a empresa atua como um braço executivo do município para gerir ativos
+  turísticos e económicos estratégicos da Nazaré.
+
+
+  A Carsurf é o Centro de Alto Rendimento de Surf da Nazaré. O seu objetivo      
+  principal é oferecer um apoio e treino abrangente a atletas, em particular     
+  surfistas, para que atinjam o seu máximo desempenho.                           
+                                                                                 
+  As suas principais atividades e infraestruturas incluem:                       
+                                                                                 
+   * Alojamento: Disponibiliza acomodações para os atletas.                      
+   * Ginásio Completo: Equipado para diversos tipos de treino, como              
+     cardiovascular, força, funcional e recuperação muscular.                    
+   * Serviços de Fisioterapia: Essenciais para a recuperação e prevenção de      
+     lesões.                                                                    
+   * Outras Facilidades: Sala de estudo digital, arrumos, área de relaxamento,  
+     avaliação de performance física e sala de refeições.                       
+                                                                                
+  O centro beneficia da sua localização com vista panorâmica para o mar e do    
+  acesso a outras instalações desportivas locais, tornando-o um hub completo    
+  para o desenvolvimento de atletas de alta competição no surf. 
+
+
+  Conteúdo do site Praia do Norte Nazaré
+
+  O site https://praiadonortenazare.pt/ é dedicado à Praia do Norte em 
+  Nazaré, reconhecida mundialmente como um destino de surf de ondas gigantes.
+
+  Principais Seções:
+
+  Sobre:
+  - Informações sobre a praia
+  - Forte de São Miguel Arcanjo
+  - Dados hidrográficos
+  - Centro de Alto Rendimento
+
+  Conteúdos:
+  - Notícias e artigos sobre surf
+  - Mural de Surfistas (com pranchas e perfis de surfistas de ondas gigantes)
+  - Previsões de ondas
+  - Câmaras ao vivo da praia
+  - Diretório de escolas de surf (4 operadores locais)
+  - Loja de merchandising oficial
+
+  Destaques:
+
+  Notícias Recentes:
+  - Competições como Tudor Nazaré Big Wave Challenge
+  - Atletas destacados: Nic Von Rupp, Justine Dupont
+  - Iniciativas de consciencialização antidoping
+  - Projetos culturais como "A Onda Exportada"
+
+  Comunidade:
+  - 41,997 seguidores no Facebook
+  - 21,963 seguidores no Instagram
+  - Série de entrevistas
+  - Perfis e histórias de surfistas
+  - Widget meteorológico com condições locais
+
+  O site funciona como portal oficial para informações sobre surf, previsões,
+   eventos e turismo relacionado à famosa Praia do Norte.
+
+
+** objetivo
+
+a ideia é que seja um website que junte todos estes conteudos num so.
+ou seja, que os utilizadores que estiverem interessados em consultar informação
+sobre a nazare qualifica, consiga ver os seus serviços, as suas valencias e também
+outras informações como as instalações do carsurf ou os produtos que a praia do norte 
+vende na sua loja online.
+
+a ideia é que os utilizadores que pretendem utilizar o carsurf, saibam que este edificio
+faz parte da empresa municipal nazare qualifica, ficando a conhecer a estrutura, mas 
+também fica a conhecer a marca praia do norte das ondas grandes, consulte a surfer wall
+em termos digitais, e seja aliciado a comprar merchandising da marca na loja online.
+
+ou simplesmente os amantes do surf ou da marca praia do norte que procuram informação
+sobre eventos da PN saibam a que empresa municipal a marca pertence, e que instalações
+como o carsurf fazem parte dos serviços da empresa municipal, tal como o parque de estacionamento,
+ALE, etc...
+
+No entanto, a parte principal, a parte que tem mais importancia ou relevancia para este
+website, a parte central deste website será sempre a praia do norte, os seus conteudos e os 
+seus produtos. Dar visibilidade à loja online, aos produtos, promoções, eventos, noticias 
+e artigos e outros conteudos da praia do norte serão sempre as partes mais relevantes.
+
+O principal desafio para este projecto, será sempre o de balancear este conteúdo tão diversificado
+num só website.
+
+Este website tambem tem que estar em dois idiomas, o principal que será o portugues de portugal
+e o ingles.
+
+Outra das minhas maiores preocupações será os ciberataques. Este website terá que ser muito seguro,
+ser muito resiliente e protegido contra a maior parte das mais conhecidas vulnerabilidade de
+plataformas alojadas em serviços online.
+
+
+*** Contas de utilizadores e permissões
+esta aplicação terá 3 grupos de utilizadores:
+- administradores
+- editores
+- gestor de loja
+
+Cada grupo de utilizadores poderá ter um numero indefinido de utilizadores.
+
+
+Administradores:
+Os administradores terão todo o acesso, todas as permissões que os outros utilizadores têm em conjunto.
+Somente os administradores poderão adicionar novos utilizadores ao sistema.
+
+
+Editores
+Os editores terão acesso à criação, edição e desativação de conteúdo. Este utilizador não pode remover ou eliminar
+qualquer tipo de conteúdo, este conteúdo ficará inativo e somente os administradores terão a permissão para remover ou eliminar.
+
+Gestores de loja
+Estes utilizadores irão fazer somente a gestão de tudo o que é relacionado com a loja online do projeto.
+Mais nenhum utilizador (excepto o administrador) terá acesso à gestão da loja online.
