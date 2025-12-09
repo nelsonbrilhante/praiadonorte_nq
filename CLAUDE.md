@@ -2,10 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> **Status: Pre-Implementation (Planning Complete)**
+> **Status: Phase 3 Complete - Dynamic Content Pages**
 >
-> No code has been written yet. This is a planning repository with comprehensive documentation.
-> When implementation begins, follow Phase 0 in `docs/phases/FASE_00_SETUP.md`.
+> All dynamic content pages implemented: News, Events, Surfer Wall with listing and detail pages.
+> Frontend fully integrated with backend API. All content fetched from database.
+> Next step: Phase 4 - SEO + Performance optimization.
 
 ## Project Overview
 
@@ -29,9 +30,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Status
 
-**Current Phase**: Pre-implementation (Planning Complete)
+**Current Phase**: Phase 3 Complete - Starting Phase 4
 
-This is a greenfield project. No code has been written yet. The complete development plan exists in `PLANO_DESENVOLVIMENTO.md` with an 11-week phased implementation roadmap.
+- [x] Backend: Laravel 12.41.1 + Filament 4.2.4 installed
+- [x] Frontend: Next.js 16.0.7 + React 19 + Tailwind 4 installed
+- [x] Design System: shadcn/ui components (Button, Card, Badge, etc.)
+- [x] Backend CMS: All Filament Resources (Noticias, Eventos, Surfers, Surfboards, Paginas)
+- [x] API: REST endpoints for all content types
+- [x] Database Seeders: Realistic PT/EN dummy content
+- [x] Frontend API Client: TypeScript types and fetch functions
+- [x] Homepage Integration: Real data from API
+- [x] News Pages: Listing with filters + individual article pages
+- [x] Events Pages: Listing with upcoming/past filters + individual event pages
+- [x] Surfer Wall: Grid with featured surfers + individual profile pages
+- [ ] Next: SEO metadata, performance optimization, security headers
 
 ## Technical Architecture
 
@@ -39,88 +51,95 @@ This is a greenfield project. No code has been written yet. The complete develop
 
 The project uses a **split architecture** optimized for the available VPS infrastructure (vm01.cm-nazare.pt):
 
-- **Backend**: Laravel 12 + Aimeos 2025.10 LTS on cPanel VPS (PHP 8.3, MySQL 8.0)
-- **Frontend**: Next.js 15 on Vercel (free tier)
+- **Backend**: Laravel 12 + Filament 4.x on cPanel VPS (PHP 8.3, MySQL 8.0)
+- **Frontend**: Next.js 16 on Vercel (free tier)
 
 This architecture was chosen because:
 1. VPS requires PHP 8.3 upgrade via EasyApache 4 (Laravel 12 requirement)
 2. RAM constraints (4GB, swap full) prevent running Node.js alongside PHP
-3. Aimeos has no major CVEs (security priority)
-4. Aimeos has best-in-class i18n support (PT/EN requirement)
+3. Filament provides a beautiful, intuitive admin panel for content editors
+4. Laravel handles all CMS and future e-commerce (WooCommerce integration planned)
 5. Vercel free tier offloads frontend processing (zero extra cost)
+
+**E-commerce Strategy**: Institutional platform first, e-commerce via WooCommerce headless in future phase (pending Sage connector validation).
 
 ### Technology Stack
 
 | Layer | Technology | Location | Notes |
 |-------|-----------|----------|-------|
-| **Frontend** | Next.js 15 (App Router) + TypeScript | Vercel | SSR for SEO |
-| **UI Framework** | Tailwind CSS + shadcn/ui | Vercel | Radix UI primitives |
-| **State Management** | Zustand | Vercel | Shopping cart |
-| **E-commerce** | Laravel 12 + Aimeos 2025.10 LTS | VPS | Products, orders, inventory |
+| **Frontend** | Next.js 16 (App Router) + TypeScript | Vercel | SSR for SEO |
+| **UI Framework** | Tailwind CSS 4 + shadcn/ui | Vercel | Radix UI primitives |
+| **State Management** | Zustand | Vercel | Future: shopping cart |
+| **Backend/CMS** | Laravel 12 + Filament 4.x | VPS | Admin panel, API |
 | **Database** | MySQL 8.0 | VPS | All data storage |
 | **Authentication** | Laravel Sanctum | VPS | API tokens for frontend |
-| **Payments** | Easypay API v2.0 | VPS | Custom Laravel integration |
+| **Payments** | Easypay API v2.0 | VPS | Future: custom Laravel integration |
 | **Validation** | Zod (frontend) + Laravel (backend) | Both | All forms + API |
-| **i18n** | next-intl (frontend) + Aimeos (backend) | Both | PT (primary) + EN |
+| **i18n** | next-intl (frontend) + Laravel (backend) | Both | PT (primary) + EN |
 
-### Project Structure (When Implemented)
+**Tech Stack Documentation**: See `docs/tech-stack/` for detailed reference guides.
+
+### Project Structure
 
 ```
-praia-do-norte-unified/
-├── frontend/                      # Next.js 15 (deploys to Vercel)
+praiadonorte_nq/
+├── backend/                       # Laravel 12 + Filament 4.x (deploys to VPS)
+│   ├── app/
+│   │   ├── Filament/
+│   │   │   └── Resources/         # NoticiaResource, SurferResource, etc.
+│   │   ├── Http/Controllers/Api/  # API controllers
+│   │   ├── Models/                # Eloquent models
+│   │   └── Providers/
+│   │       └── Filament/
+│   │           └── AdminPanelProvider.php
+│   ├── database/migrations/
+│   ├── routes/api.php
+│   └── composer.json
+│
+├── frontend/                      # Next.js 16 + React 19 (deploys to Vercel)
 │   ├── src/
-│   │   ├── app/[locale]/          # App Router with i18n
-│   │   │   ├── (praia-do-norte)/  # Route group for main brand
-│   │   │   ├── (carsurf)/         # Route group for Carsurf
-│   │   │   └── (nazare-qualifica)/ # Route group for NQ
-│   │   ├── components/
-│   │   │   ├── ui/                # shadcn/ui components
-│   │   │   ├── layout/            # Header, Footer, Navigation
-│   │   │   ├── e-commerce/        # Product, Cart, Checkout
-│   │   │   └── seo/               # Structured data components
-│   │   ├── lib/
-│   │   │   └── api/               # Aimeos API client
-│   │   ├── store/                 # Zustand stores
-│   │   └── types/                 # TypeScript definitions
+│   │   └── app/
+│   │       ├── [locale]/          # i18n routes (to create)
+│   │       │   ├── (praia-do-norte)/
+│   │       │   ├── (carsurf)/
+│   │       │   └── (nazare-qualifica)/
+│   │       ├── layout.tsx
+│   │       └── page.tsx
+│   ├── messages/                  # i18n (pt.json, en.json)
 │   └── package.json
 │
-└── backend/                       # Laravel 12 + Aimeos 2025.10 LTS (deploys to VPS)
-    ├── app/
-    │   ├── Http/Controllers/      # API controllers
-    │   └── Services/              # Easypay integration
-    ├── config/
-    │   └── shop.php               # Aimeos configuration
-    ├── routes/
-    │   └── api.php                # API routes
-    └── composer.json
+└── docs/
+    ├── tech-stack/                # Technical reference docs
+    ├── phases/                    # Implementation guides
+    └── architecture/              # Architecture docs
 ```
 
 ## Key Architectural Decisions
 
-### 1. Laravel + Aimeos E-commerce Platform
+### 1. Laravel + Filament CMS Platform
 
-**Rationale**: Aimeos is a mature, secure PHP e-commerce framework that runs natively on the VPS infrastructure.
+**Rationale**: Filament provides a beautiful, intuitive admin panel that content editors will love, while Laravel handles all backend logic.
 
-**Why Aimeos over alternatives**:
-- No major CVEs (unlike Bagisto with 3 XSS vulnerabilities in 2025)
-- Best-in-class multi-language support
-- Built-in admin panel for content and products
-- REST + GraphQL APIs for headless frontend
-- Handles both e-commerce AND content management
+**Why Filament**:
+- Modern, clean UI that's intuitive for non-technical users
+- Full control over admin interface customization
+- Native Laravel integration (no separate system)
+- Excellent form builder with i18n support via JSON fields
+- Extensible via plugins
 
 **Implementation**:
-- Products, orders, customers managed in Aimeos
-- Shopping cart state in Zustand (frontend) synced with Aimeos API
-- Checkout flow via Aimeos checkout controller
-- Custom Easypay payment service provider
+- Content (News, Surfers, Events) managed via Filament Resources
+- API endpoints for frontend consumption
+- i18n via JSON columns in database
+- Future: WooCommerce headless for e-commerce
 
 ### 2. Multi-Entity Content Strategy
 
 The platform serves three distinct brands within one codebase:
 
-**Entity Field Pattern**: All Aimeos content includes a `site` identifier:
+**Entity Field Pattern**: All content models include an `entity` field:
 ```php
-'site' => 'praia-norte' | 'carsurf' | 'nazare-qualifica'
+'entity' => 'praia-norte' | 'carsurf' | 'nazare-qualifica'
 ```
 
 This allows content filtering and ensures proper brand association throughout the platform.
@@ -130,10 +149,10 @@ This allows content filtering and ensures proper brand association throughout th
 **Languages**: Portuguese (PT) - primary, English (EN) - secondary
 
 **Implementation**:
-- Route-based locales: `/pt/loja`, `/en/shop`
-- Aimeos built-in i18n (30+ languages supported)
+- Route-based locales: `/pt/sobre`, `/en/about`
+- JSON columns for translatable fields (title, content, bio, etc.)
 - `next-intl` for frontend UI translations
-- All product/content fields support translations
+- All content fields support translations via JSON structure
 
 ### 4. Payment Integration Pattern
 
@@ -152,60 +171,51 @@ This allows content filtering and ensures proper brand association throughout th
 - Log all transactions for audit
 - Server-side price validation (never trust frontend prices)
 
-## Content Management (Aimeos)
+## Content Management (Filament)
 
-### Built-in E-commerce Data
+### Content Types (Filament Resources)
 
-Aimeos provides built-in managers for e-commerce:
+All content is managed via Filament Resources with i18n support through JSON columns.
 
-**Product**:
-- label (i18n), code (SKU), description (i18n)
-- price, stock levels
-- images (media), categories
-- variants (size, color)
-- SEO fields
-
-**Order**:
-- Customer details, shipping address
-- Order items with prices
-- Payment status, delivery status
-- Transaction history
-
-**Customer**:
-- Registration, authentication
-- Address book
-- Order history
-
-### Custom Content Types (via Aimeos CMS)
-
-Additional content managed in Aimeos:
-
-**Article** (news/blog):
-- title (i18n), slug, content (i18n)
-- coverImage, author, category
+**Noticia** (news/blog):
+- title (JSON: pt, en), slug, content (JSON)
+- cover_image, author, category
 - entity, tags, featured
-- publishedAt
+- published_at, seo_title, seo_description
 
-**Event**:
-- title (i18n), description (i18n)
-- startDate, endDate, location
-- entity, image, ticketUrl
+**Evento**:
+- title (JSON), description (JSON)
+- start_date, end_date, location
+- entity, image, ticket_url
+- featured
 
 **Surfer** (unique to this project):
-- name, slug, bio (i18n), photo
-- nationality, achievements
+- name, slug, bio (JSON), photo
+- nationality, achievements (JSON)
 - surfboards (relation)
-- socialMedia (JSON), featured
+- social_media (JSON), featured
 
 **Surfboard**:
 - brand, model, length, image
-- surfer (relation)
+- surfer_id (FK)
+
+**Pagina** (institutional pages):
+- title (JSON), slug, content (JSON)
+- entity, seo_title, seo_description
+
+### Future E-commerce (WooCommerce Headless)
+
+When e-commerce is implemented:
+- WooCommerce as product/order backend
+- Easypay plugin for payments
+- Sage connector for inventory sync
+- API integration with Next.js frontend
 
 ### SEO
 
 All content supports SEO fields:
-- metaTitle (i18n), metaDescription (i18n)
-- keywords, og:image, canonicalURL
+- seo_title (i18n), seo_description (i18n)
+- og:image via cover_image field
 
 ## Security Requirements
 
@@ -224,42 +234,76 @@ All content supports SEO fields:
 
 ### Build & Test Commands
 
-> Commands will be added when Phase 0 (Setup) is complete. Until then, see:
-> - Backend setup: `docs/phases/FASE_00_SETUP.md`
-> - Frontend setup: `docs/phases/FASE_01_DESIGN.md`
+**Backend (Laravel)**:
+```bash
+cd backend
+php artisan serve          # Start dev server (localhost:8000)
+php artisan migrate        # Run migrations
+php artisan migrate:fresh --seed  # Reset DB with seeds
+php artisan make:filament-resource Noticia  # Create Filament resource
+```
 
-### When Starting Implementation
+**Frontend (Next.js)**:
+```bash
+cd frontend
+npm run dev      # Start dev server (localhost:3000)
+npm run build    # Production build
+npm run lint     # ESLint check
+```
 
-1. **Read** `PLANO_DESENVOLVIMENTO.md` for project overview and architecture
-2. **Follow** `docs/phases/` for detailed phase-by-phase implementation guides
-3. **Begin with Phase 0** (Setup) - creates Laravel + Aimeos backend + Next.js frontend
-4. **Follow phases sequentially** - each phase has dependencies on previous ones
-5. **Reference** `docs/archive/E-COMMERCE_PLATFORMS_COMPARISON.md` for architecture rationale
+### Development URLs
+
+| Service | URL | Command |
+|---------|-----|---------|
+| Frontend | http://localhost:3000 | `npm run dev` |
+| Backend API | http://localhost:8000/api | `php artisan serve` |
+| Filament Admin | http://localhost:8000/admin | `php artisan serve` |
+
+### Scripts de Desenvolvimento
+
+Scripts disponíveis em `scripts/` para gestão dos servidores:
+
+| Script | Descrição |
+|--------|-----------|
+| `scripts/start.sh` | Inicia backend (Laravel) e frontend (Next.js) em background |
+| `scripts/stop.sh` | Para todos os servidores e limpa processos órfãos |
+| `scripts/restart.sh` | Executa stop.sh seguido de start.sh |
+
+**Uso:**
+```bash
+./scripts/start.sh    # Iniciar servidores
+./scripts/stop.sh     # Parar servidores
+./scripts/restart.sh  # Reiniciar servidores
+```
+
+**Notas:**
+- Os PIDs são guardados em `.pids/` (ignorado pelo git)
+- Os scripts matam processos órfãos nas portas 3000 e 8000
+- Output dos servidores é silenciado (correm em background)
+
+> **IMPORTANTE**: Estes scripts devem ser atualizados sempre que houver alterações na infraestrutura do projeto: novas portas, novos serviços, novos containers Docker, novas dependências de runtime, etc.
 
 ### Phase Overview
 
-The project is organized in 4 blocks, with e-commerce phases at the end (pending SAGE API documentation):
+The project is organized in 4 blocks, with e-commerce in future phase:
 
-**Block 1 - Foundations**
-- **Phase 0**: Project setup, Git, CI/CD, Laravel + Next.js installation
-- **Phase 1**: Design system (Next.js), shadcn/ui, layout components
+**Block 1 - Foundations** ✅ Complete
+- **Phase 0**: ✅ Project setup - Laravel 12 + Filament 4 + Next.js 16 installed
+- **Phase 1**: ✅ Design system (Next.js), shadcn/ui, layout components
 
-**Block 2 - Institutional**
-- **Phase 2**: Homepage and institutional pages
-- **Phase 3**: Dynamic content (news, events, surfer wall)
+**Block 2 - Institutional** ✅ Complete
+- **Phase 2**: ✅ Homepage and CMS backend (Filament resources, API, seeders)
+- **Phase 3**: ✅ Dynamic content pages (news, events, surfer wall - listing + detail)
 
 **Block 3 - Quality**
 - **Phase 4**: SEO + Performance optimization
 - **Phase 5**: Security hardening
 
-**Block 4 - E-commerce** *(pending SAGE API decision)*
-- **Phase 6**: E-commerce platform setup
-- **Phase 7**: Product catalog
-- **Phase 8**: Cart + Checkout
-- **Phase 9**: Easypay payment integration
-- **Phase 10**: Authentication (Laravel Sanctum)
+**Block 4 - E-commerce** *(future phase)*
+- WooCommerce headless integration (pending Sage connector validation)
+- Easypay payment integration
 
-> **Note**: E-commerce implementation is pending decision between Aimeos and SAGE API integration.
+> **Note**: E-commerce implementation postponed to future phase. Current focus is institutional platform with CMS.
 
 ### Deployment
 
@@ -314,12 +358,23 @@ Navigation must clearly distinguish between the three entities while maintaining
 - Secondary navigation for Carsurf and Nazaré Qualifica
 - Footer organized in three columns (one per entity)
 
-### Wave Forecast & Live Webcams
+### Wave Forecast & Live Webcams ✅ IMPLEMENTED
 
-Integration requirements:
-- Embed wave forecast widgets (e.g., Magicseaweed, Surfline)
-- Live webcam feeds from Praia do Norte and Forte São Miguel Arcanjo
-- Real-time weather conditions display
+**Página**: `/[locale]/previsoes`
+
+**APIs Integradas**:
+- **Open-Meteo Marine API** - Ondas, swell, temperatura da água (gratuita, sem chave)
+- **Open-Meteo Weather API** - Vento, rajadas (gratuita, sem chave)
+- **MONICAN** - Previsão oficial Instituto Hidrográfico (iframe)
+
+**Funcionalidades**:
+- 8 cards de condições atuais com dados em tempo real
+- Previsão 7 dias em tabela
+- Links para webcams (Surfline, Beachcam MEO)
+- Código de cores para direção do vento (offshore/onshore)
+- Recomendações de fato baseadas na temperatura da água
+
+**Ficheiros**: `frontend/src/lib/api/forecast.ts`, `frontend/src/app/[locale]/previsoes/page.tsx`
 
 ## Testing & Quality Standards
 
@@ -344,26 +399,31 @@ Integration requirements:
 
 ## Documentation References
 
+**Tech Stack Reference** (start here):
+- **Laravel 12 Guide**: `docs/tech-stack/LARAVEL_12.md`
+- **Filament 4.x Guide**: `docs/tech-stack/FILAMENT_4.md`
+- **Next.js 16 Guide**: `docs/tech-stack/NEXTJS_16.md`
+- **Setup Log**: `docs/tech-stack/SETUP_LOG.md` (versions, issues, solutions)
+
+**Planning Docs**:
 - **Full Development Plan**: `PLANO_DESENVOLVIMENTO.md` (Portuguese, overview)
-- **Phase-by-Phase Guides**: `docs/phases/` (11 detailed implementation guides)
-- **Folder Structure**: `docs/architecture/FOLDER_STRUCTURE.md` (complete project structure)
-- **Naming Conventions**: `docs/architecture/NAMING_CONVENTIONS.md` (URLs, slugs, routes)
-- **Migration/Deployment Guide**: `MIGRATION_PLAN.md` (VPS, Vercel, Cloudflare setup)
-- **E-commerce Analysis**: `docs/archive/E-COMMERCE_PLATFORMS_COMPARISON.md` (21 platforms evaluated)
+- **Phase-by-Phase Guides**: `docs/phases/` (implementation guides)
+- **Folder Structure**: `docs/architecture/FOLDER_STRUCTURE.md`
+- **Naming Conventions**: `docs/architecture/NAMING_CONVENTIONS.md`
+- **Migration/Deployment Guide**: `MIGRATION_PLAN.md`
+- **E-commerce Analysis**: `docs/archive/E-COMMERCE_PLATFORMS_COMPARISON.md`
 - **Security Strategy**: `CYBERSECURITY_ASSESSMENT.md`
-- **User Roles**: `USER_POLICY_PREVIEW.md`
 - **Project Concept**: `docs/concept.txt` (Portuguese, business requirements)
-- **Easypay API Spec**: `api/swagger.json`
 
 ## Important Notes for Future Claude Instances
 
-1. **E-commerce Decision Pending** - The e-commerce solution is pending decision between Aimeos 2025.10 LTS and SAGE API integration. Laravel 12 remains the backend framework regardless. See `docs/archive/E-COMMERCE_PLATFORMS_COMPARISON.md` for Aimeos rationale.
+1. **E-commerce Postponed** - E-commerce will be implemented in a future phase using WooCommerce headless. Current focus is the institutional platform with Laravel + Filament CMS.
 
 2. **Praia do Norte is PRIMARY** - When balancing content from the three entities, always prioritize Praia do Norte visibility
 
 3. **Security is non-negotiable** - The client specifically emphasized protection against cyber attacks. Never compromise on security for convenience.
 
-4. **Multi-language from day one** - All content must support PT/EN. Never create single-language solutions.
+4. **Multi-language from day one** - All content must support PT/EN via JSON columns. Never create single-language solutions.
 
 5. **Easypay credentials are sacred** - Never suggest client-side payment processing. All payment logic must be in Laravel backend.
 
@@ -373,7 +433,9 @@ Integration requirements:
 
 8. **TypeScript for frontend** - Next.js frontend must use TypeScript. Laravel backend uses PHP.
 
-9. **No code exists yet** - This is a planning repository. When implementation begins, follow Phase 0 setup instructions exactly.
+9. **Phase 3 Complete** - All dynamic content pages implemented. News, Events, and Surfer Wall with listing and detail views. Continue with Phase 4 (SEO + Performance).
+
+10. **Tech Stack Docs** - See `docs/tech-stack/` for Laravel, Filament, and Next.js reference guides with code patterns.
 
 ## VPS Infrastructure
 

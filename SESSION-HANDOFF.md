@@ -1,25 +1,79 @@
 # Session Handoff - Praia do Norte
 
 > Este ficheiro serve como ponto de continuidade entre sessões de desenvolvimento.
-> Lê-o no início de cada sessão para retomar o contexto.
+> Lê-lo no início de cada sessão para retomar o contexto.
 
 ---
 
 ## Última Sessão
 
-- **Data**: 2025-12-03
-- **Resumo**: Inicialização do repositório Git e push para GitHub
+- **Data**: 2025-12-09
+- **Resumo**: Melhorada página de Previsões com 8 cards de condições, temperatura da água e layout reequilibrado
 
 ---
 
 ## O Que Foi Feito
 
-- [x] Corrigido ownership nos documentos (Nazaré Qualifica, EM)
-- [x] Criado `.gitignore` completo para Next.js + Laravel
-- [x] Criado `README.md` com overview do projeto
-- [x] Inicializado repositório Git
-- [x] Push para GitHub: `nelsonbrilhante/praiadonorte_nq`
-- [x] Criado este ficheiro `SESSION-HANDOFF.md`
+### Fase 0 - Setup ✅
+- [x] Instalado Laravel 12.41.1 em `backend/`
+- [x] Instalado Filament 4.2.4 (admin panel)
+- [x] Instalado Next.js 16.0.7 + React 19 em `frontend/`
+- [x] Tailwind CSS 4.x configurado
+- [x] Criada documentação em `docs/tech-stack/`
+- [x] Configurados .env files
+- [x] Criado utilizador admin Filament
+
+### Fase 1 - Design System ✅
+- [x] Instalado e configurado shadcn/ui
+- [x] Instalado next-intl para i18n (PT/EN)
+- [x] Configuradas cores do projeto (ocean, institutional, performance)
+- [x] Criado componente Header com navegação
+- [x] Criado componente Footer com 4 colunas
+- [x] Criado componente LanguageSwitcher (PT/EN)
+- [x] Criada estrutura de rotas [locale]
+- [x] Criada Homepage com secções placeholder
+
+### Fase 2 - Backend CMS (Filament) ✅
+- [x] Criados models: Noticia, Surfer, Surfboard, Evento, Pagina
+- [x] Criadas migrations com colunas JSON para i18n
+- [x] Criados Filament Resources para cada model
+- [x] Configuradas API routes em `routes/api.php`
+- [x] Criados API Controllers
+- [x] Sistema de pesquisa global (SearchController)
+
+### Fase 3 - Integração Frontend-Backend ✅
+- [x] Criado API client no frontend (`src/lib/api/`)
+- [x] Conectadas páginas aos dados reais
+- [x] Implementadas páginas dinâmicas (notícias, surfers, eventos)
+- [x] Página de detalhe do surfer com pranchas
+- [x] Conversão de medidas imperial para métrico
+
+### Funcionalidades Adicionais ✅
+- [x] Breadcrumbs de navegação
+- [x] Pesquisa global (Cmd+K) com cmdk
+- [x] Dark mode toggle
+- [x] Sistema de medidas métricas para surfboards
+- [x] Correção de entidades (exibir nomes completos)
+
+### Página de Previsões Marítimas ✅
+- [x] Página dedicada em `/previsoes`
+- [x] Integração Open-Meteo Marine API (dados em tempo real)
+- [x] Integração Open-Meteo Weather API (vento, temperatura)
+- [x] **8 cards de condições atuais** (layout reequilibrado):
+  - Altura das Ondas (card grande, 2 colunas)
+  - Ondulação/Swell (card grande, 2 colunas)
+  - Período das Ondas
+  - Direção das Ondas
+  - Velocidade do Vento
+  - Direção do Vento (com código de cores offshore/onshore)
+  - Rajadas de Vento (card médio, 2 colunas)
+  - **Temperatura da Água** (card médio, 2 colunas) - NOVO
+- [x] Previsão 7 dias em tabela
+- [x] MONICAN embed (Instituto Hidrográfico)
+- [x] Secção de webcams ao vivo
+- [x] Link "Previsões" no menu principal
+- [x] Traduções PT/EN completas
+- [x] Recomendações de fato baseadas na temperatura da água
 
 ---
 
@@ -27,25 +81,81 @@
 
 | Item | Valor |
 |------|-------|
-| **Fase** | Pré-implementação (Planeamento Completo) |
+| **Fase** | Fase 3 Completa - Funcionalidades extras |
 | **Branch** | `main` |
-| **Último commit** | `47272d3` - chore: initial commit - project planning documentation |
-| **Repositório** | https://github.com/nelsonbrilhante/praiadonorte_nq |
+| **Backend** | Laravel 12.41.1 + Filament 4.2.4 |
+| **Frontend** | Next.js 16.0.7 + React 19.2.0 + Tailwind 4.x |
+| **i18n** | next-intl configurado (PT/EN) |
+| **UI** | shadcn/ui instalado |
 
 ---
 
-## Próximas Tarefas
+## Ficheiros Criados/Modificados (Sessão Atual)
 
-1. **Fase 0: Setup do Projeto** (`docs/phases/FASE_00_SETUP.md`)
-   - Criar estrutura de pastas `frontend/` e `backend/`
-   - Inicializar Next.js 15 com TypeScript
-   - Inicializar Laravel 12 com Aimeos
-   - Configurar ambiente de desenvolvimento
+### API Forecast (Atualizado)
+```
+frontend/src/lib/api/forecast.ts
+├── getMarineForecast()      # Ondas, swell, temp. água
+├── getWeatherForecast()     # Vento, rajadas
+├── getFullForecast()        # Ambas APIs em paralelo
+├── processForecast()        # Processa dados para UI
+├── getWindType()            # Offshore/onshore para Nazaré
+├── getWindStrength()        # Descrição força do vento
+└── getWaveCondition()       # Descrição estado do mar
+```
 
-2. **Fase 1: Design System** (`docs/phases/FASE_01_DESIGN.md`)
-   - Instalar e configurar shadcn/ui
-   - Criar componentes base (Button, Card, Input)
-   - Configurar Tailwind com cores do projeto
+### Página de Previsões (Atualizada)
+```
+frontend/src/app/[locale]/previsoes/page.tsx
+├── Layout com 8 cards (grid responsivo)
+├── Cards grandes: Altura Ondas + Swell (2 cols cada)
+├── Cards normais: Período, Direção, Vento, Dir. Vento
+├── Cards médios: Rajadas + Temp. Água (2 cols cada)
+└── Código de cores para direção do vento
+```
+
+### Traduções (Atualizadas)
+- `frontend/messages/pt.json` - Adicionado `waterTemperature`
+- `frontend/messages/en.json` - Adicionado `waterTemperature`
+
+---
+
+## Dados das APIs (Verificados)
+
+Todos os dados são **100% reais** das APIs Open-Meteo:
+
+| Dado | API | Parâmetro |
+|------|-----|-----------|
+| Altura Ondas | Marine | `wave_height` |
+| Período | Marine | `wave_period` |
+| Direção Ondas | Marine | `wave_direction` |
+| Swell | Marine | `swell_wave_height` |
+| Swell Período | Marine | `swell_wave_period` |
+| Temp. Água | Marine | `sea_surface_temperature` |
+| Velocidade Vento | Weather | `wind_speed_10m` |
+| Direção Vento | Weather | `wind_direction_10m` |
+| Rajadas | Weather | `wind_gusts_10m` |
+
+**Nota**: Altura Total ≠ Swell (explicação no código):
+- `wave_height` = ondas totais (swell + vento local)
+- `swell_wave_height` = apenas ondulação de longo período (qualidade)
+
+---
+
+## Próximas Tarefas Sugeridas
+
+### Melhorias Potenciais
+1. Adicionar gráfico visual de ondas (recharts)
+2. Melhorar embeds de webcams com iframes diretos
+3. Adicionar alertas de ondas gigantes
+4. SEO metadata para página de previsões
+5. Adicionar período do swell à tabela de 7 dias
+
+### Funcionalidades Pendentes
+1. Sistema de e-commerce (WooCommerce headless) - futuro
+2. Integração Easypay para pagamentos - futuro
+3. Sistema de newsletters
+4. Área de utilizador registado
 
 ---
 
@@ -54,39 +164,127 @@
 | Ficheiro | Propósito |
 |----------|-----------|
 | `CLAUDE.md` | Instruções técnicas para Claude Code |
-| `PLANO_DESENVOLVIMENTO.md` | Plano completo de desenvolvimento |
-| `docs/phases/FASE_00_SETUP.md` | Próxima fase a implementar |
-| `docs/design/DESIGN_BRIEF.md` | Brief de design da homepage |
+| `docs/tech-stack/SETUP_LOG.md` | Log de instalação e problemas |
+| `docs/tech-stack/LARAVEL_12.md` | Referência Laravel |
+| `docs/tech-stack/FILAMENT_4.md` | Referência Filament |
+| `docs/tech-stack/NEXTJS_16.md` | Referência Next.js |
 
 ---
 
-## Notas e Contexto
+## Stack Tecnológica Instalada
 
-### Stack Tecnológica Definida
-- **Frontend**: Next.js 15 + TypeScript + Tailwind + shadcn/ui (Vercel)
-- **Backend**: Laravel 12 + Aimeos 2025.10 LTS (VPS cPanel)
-- **Database**: MySQL 8.0
-- **Pagamentos**: Easypay API v2.0 (server-side only)
-
-### Decisões Importantes
-- Praia do Norte é a marca PRIMÁRIA - todo o design e UX deve priorizá-la
-- i18n desde o dia 1: PT (primário) + EN
-- Pagamentos APENAS no backend Laravel (nunca expor credenciais)
-- VPS tem 4GB RAM - frontend fica no Vercel
-
-### Três Entidades
-1. **Praia do Norte** - E-commerce + ondas gigantes (foco principal)
-2. **Carsurf** - Centro de alto rendimento de surf
-3. **Nazaré Qualifica** - Empresa municipal (proprietária)
+| Camada | Tecnologia | Versão |
+|--------|------------|--------|
+| **Frontend** | Next.js + React | 16.0.7 / 19.2.0 |
+| **Styling** | Tailwind CSS | 4.x |
+| **UI Components** | shadcn/ui | latest |
+| **i18n** | next-intl | latest |
+| **Search** | cmdk | latest |
+| **Backend** | Laravel | 12.41.1 |
+| **Admin Panel** | Filament | 4.2.4 |
+| **Database** | SQLite (dev) / MySQL (prod) | - |
 
 ---
 
-## Bloqueios ou Pendentes
+## Estrutura de Ficheiros Atual
 
-- [ ] Upgrade PHP 8.1 → 8.3 no VPS (necessário para Laravel 12)
-- [ ] Migração CentOS 7 → AlmaLinux (CentOS 7 EOL desde Jun 2024)
-- [ ] Credenciais Easypay de produção (aguarda cliente)
-- [ ] Acesso API SAGE para integração de inventário
+```
+frontend/
+├── messages/
+│   ├── pt.json                    # Traduções PT (incluindo forecast)
+│   └── en.json                    # Traduções EN (incluindo forecast)
+├── src/
+│   ├── i18n/
+│   │   ├── config.ts              # Locales config
+│   │   └── request.ts             # next-intl server
+│   ├── middleware.ts              # i18n routing
+│   ├── components/
+│   │   ├── ui/                    # shadcn/ui components
+│   │   ├── layout/                # Header, Footer, etc.
+│   │   └── forecast/              # Componentes previsões
+│   ├── lib/
+│   │   ├── api/                   # API client (noticias, surfers, forecast)
+│   │   └── utils/                 # Utilidades (measurements, etc.)
+│   └── app/
+│       └── [locale]/
+│           ├── layout.tsx
+│           ├── page.tsx           # Homepage
+│           ├── previsoes/         # Página de previsões (8 cards)
+│           ├── noticias/          # Listagem e detalhe
+│           ├── eventos/           # Listagem e detalhe
+│           ├── surfer-wall/       # Listagem e detalhe
+│           └── ...
+└── next.config.ts
+
+backend/
+├── app/
+│   ├── Filament/Resources/        # Admin resources
+│   ├── Http/Controllers/Api/      # API controllers
+│   └── Models/                    # Eloquent models
+├── database/migrations/           # Database schema
+└── routes/api.php                 # API routes
+```
+
+---
+
+## URLs de Desenvolvimento
+
+| Serviço | URL | Comando |
+|---------|-----|---------|
+| Frontend | http://localhost:3000/pt | `./scripts/start.sh` |
+| Backend API | http://localhost:8000/api | `./scripts/start.sh` |
+| Filament Admin | http://localhost:8000/admin | `./scripts/start.sh` |
+| **Previsões** | http://localhost:3000/pt/previsoes | - |
+
+**Credenciais Filament:**
+- Email: `admin@nazarequalifica.pt`
+- Password: `password`
+
+**Scripts Úteis:**
+```bash
+./scripts/start.sh    # Iniciar servidores
+./scripts/stop.sh     # Parar servidores
+./scripts/restart.sh  # Reiniciar servidores
+```
+
+---
+
+## Cores do Projeto
+
+| Cor | Hex | Uso |
+|-----|-----|-----|
+| **ocean** | #0066cc | Praia do Norte (primário) |
+| **institutional** | #ffa500 | Nazaré Qualifica |
+| **performance** | #00cc66 | Carsurf |
+
+---
+
+## APIs Externas Integradas
+
+| API | Uso | Documentação |
+|-----|-----|--------------|
+| **Open-Meteo Marine** | Ondas, swell, temp. água | https://open-meteo.com/en/docs/marine-weather-api |
+| **Open-Meteo Weather** | Vento, rajadas | https://open-meteo.com/en/docs |
+| **MONICAN** | Previsão oficial (iframe) | https://monican.hidrografico.pt/previsao |
+| **Surfline** | Webcam Praia do Norte | https://www.surfline.com |
+| **Beachcam MEO** | Webcam Forte | https://beachcam.meo.pt |
+
+---
+
+## Avisos Conhecidos
+
+1. **Middleware deprecated warning** (Next.js 16)
+   - next-intl usa middleware que está deprecated
+   - Não é crítico, funciona normalmente
+   - Será atualizado em versão futura do next-intl
+
+2. **Workspace root warning** (Next.js)
+   - Detecta múltiplos package-lock.json
+   - Não afeta funcionamento
+
+3. **legacyBehavior deprecated** (Next.js Link)
+   - Alguns links usam legacyBehavior
+   - Funciona mas será removido em versões futuras
 
 ---
 
@@ -95,6 +293,8 @@
 ```
 1. Lê este ficheiro para contexto
 2. Consulta CLAUDE.md para instruções técnicas
-3. Segue docs/phases/FASE_XX_*.md para a próxima fase
-4. Atualiza este ficheiro no final da sessão
+3. Inicia servidores: ./scripts/start.sh
+4. Verifica página de previsões: http://localhost:3000/pt/previsoes
+5. Continua com melhorias ou novas funcionalidades
+6. Atualiza este ficheiro no final da sessão
 ```

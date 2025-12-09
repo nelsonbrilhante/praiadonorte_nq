@@ -1,0 +1,203 @@
+{
+  "metadata": {
+    "title": "Nazaré Qualifica",
+    "description": "Ondas gigantes, surf de elite e a alma da Nazaré"
+  },
+  "navigation": {
+    "home": "Início",
+    "about": "Sobre",
+    "news": "Notícias",
+    "events": "Eventos",
+    "surferWall": "Surfer Wall",
+    "forecast": "Previsões",
+    "shop": "Loja",
+    "contact": "Contacto"
+  },
+  "entities": {
+    "praiaDoNorte": "Praia do Norte",
+    "carsurf": "Carsurf",
+    "nazareQualifica": "Nazaré Qualifica"
+  },
+  "home": {
+    "hero": {
+      "title": "Praia do Norte",
+      "subtitle": "Onde nascem as ondas gigantes",
+      "cta": "Descobrir"
+    },
+    "news": {
+      "title": "Últimas Notícias",
+      "viewAll": "Ver todas"
+    },
+    "surfers": {
+      "title": "Surfer Wall",
+      "subtitle": "Os heróis das ondas gigantes",
+      "viewAll": "Ver todos"
+    },
+    "events": {
+      "title": "Próximos Eventos",
+      "viewAll": "Ver todos"
+    }
+  },
+  "news": {
+    "title": "Notícias",
+    "subtitle": "As últimas novidades do mundo do surf e da Nazaré",
+    "featured": "Destaque",
+    "categories": {
+      "all": "Todas",
+      "praiaDoNorte": "Praia do Norte",
+      "carsurf": "Carsurf",
+      "nazareQualifica": "Nazaré Qualifica"
+    },
+    "publishedAt": "Publicado em {date}",
+    "by": "Por {author}",
+    "share": "Partilhar",
+    "relatedNews": "Notícias Relacionadas",
+    "noNews": "Não existem notícias de momento.",
+    "backToList": "Voltar às notícias"
+  },
+  "events": {
+    "title": "Eventos",
+    "subtitle": "Calendário de eventos e competições",
+    "upcoming": "Próximos",
+    "past": "Passados",
+    "all": "Todos",
+    "date": "Data",
+    "location": "Local",
+    "tickets": "Bilhetes",
+    "moreInfo": "Mais informações",
+    "noEvents": "Não existem eventos agendados.",
+    "backToList": "Voltar aos eventos",
+    "startDate": "Início",
+    "endDate": "Fim"
+  },
+  "surfers": {
+    "title": "Surfer Wall",
+    "subtitle": "Os heróis das ondas gigantes da Nazaré",
+    "achievements": "Conquistas",
+    "surfboards": "Pranchas",
+    "bio": "Biografia",
+    "nationality": "Nacionalidade",
+    "socialMedia": "Redes Sociais",
+    "noSurfers": "Não existem surfers registados.",
+    "backToList": "Voltar ao Surfer Wall",
+    "featuredSurfers": "Surfers em Destaque",
+    "specs": {
+      "width": "Largura",
+      "thickness": "Espessura",
+      "volume": "Volume",
+      "tail": "Rabeta",
+      "fins": "Quilhas",
+      "material": "Material"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} Nazaré Qualifica, EM. Todos os direitos reservados.",
+    "links": {
+      "privacy": "Política de Privacidade",
+      "terms": "Termos de Uso",
+      "cookies": "Política de Cookies"
+    }
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "Entre em contacto connosco",
+    "form": {
+      "name": "Nome",
+      "email": "Email",
+      "subject": "Assunto",
+      "message": "Mensagem",
+      "submit": "Enviar mensagem",
+      "success": "Mensagem enviada com sucesso!",
+      "error": "Erro ao enviar mensagem. Tente novamente."
+    },
+    "info": {
+      "title": "Informações de Contacto",
+      "address": "Morada",
+      "phone": "Telefone",
+      "email": "Email",
+      "hours": "Horário de Atendimento"
+    }
+  },
+  "pages": {
+    "about": "Sobre",
+    "programs": "Programas",
+    "services": "Serviços"
+  },
+  "breadcrumbs": {
+    "home": "Início",
+    "sobre": "Sobre",
+    "contacto": "Contacto",
+    "noticias": "Notícias",
+    "eventos": "Eventos",
+    "surfer-wall": "Surfer Wall",
+    "previsoes": "Previsões",
+    "carsurf": "Carsurf",
+    "nazare-qualifica": "Nazaré Qualifica",
+    "programas": "Programas",
+    "servicos": "Serviços"
+  },
+  "common": {
+    "readMore": "Ler mais",
+    "viewDetails": "Ver detalhes",
+    "loading": "A carregar...",
+    "error": "Ocorreu um erro",
+    "tryAgain": "Tentar novamente",
+    "notFound": "Página não encontrada",
+    "goHome": "Voltar ao início"
+  },
+  "search": {
+    "placeholder": "Pesquisar...",
+    "loading": "A pesquisar...",
+    "noResults": "Nenhum resultado encontrado",
+    "minChars": "Digite pelo menos 2 caracteres",
+    "hint": "Use ↑↓ para navegar, Enter para selecionar, Esc para fechar",
+    "types": {
+      "news": "Notícia",
+      "event": "Evento",
+      "surfer": "Surfer",
+      "page": "Página"
+    }
+  },
+  "forecast": {
+    "title": "Previsões Marítimas",
+    "subtitle": "Condições do mar e vento para a Praia do Norte",
+    "updated": "Atualizado em {time}",
+    "error": "Não foi possível carregar as previsões. Tente novamente mais tarde.",
+    "marine": {
+      "title": "Condições Atuais",
+      "waveHeight": "Altura das Ondas",
+      "wavePeriod": "Período das Ondas",
+      "waveDirection": "Direção das Ondas",
+      "swellHeight": "Ondulação (Swell)",
+      "swellPeriod": "Período do Swell",
+      "windSpeed": "Velocidade do Vento",
+      "windDirection": "Direção do Vento",
+      "windGusts": "Rajadas de Vento",
+      "airTemperature": "Temperatura do Ar",
+      "waterTemperature": "Temperatura da Água"
+    },
+    "daily": {
+      "title": "Previsão 7 Dias",
+      "day": "Dia"
+    },
+    "monican": {
+      "title": "Previsão MONICAN",
+      "subtitle": "Instituto Hidrográfico",
+      "description": "Previsão oficial da agitação marítima para a costa portuguesa",
+      "credit": "Dados: Instituto Hidrográfico - MONICAN",
+      "viewFull": "Ver previsão completa",
+      "info": "O sistema MONICAN fornece previsões detalhadas da agitação marítima para a Nazaré e toda a costa portuguesa."
+    },
+    "webcams": {
+      "title": "Webcams ao Vivo",
+      "description": "Veja as condições em tempo real",
+      "praiaDoNorte": "Praia do Norte",
+      "forte": "Forte de São Miguel Arcanjo"
+    },
+    "units": {
+      "meters": "m",
+      "seconds": "s",
+      "kmh": "km/h"
+    }
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "metadata": {
+    "title": "Nazaré Qualifica",
+    "description": "Giant waves, elite surfing and the soul of Nazaré"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "news": "News",
+    "events": "Events",
+    "surferWall": "Surfer Wall",
+    "forecast": "Forecast",
+    "shop": "Shop",
+    "contact": "Contact"
+  },
+  "entities": {
+    "praiaDoNorte": "Praia do Norte",
+    "carsurf": "Carsurf",
+    "nazareQualifica": "Nazaré Qualifica"
+  },
+  "home": {
+    "hero": {
+      "title": "Praia do Norte",
+      "subtitle": "Where giant waves are born",
+      "cta": "Discover"
+    },
+    "news": {
+      "title": "Latest News",
+      "viewAll": "View all"
+    },
+    "surfers": {
+      "title": "Surfer Wall",
+      "subtitle": "The heroes of giant waves",
+      "viewAll": "View all"
+    },
+    "events": {
+      "title": "Upcoming Events",
+      "viewAll": "View all"
+    }
+  },
+  "news": {
+    "title": "News",
+    "subtitle": "The latest from the world of surfing and Nazaré",
+    "featured": "Featured",
+    "categories": {
+      "all": "All",
+      "praiaDoNorte": "Praia do Norte",
+      "carsurf": "Carsurf",
+      "nazareQualifica": "Nazaré Qualifica"
+    },
+    "publishedAt": "Published on {date}",
+    "by": "By {author}",
+    "share": "Share",
+    "relatedNews": "Related News",
+    "noNews": "No news available at the moment.",
+    "backToList": "Back to news"
+  },
+  "events": {
+    "title": "Events",
+    "subtitle": "Calendar of events and competitions",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "all": "All",
+    "date": "Date",
+    "location": "Location",
+    "tickets": "Tickets",
+    "moreInfo": "More information",
+    "noEvents": "No events scheduled.",
+    "backToList": "Back to events",
+    "startDate": "Start",
+    "endDate": "End"
+  },
+  "surfers": {
+    "title": "Surfer Wall",
+    "subtitle": "The heroes of Nazaré's giant waves",
+    "achievements": "Achievements",
+    "surfboards": "Surfboards",
+    "bio": "Biography",
+    "nationality": "Nationality",
+    "socialMedia": "Social Media",
+    "noSurfers": "No surfers registered.",
+    "backToList": "Back to Surfer Wall",
+    "featuredSurfers": "Featured Surfers",
+    "specs": {
+      "width": "Width",
+      "thickness": "Thickness",
+      "volume": "Volume",
+      "tail": "Tail",
+      "fins": "Fins",
+      "material": "Material"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} Nazaré Qualifica, EM. All rights reserved.",
+    "links": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Use",
+      "cookies": "Cookie Policy"
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Get in touch with us",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "submit": "Send message",
+      "success": "Message sent successfully!",
+      "error": "Error sending message. Please try again."
+    },
+    "info": {
+      "title": "Contact Information",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Opening Hours"
+    }
+  },
+  "pages": {
+    "about": "About",
+    "programs": "Programs",
+    "services": "Services"
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "sobre": "About",
+    "contacto": "Contact",
+    "noticias": "News",
+    "eventos": "Events",
+    "surfer-wall": "Surfer Wall",
+    "previsoes": "Forecast",
+    "carsurf": "Carsurf",
+    "nazare-qualifica": "Nazaré Qualifica",
+    "programas": "Programs",
+    "servicos": "Services"
+  },
+  "common": {
+    "readMore": "Read more",
+    "viewDetails": "View details",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "tryAgain": "Try again",
+    "notFound": "Page not found",
+    "goHome": "Go back home"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "loading": "Searching...",
+    "noResults": "No results found",
+    "minChars": "Type at least 2 characters",
+    "hint": "Use ↑↓ to navigate, Enter to select, Esc to close",
+    "types": {
+      "news": "News",
+      "event": "Event",
+      "surfer": "Surfer",
+      "page": "Page"
+    }
+  },
+  "forecast": {
+    "title": "Marine Forecast",
+    "subtitle": "Sea and wind conditions for Praia do Norte",
+    "updated": "Updated at {time}",
+    "error": "Unable to load forecast. Please try again later.",
+    "marine": {
+      "title": "Current Conditions",
+      "waveHeight": "Wave Height",
+      "wavePeriod": "Wave Period",
+      "waveDirection": "Wave Direction",
+      "swellHeight": "Swell Height",
+      "swellPeriod": "Swell Period",
+      "windSpeed": "Wind Speed",
+      "windDirection": "Wind Direction",
+      "windGusts": "Wind Gusts",
+      "airTemperature": "Air Temperature",
+      "waterTemperature": "Water Temperature"
+    },
+    "daily": {
+      "title": "7-Day Forecast",
+      "day": "Day"
+    },
+    "monican": {
+      "title": "MONICAN Forecast",
+      "subtitle": "Hydrographic Institute",
+      "description": "Official maritime wave forecast for the Portuguese coast",
+      "credit": "Data: Hydrographic Institute - MONICAN",
+      "viewFull": "View full forecast",
+      "info": "The MONICAN system provides detailed maritime wave forecasts for Nazaré and the entire Portuguese coast."
+    },
+    "webcams": {
+      "title": "Live Webcams",
+      "description": "View real-time conditions",
+      "praiaDoNorte": "Praia do Norte",
+      "forte": "Fort São Miguel Arcanjo"
+    },
+    "units": {
+      "meters": "m",
+      "seconds": "s",
+      "kmh": "km/h"
+    }
+  }
+}

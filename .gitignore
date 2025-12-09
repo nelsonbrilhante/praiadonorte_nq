@@ -114,3 +114,9 @@ temp/
 *.temp
 *.bak
 *.backup
+
+# ===================
+# Scripts PIDs
+# ===================
+
+.pids/
