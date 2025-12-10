@@ -269,8 +269,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Nazaré Qualifica')
             ->colors([
-                'primary' => '#0066cc', // Ocean blue (Praia do Norte)
+                'primary' => '#1e3a5f', // Navy Blue (Nazaré Qualifica)
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -286,6 +287,63 @@ class AdminPanelProvider extends PanelProvider
             ]);
     }
 }
+```
+
+---
+
+## Navegação com Grupos (Filament 4.x)
+
+**IMPORTANTE**: Filament 4.x usa tipos union para propriedades de navegação:
+
+```php
+class NoticiaResource extends Resource
+{
+    protected static ?string $model = Noticia::class;
+
+    // ATENÇÃO: Usar tipos corretos para Filament 4.x
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-newspaper';
+    protected static string|\UnitEnum|null $navigationGroup = 'Conteúdo';
+    protected static ?int $navigationSort = 1;
+
+    // Labels em português
+    protected static ?string $modelLabel = 'Notícia';
+    protected static ?string $pluralModelLabel = 'Notícias';
+}
+```
+
+**Grupos de Navegação Implementados**:
+| Grupo | Resources | Ícones |
+|-------|-----------|--------|
+| Conteúdo | Notícias, Eventos | newspaper, calendar-days |
+| Surfer Wall | Surfers, Pranchas | user-group, rectangle-stack |
+| Páginas | Páginas | document-text |
+
+---
+
+## Dashboard Widgets
+
+Widgets criados em `app/Filament/Widgets/`:
+
+```php
+// StatsOverviewWidget.php - Cards com totais
+class StatsOverviewWidget extends BaseWidget
+{
+    protected static ?int $sort = 1;
+
+    protected function getStats(): array
+    {
+        return [
+            Stat::make('Notícias', Noticia::count())
+                ->description('Total de notícias')
+                ->descriptionIcon('heroicon-o-newspaper')
+                ->color('primary'),
+            // ...
+        ];
+    }
+}
+
+// LatestNoticiasWidget.php - Tabela últimas notícias
+// UpcomingEventosWidget.php - Lista próximos eventos
 ```
 
 ---

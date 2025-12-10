@@ -2,10 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> **Status: Phase 3 Complete - Dynamic Content Pages**
+> **Status: Phase 3 Complete + Admin UX Improvements**
 >
 > All dynamic content pages implemented: News, Events, Surfer Wall with listing and detail pages.
 > Frontend fully integrated with backend API. All content fetched from database.
+> Filament Admin UX improved: navigation groups, distinct icons, dashboard widgets.
 > Next step: Phase 4 - SEO + Performance optimization.
 
 ## Project Overview
@@ -43,6 +44,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - [x] News Pages: Listing with filters + individual article pages
 - [x] Events Pages: Listing with upcoming/past filters + individual event pages
 - [x] Surfer Wall: Grid with featured surfers + individual profile pages
+- [x] Admin UX: Navigation groups, distinct icons, dashboard widgets, Navy Blue theme
 - [ ] Next: SEO metadata, performance optimization, security headers
 
 ## Technical Architecture
@@ -86,7 +88,8 @@ praiadonorte_nq/
 ├── backend/                       # Laravel 12 + Filament 4.x (deploys to VPS)
 │   ├── app/
 │   │   ├── Filament/
-│   │   │   └── Resources/         # NoticiaResource, SurferResource, etc.
+│   │   │   ├── Resources/         # NoticiaResource, SurferResource, etc.
+│   │   │   └── Widgets/           # Dashboard widgets (Stats, Latest, Upcoming)
 │   │   ├── Http/Controllers/Api/  # API controllers
 │   │   ├── Models/                # Eloquent models
 │   │   └── Providers/
@@ -132,6 +135,12 @@ praiadonorte_nq/
 - API endpoints for frontend consumption
 - i18n via JSON columns in database
 - Future: WooCommerce headless for e-commerce
+
+**Admin Panel Configuration** (Nazaré Qualifica branding):
+- Theme: Navy Blue (#1e3a5f)
+- Navigation organized in groups: Conteúdo, Surfer Wall, Páginas
+- Dashboard with stats widgets (totals) + recent content tables
+- Labels em português (Notícias, Eventos, Surfers, Pranchas, Páginas)
 
 ### 2. Multi-Entity Content Strategy
 
@@ -399,6 +408,9 @@ Navigation must clearly distinguish between the three entities while maintaining
 
 ## Documentation References
 
+**Session Continuity** (IMPORTANT):
+- **Session Handoff**: `SESSION-HANDOFF.md` - Read at start of each session, update at end
+
 **Tech Stack Reference** (start here):
 - **Laravel 12 Guide**: `docs/tech-stack/LARAVEL_12.md`
 - **Filament 4.x Guide**: `docs/tech-stack/FILAMENT_4.md`
@@ -436,6 +448,15 @@ Navigation must clearly distinguish between the three entities while maintaining
 9. **Phase 3 Complete** - All dynamic content pages implemented. News, Events, and Surfer Wall with listing and detail views. Continue with Phase 4 (SEO + Performance).
 
 10. **Tech Stack Docs** - See `docs/tech-stack/` for Laravel, Filament, and Next.js reference guides with code patterns.
+
+11. **Filament 4.x Type Hints** - When adding navigation properties to Resources, use the correct types:
+    - `$navigationIcon`: `string|\BackedEnum|null`
+    - `$navigationGroup`: `string|\UnitEnum|null`
+    - Example: `protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-newspaper';`
+
+12. **Admin Panel is Nazaré Qualifica** - The Filament admin panel represents Nazaré Qualifica (the municipal company), not Praia do Norte. The Navy Blue theme (#1e3a5f) aligns with NQ branding. Praia do Norte branding is for the public frontend only.
+
+13. **Session Handoff** - Always update `SESSION-HANDOFF.md` at the end of each session with what was done, files changed, and next steps. This ensures continuity between sessions.
 
 ## VPS Infrastructure
 

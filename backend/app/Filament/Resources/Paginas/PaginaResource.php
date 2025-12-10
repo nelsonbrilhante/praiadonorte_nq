@@ -8,17 +8,23 @@ use App\Filament\Resources\Paginas\Pages\ListPaginas;
 use App\Filament\Resources\Paginas\Schemas\PaginaForm;
 use App\Filament\Resources\Paginas\Tables\PaginasTable;
 use App\Models\Pagina;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class PaginaResource extends Resource
 {
     protected static ?string $model = Pagina::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Páginas';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $modelLabel = 'Página';
+
+    protected static ?string $pluralModelLabel = 'Páginas';
 
     public static function form(Schema $schema): Schema
     {

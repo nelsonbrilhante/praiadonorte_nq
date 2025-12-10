@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -64,8 +65,16 @@ function HomeContent({ locale, noticias, eventos, surfers }: HomeContentProps) {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative flex min-h-[70vh] items-center justify-center bg-gradient-to-br from-ocean via-ocean-dark to-ocean-light text-white">
-        <div className="absolute inset-0 bg-black/30" />
+      <section className="relative flex min-h-[70vh] items-center justify-center text-white">
+        <Image
+          src="/pn-ai-wave-hero.png"
+          alt="Giant wave at Praia do Norte, Nazaré"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/40" />
         <div className="container relative z-10 mx-auto px-4 text-center">
           <h1 className="mb-4 text-5xl font-bold md:text-7xl">
             {t('hero.title')}

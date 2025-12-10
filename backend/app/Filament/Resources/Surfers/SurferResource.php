@@ -8,17 +8,23 @@ use App\Filament\Resources\Surfers\Pages\ListSurfers;
 use App\Filament\Resources\Surfers\Schemas\SurferForm;
 use App\Filament\Resources\Surfers\Tables\SurfersTable;
 use App\Models\Surfer;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class SurferResource extends Resource
 {
     protected static ?string $model = Surfer::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-user-group';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Surfer Wall';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $modelLabel = 'Surfer';
+
+    protected static ?string $pluralModelLabel = 'Surfers';
 
     public static function form(Schema $schema): Schema
     {

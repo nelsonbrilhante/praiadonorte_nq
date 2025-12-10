@@ -8,17 +8,23 @@ use App\Filament\Resources\Surfboards\Pages\ListSurfboards;
 use App\Filament\Resources\Surfboards\Schemas\SurfboardForm;
 use App\Filament\Resources\Surfboards\Tables\SurfboardsTable;
 use App\Models\Surfboard;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class SurfboardResource extends Resource
 {
     protected static ?string $model = Surfboard::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Surfer Wall';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $modelLabel = 'Prancha';
+
+    protected static ?string $pluralModelLabel = 'Pranchas';
 
     public static function form(Schema $schema): Schema
     {
