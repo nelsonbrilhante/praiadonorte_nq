@@ -8,12 +8,16 @@ import {
   getLatestNoticias,
   getUpcomingEventos,
   getSurfers,
+  getPagina,
   getLocalizedField,
+  isHomepageContent,
   type Noticia,
   type Evento,
   type Surfer,
+  type Pagina,
   type Locale,
 } from '@/lib/api';
+import { HomepageHeroSection } from '@/components/praia-norte/HomepageHeroSection';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -21,15 +25,16 @@ type Props = {
 
 async function fetchHomeData() {
   try {
-    const [noticias, eventos, surfers] = await Promise.all([
+    const [noticias, eventos, surfers, homepageData] = await Promise.all([
       getLatestNoticias(3),
       getUpcomingEventos(2),
       getSurfers({ featured: true }),
+      getPagina('praia-norte', 'homepage').catch(() => null),
     ]);
-    return { noticias, eventos, surfers };
+    return { noticias, eventos, surfers, homepageData };
   } catch (error) {
     console.error('Error fetching home data:', error);
-    return { noticias: [], eventos: [], surfers: [] };
+    return { noticias: [], eventos: [], surfers: [], homepageData: null };
   }
 }
 
@@ -37,9 +42,9 @@ export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const { noticias, eventos, surfers } = await fetchHomeData();
+  const { noticias, eventos, surfers, homepageData } = await fetchHomeData();
 
-  return <HomeContent locale={locale as Locale} noticias={noticias} eventos={eventos} surfers={surfers} />;
+  return <HomeContent locale={locale as Locale} noticias={noticias} eventos={eventos} surfers={surfers} homepageData={homepageData} />;
 }
 
 interface HomeContentProps {
@@ -47,9 +52,10 @@ interface HomeContentProps {
   noticias: Noticia[];
   eventos: Evento[];
   surfers: Surfer[];
+  homepageData: Pagina | null;
 }
 
-function HomeContent({ locale, noticias, eventos, surfers }: HomeContentProps) {
+function HomeContent({ locale, noticias, eventos, surfers, homepageData }: HomeContentProps) {
   const t = useTranslations('home');
   const tEntities = useTranslations('entities');
 
@@ -62,31 +68,48 @@ function HomeContent({ locale, noticias, eventos, surfers }: HomeContentProps) {
     };
   };
 
+  // Extract hero data from API or fallback to i18n
+  const heroData = homepageData && isHomepageContent(homepageData.content)
+    ? homepageData.content[locale].hero
+    : null;
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative flex min-h-[70vh] items-center justify-center text-white">
-        <Image
-          src="/pn-ai-wave-hero.png"
-          alt="Giant wave at Praia do Norte, Nazaré"
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
+      {heroData ? (
+        <HomepageHeroSection
+          title={heroData.title}
+          subtitle={heroData.subtitle}
+          ctaText={heroData.cta_text}
+          ctaUrl={heroData.cta_url}
+          locale={locale}
+          youtubeUrl={heroData.youtube_url}
+          fallbackImage="/pn-ai-wave-hero.png"
         />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="container relative z-10 mx-auto px-4 text-center">
-          <h1 className="mb-4 text-5xl font-bold md:text-7xl">
-            {t('hero.title')}
-          </h1>
-          <p className="mb-8 text-xl md:text-2xl opacity-90">
-            {t('hero.subtitle')}
-          </p>
-          <Button asChild size="lg" className="bg-white text-ocean hover:bg-white/90">
-            <Link href={`/${locale}/sobre`}>{t('hero.cta')}</Link>
-          </Button>
-        </div>
-      </section>
+      ) : (
+        <section className="relative flex min-h-[70vh] items-center justify-center text-white">
+          <Image
+            src="/pn-ai-wave-hero.png"
+            alt="Giant wave at Praia do Norte, Nazare"
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="container relative z-10 mx-auto px-4 text-center">
+            <h1 className="mb-4 text-5xl font-bold md:text-7xl">
+              {t('hero.title')}
+            </h1>
+            <p className="mb-8 text-xl opacity-90 md:text-2xl">
+              {t('hero.subtitle')}
+            </p>
+            <Button asChild size="lg" className="bg-white text-ocean hover:bg-white/90">
+              <Link href={`/${locale}/sobre`}>{t('hero.cta')}</Link>
+            </Button>
+          </div>
+        </section>
+      )}
 
       {/* News Section */}
       <section className="py-16 bg-muted/30">
@@ -102,7 +125,19 @@ function HomeContent({ locale, noticias, eventos, surfers }: HomeContentProps) {
               noticias.map((noticia) => (
                 <Link key={noticia.id} href={`/${locale}/noticias/${noticia.slug}`}>
                   <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow cursor-pointer">
-                    <div className="h-48 bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                    <div className="relative h-48">
+                      {noticia.cover_image ? (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${noticia.cover_image}`}
+                          alt={getLocalizedField(noticia.title, locale)}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                      )}
+                    </div>
                     <CardHeader>
                       <CardTitle className="line-clamp-2">
                         {getLocalizedField(noticia.title, locale)}
@@ -148,8 +183,20 @@ function HomeContent({ locale, noticias, eventos, surfers }: HomeContentProps) {
             {surfers.length > 0 ? (
               surfers.slice(0, 4).map((surfer) => (
                 <Link key={surfer.id} href={`/${locale}/surfer-wall/${surfer.slug}`}>
-                  <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-                    <div className="aspect-square bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                  <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
+                    <div className="relative aspect-square">
+                      {surfer.photo ? (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${surfer.photo}`}
+                          alt={surfer.name}
+                          fill
+                          className="object-cover transition-transform group-hover:scale-105"
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                      )}
+                    </div>
                     <CardContent className="p-4">
                       <p className="font-semibold">{surfer.name}</p>
                       <p className="text-sm text-muted-foreground">{surfer.nationality}</p>

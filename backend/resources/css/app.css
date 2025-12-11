@@ -5,7 +5,248 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Montserrat', system-ui, sans-serif;
+  --font-display: 'Montserrat', system-ui, sans-serif;
+
+  /* Cores do Projeto - Praia do Norte / Nazare Qualifica */
+  --color-ocean: #0066cc;
+  --color-ocean-50: #e6f2ff;
+  --color-ocean-100: #b3d9ff;
+  --color-ocean-200: #80c0ff;
+  --color-ocean-300: #4da6ff;
+  --color-ocean-400: #1a8cff;
+  --color-ocean-500: #0066cc;
+  --color-ocean-600: #0052a3;
+  --color-ocean-700: #003d7a;
+  --color-ocean-800: #002952;
+  --color-ocean-900: #001429;
+  --color-ocean-dark: #004d99;
+  --color-ocean-light: #3399ff;
+
+  --color-institutional: #ffa500;
+  --color-institutional-50: #fff8e6;
+  --color-institutional-100: #ffeab3;
+  --color-institutional-200: #ffdc80;
+  --color-institutional-300: #ffce4d;
+  --color-institutional-400: #ffc01a;
+  --color-institutional-500: #ffa500;
+  --color-institutional-600: #cc8400;
+  --color-institutional-700: #996300;
+  --color-institutional-800: #664200;
+  --color-institutional-900: #332100;
+  --color-institutional-dark: #cc8400;
+  --color-institutional-light: #ffb833;
+
+  --color-performance: #00cc66;
+  --color-performance-50: #e6fff2;
+  --color-performance-100: #b3ffd9;
+  --color-performance-200: #80ffc0;
+  --color-performance-300: #4dffa6;
+  --color-performance-400: #1aff8c;
+  --color-performance-500: #00cc66;
+  --color-performance-600: #009944;
+  --color-performance-700: #007733;
+  --color-performance-800: #005522;
+  --color-performance-900: #003311;
+  --color-performance-dark: #009944;
+  --color-performance-light: #33ff99;
+
+  /* shadcn/ui variables */
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  h1 {
+    font-weight: 800;
+  }
+}
+
+/* Entity-specific badge colors */
+.badge-praia-norte {
+  @apply bg-ocean-500 text-white;
+}
+.badge-carsurf {
+  @apply bg-performance-500 text-white;
+}
+.badge-nazare-qualifica {
+  @apply bg-institutional-500 text-white;
+}
+
+/* Entity card backgrounds */
+.entity-praia-norte {
+  @apply bg-ocean-50 border-ocean-100;
+}
+.entity-carsurf {
+  @apply bg-performance-50 border-performance-100;
+}
+.entity-nazare-qualifica {
+  @apply bg-institutional-50 border-institutional-100;
+}
+
+/* Gradient backgrounds for entity headers */
+.gradient-ocean {
+  background: linear-gradient(to bottom right, #0066cc, #004d99, #3399ff);
+}
+.gradient-performance {
+  background: linear-gradient(to bottom right, #00cc66, #009944, #33ff99);
+}
+.gradient-institutional {
+  background: linear-gradient(to bottom right, #ffa500, #cc8400, #ffb833);
+}
+
+/* Entity background colors */
+.bg-ocean {
+  background-color: #0066cc;
+}
+.bg-ocean-dark {
+  background-color: #004d99;
+}
+.bg-ocean-light {
+  background-color: #3399ff;
+}
+.bg-performance {
+  background-color: #00cc66;
+}
+.bg-institutional {
+  background-color: #ffa500;
+}
+
+/* Entity text colors */
+.text-ocean {
+  color: #0066cc;
+}
+.text-performance {
+  color: #00cc66;
+}
+.text-institutional {
+  color: #ffa500;
+}
+
+/* Entity border colors */
+.border-t-ocean {
+  border-top-color: #0066cc;
+}
+.border-t-performance {
+  border-top-color: #00cc66;
+}
+.border-t-institutional {
+  border-top-color: #ffa500;
 }

@@ -8,10 +8,19 @@ export type {
   Surfboard,
   Pagina,
   PaginatedResponse,
+  // Carsurf Landing types
+  CarsurfLandingContent,
+  CarsurfLandingSection,
+  CarsurfFacility,
+  CarsurfActivity,
+  CarsurfTeamMember,
+  // Homepage types
+  HomepageContent,
+  HomepageSection,
 } from './types';
 
 // Helper functions
-export { getLocalizedField } from './types';
+export { getLocalizedField, isCarsurfLandingContent, isHomepageContent } from './types';
 
 // API Client functions
 export {

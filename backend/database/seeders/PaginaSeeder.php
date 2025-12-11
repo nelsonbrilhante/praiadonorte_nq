@@ -10,7 +10,39 @@ class PaginaSeeder extends Seeder
     public function run(): void
     {
         $paginas = [
-            // Praia do Norte
+            // Praia do Norte Homepage
+            [
+                'title' => [
+                    'pt' => 'Homepage',
+                    'en' => 'Homepage',
+                ],
+                'slug' => 'homepage',
+                'content' => [
+                    'pt' => [
+                        'hero' => [
+                            'title' => 'Praia do Norte',
+                            'subtitle' => 'Onde nascem as ondas gigantes',
+                            'cta_text' => 'Descobrir',
+                            'cta_url' => '/sobre',
+                            'youtube_url' => 'https://www.youtube.com/watch?v=LDi6PQ4b6W8',
+                        ],
+                    ],
+                    'en' => [
+                        'hero' => [
+                            'title' => 'Praia do Norte',
+                            'subtitle' => 'Where giant waves are born',
+                            'cta_text' => 'Discover',
+                            'cta_url' => '/about',
+                            'youtube_url' => 'https://www.youtube.com/watch?v=LDi6PQ4b6W8',
+                        ],
+                    ],
+                ],
+                'entity' => 'praia-norte',
+                'published' => true,
+                'seo_title' => ['pt' => 'Praia do Norte - Ondas Gigantes da Nazaré', 'en' => 'Praia do Norte - Nazaré Giant Waves'],
+                'seo_description' => ['pt' => 'Bem-vindo à Praia do Norte, o lar das maiores ondas do mundo na Nazaré, Portugal.', 'en' => 'Welcome to Praia do Norte, home of the world\'s largest waves in Nazaré, Portugal.'],
+            ],
+            // Praia do Norte Sobre
             [
                 'title' => [
                     'pt' => 'Sobre a Praia do Norte',
@@ -26,7 +58,201 @@ class PaginaSeeder extends Seeder
                 'seo_title' => ['pt' => 'Sobre a Praia do Norte - Ondas Gigantes Nazaré', 'en' => 'About Praia do Norte - Nazaré Giant Waves'],
                 'seo_description' => ['pt' => 'Conheça a história da Praia do Norte e do Canhão da Nazaré, berço das maiores ondas do mundo.', 'en' => 'Discover the history of Praia do Norte and the Nazaré Canyon, home of the world\'s largest waves.'],
             ],
-            // Carsurf
+            // Carsurf Landing Page (structured content)
+            [
+                'title' => [
+                    'pt' => 'Carsurf - Centro de Alto Rendimento de Surf',
+                    'en' => 'Carsurf - High Performance Surf Center',
+                ],
+                'slug' => 'landing',
+                'content' => [
+                    'pt' => [
+                        'hero' => [
+                            'title' => "Centro de Alto Rendimento\nde Surf da Nazaré",
+                            'subtitle' => 'Trabalhe para o Rendimento Máximo',
+                            'cta_primary' => 'Visite-nos',
+                            'cta_secondary' => 'Ver Instalações',
+                            'youtube_url' => 'https://youtu.be/dUqKdF-AcCQ',
+                        ],
+                        'about' => [
+                            'title' => 'Sobre o Carsurf',
+                            'text' => 'O CARSURF é um Centro de Alto Rendimento de Surf situado na Nazaré, Portugal. Criado para apoiar atletas de surf da Federação Portuguesa de Surf, o centro oferece condições ideais para treino, alojamento e recuperação. Num único local, atletas podem focar-se no treino, nutrição e descanso, com acesso a diversas infraestruturas desportivas municipais.',
+                            'highlight' => 'O primeiro Centro de Alto Rendimento de Surf em Portugal',
+                        ],
+                        'facilities' => [
+                            [
+                                'name' => 'Alojamento',
+                                'description' => 'Capacidade para 30 atletas em 7 quartos equipados. Ideal para estágios e concentrações de equipas.',
+                                'icon' => 'home',
+                                'price' => '€15/cama',
+                                'capacity' => '30 camas',
+                            ],
+                            [
+                                'name' => 'Ginásio',
+                                'description' => 'Equipamento de treino cardiovascular, força e funcional. Preparado para as exigências específicas do surf de alto rendimento.',
+                                'icon' => 'dumbbell',
+                            ],
+                            [
+                                'name' => 'Fisioterapia',
+                                'description' => 'Serviço de fisioterapia em acordo com empresa privada especializada. Recuperação e prevenção de lesões.',
+                                'icon' => 'heart-pulse',
+                            ],
+                            [
+                                'name' => 'Sala Digital',
+                                'description' => 'Sala de apoio com equipamento para análise de vídeo e estudo de performance. Eleve os seus níveis de concentração.',
+                                'icon' => 'monitor',
+                            ],
+                            [
+                                'name' => 'Armazenamento',
+                                'description' => 'Espaço seguro para armazenamento de pranchas, fatos e outro material de surf.',
+                                'icon' => 'archive',
+                            ],
+                            [
+                                'name' => 'Zona de Relaxe',
+                                'description' => 'Área de convívio e descanso para atletas. Ambiente propício à recuperação entre treinos.',
+                                'icon' => 'sofa',
+                            ],
+                            [
+                                'name' => 'Avaliação Física',
+                                'description' => 'Avaliação física da performance com testes específicos para surfistas. Monitorização do progresso.',
+                                'icon' => 'clipboard-check',
+                            ],
+                            [
+                                'name' => 'Refeições',
+                                'description' => 'Serviço de catering disponível para grupos. Alimentação adequada às necessidades dos atletas.',
+                                'icon' => 'utensils',
+                            ],
+                        ],
+                        'activities' => [
+                            ['name' => 'Fitness', 'icon' => 'dumbbell'],
+                            ['name' => 'Piscina', 'icon' => 'waves'],
+                            ['name' => 'Raquetes', 'icon' => 'racket'],
+                            ['name' => 'Equipas', 'icon' => 'users'],
+                            ['name' => 'Aulas', 'icon' => 'graduation-cap'],
+                            ['name' => 'Kids Club', 'icon' => 'child'],
+                        ],
+                        'team' => [
+                            [
+                                'name' => 'Pedro Pisco',
+                                'role' => 'Gestor Geral',
+                                'description' => 'Responsável por alojamentos e estágios de treino.',
+                                'email' => 'geral@carsurf.nazare.pt',
+                            ],
+                            [
+                                'name' => 'Tiago Barbosa',
+                                'role' => 'Diretor Técnico',
+                                'description' => 'Coordena as operações das instalações desportivas.',
+                                'email' => 'geral@carsurf.nazare.pt',
+                            ],
+                        ],
+                        'contact' => [
+                            'phone' => '+351 938 013 603',
+                            'email' => 'geral@carsurf.nazare.pt',
+                            'hours' => '24 horas por dia, 7 dias por semana',
+                            'address' => 'Centro de Alto Rendimento de Surf, Nazaré, Portugal',
+                            'maps_url' => 'https://www.google.com/maps/place/Centro+de+Alto+Rendimento+de+Surf/',
+                        ],
+                        'partners' => [
+                            'text' => 'O Carsurf é uma infraestrutura gerida pela Nazaré Qualifica E.M., empresa municipal da Câmara Municipal da Nazaré.',
+                        ],
+                    ],
+                    'en' => [
+                        'hero' => [
+                            'title' => "Nazaré High Performance\nSurf Center",
+                            'subtitle' => 'Work Towards Maximum Performance',
+                            'cta_primary' => 'Visit Us',
+                            'cta_secondary' => 'View Facilities',
+                            'youtube_url' => 'https://youtu.be/dUqKdF-AcCQ',
+                        ],
+                        'about' => [
+                            'title' => 'About Carsurf',
+                            'text' => 'CARSURF is a High Performance Surf Center located in Nazaré, Portugal. Created to support surf athletes from the Portuguese Surfing Federation, the center offers ideal conditions for training, accommodation, and recovery. In a single location, athletes can focus on training, nutrition, and rest, with access to various municipal sports facilities.',
+                            'highlight' => 'The first High Performance Surf Center in Portugal',
+                        ],
+                        'facilities' => [
+                            [
+                                'name' => 'Accommodation',
+                                'description' => 'Capacity for 30 athletes in 7 equipped rooms. Ideal for training camps and team concentrations.',
+                                'icon' => 'home',
+                                'price' => '€15/bed',
+                                'capacity' => '30 beds',
+                            ],
+                            [
+                                'name' => 'Gym',
+                                'description' => 'Cardiovascular, strength, and functional training equipment. Prepared for the specific demands of high-performance surfing.',
+                                'icon' => 'dumbbell',
+                            ],
+                            [
+                                'name' => 'Physiotherapy',
+                                'description' => 'Physiotherapy service in partnership with a specialized private company. Injury recovery and prevention.',
+                                'icon' => 'heart-pulse',
+                            ],
+                            [
+                                'name' => 'Digital Room',
+                                'description' => 'Support room with equipment for video analysis and performance study. Elevate your concentration levels.',
+                                'icon' => 'monitor',
+                            ],
+                            [
+                                'name' => 'Storage',
+                                'description' => 'Secure space for storing boards, wetsuits, and other surf equipment.',
+                                'icon' => 'archive',
+                            ],
+                            [
+                                'name' => 'Relaxation Zone',
+                                'description' => 'Social and rest area for athletes. Environment conducive to recovery between training sessions.',
+                                'icon' => 'sofa',
+                            ],
+                            [
+                                'name' => 'Physical Assessment',
+                                'description' => 'Physical performance assessment with specific tests for surfers. Progress monitoring.',
+                                'icon' => 'clipboard-check',
+                            ],
+                            [
+                                'name' => 'Meals',
+                                'description' => 'Catering service available for groups. Nutrition suited to athletes\' needs.',
+                                'icon' => 'utensils',
+                            ],
+                        ],
+                        'activities' => [
+                            ['name' => 'Fitness', 'icon' => 'dumbbell'],
+                            ['name' => 'Pool', 'icon' => 'waves'],
+                            ['name' => 'Rackets', 'icon' => 'racket'],
+                            ['name' => 'Teams', 'icon' => 'users'],
+                            ['name' => 'Classes', 'icon' => 'graduation-cap'],
+                            ['name' => 'Kids Club', 'icon' => 'child'],
+                        ],
+                        'team' => [
+                            [
+                                'name' => 'Pedro Pisco',
+                                'role' => 'General Manager',
+                                'description' => 'Responsible for accommodations and training camps.',
+                                'email' => 'geral@carsurf.nazare.pt',
+                            ],
+                            [
+                                'name' => 'Tiago Barbosa',
+                                'role' => 'Technical Director',
+                                'description' => 'Coordinates sports facility operations.',
+                                'email' => 'geral@carsurf.nazare.pt',
+                            ],
+                        ],
+                        'contact' => [
+                            'phone' => '+351 938 013 603',
+                            'email' => 'geral@carsurf.nazare.pt',
+                            'hours' => '24 hours a day, 7 days a week',
+                            'address' => 'High Performance Surf Center, Nazaré, Portugal',
+                            'maps_url' => 'https://www.google.com/maps/place/Centro+de+Alto+Rendimento+de+Surf/',
+                        ],
+                        'partners' => [
+                            'text' => 'Carsurf is a facility managed by Nazaré Qualifica E.M., a municipal company of the Nazaré City Council.',
+                        ],
+                    ],
+                ],
+                'entity' => 'carsurf',
+                'published' => true,
+                'seo_title' => ['pt' => 'Carsurf - Centro de Alto Rendimento de Surf da Nazaré', 'en' => 'Carsurf - Nazaré High Performance Surf Center'],
+                'seo_description' => ['pt' => 'O Carsurf é o Centro de Alto Rendimento de Surf da Nazaré. Instalações de treino, alojamento e recuperação para atletas de surf.', 'en' => 'Carsurf is the Nazaré High Performance Surf Center. Training facilities, accommodation, and recovery for surf athletes.'],
+            ],
+            // Carsurf Sobre (legacy page)
             [
                 'title' => [
                     'pt' => 'Sobre o Carsurf',
@@ -91,7 +317,10 @@ class PaginaSeeder extends Seeder
         ];
 
         foreach ($paginas as $pagina) {
-            Pagina::create($pagina);
+            Pagina::updateOrCreate(
+                ['entity' => $pagina['entity'], 'slug' => $pagina['slug']],
+                $pagina
+            );
         }
     }
 }

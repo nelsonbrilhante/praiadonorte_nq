@@ -1,16 +1,20 @@
 # Fase 5: Segurança Base
 
-**Duração Estimada**: 1 semana
+**Status**: ⏳ Pendente
 **Dependências**: Fase 4
 **Bloco**: 3 - Qualidade
 
-> **Nota**: Esta fase implementa segurança para o site institucional. Segurança adicional para e-commerce será adicionada nas Fases 6-10.
+> **Nota**: A arquitectura monolítica (Laravel + Blade) tem vantagens de segurança inerentes:
+> - Sem API exposta publicamente
+> - Autenticação baseada em sessions (mais segura que tokens)
+> - Sem CORS para configurar
 
 ---
 
 ## Objetivos
 
-- Implementar medidas de segurança
+- Implementar medidas de segurança Laravel
+- Configurar security headers
 - Escrever testes
 - Preparar para produção
 
@@ -18,209 +22,300 @@
 
 ## Tarefas
 
-### 10.1 Security Headers (Next.js)
+### 5.1 Security Headers Middleware
 
-**`next.config.js`**:
+**`app/Http/Middleware/SecurityHeaders.php`**:
 
-```javascript
-const securityHeaders = [
-  {
-    key: 'X-DNS-Prefetch-Control',
-    value: 'on'
-  },
-  {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=63072000; includeSubDomains; preload'
-  },
-  {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff'
-  },
-  {
-    key: 'X-Frame-Options',
-    value: 'DENY'
-  },
-  {
-    key: 'X-XSS-Protection',
-    value: '1; mode=block'
-  },
-  {
-    key: 'Referrer-Policy',
-    value: 'strict-origin-when-cross-origin'
-  },
-  {
-    key: 'Content-Security-Policy',
-    value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.praiadonortenazare.pt"
-  }
-]
+```php
+<?php
 
-module.exports = {
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: securityHeaders,
-      },
-    ]
-  },
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class SecurityHeaders
+{
+    public function handle(Request $request, Closure $next): Response
+    {
+        $response = $next($request);
+
+        // Security Headers
+        $response->headers->set('X-Content-Type-Options', 'nosniff');
+        $response->headers->set('X-Frame-Options', 'DENY');
+        $response->headers->set('X-XSS-Protection', '1; mode=block');
+        $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+        // HSTS (apenas em produção)
+        if (app()->environment('production')) {
+            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+        }
+
+        // Content Security Policy
+        $csp = implode('; ', [
+            "default-src 'self'",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.youtube.com https://www.google.com",
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+            "img-src 'self' data: https: blob:",
+            "font-src 'self' https://fonts.gstatic.com data:",
+            "frame-src 'self' https://www.youtube.com https://player.vimeo.com",
+            "connect-src 'self' https://marine-api.open-meteo.com https://api.open-meteo.com",
+        ]);
+        $response->headers->set('Content-Security-Policy', $csp);
+
+        // Permissions Policy
+        $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+        return $response;
+    }
 }
 ```
 
-### 10.2 Rate Limiting (Laravel)
-
-**`app/Providers/RouteServiceProvider.php`**:
+**Registar no `bootstrap/app.php`**:
 
 ```php
-protected function configureRateLimiting(): void
-{
-    RateLimiter::for('api', function (Request $request) {
-        return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->web(append: [
+        \App\Http\Middleware\SecurityHeaders::class,
+    ]);
+})
+```
+
+---
+
+### 5.2 Rate Limiting
+
+**`bootstrap/app.php`** (Laravel 12):
+
+```php
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
+->withMiddleware(function (Middleware $middleware) {
+    // Rate limiters
+    RateLimiter::for('web', function (Request $request) {
+        return Limit::perMinute(60)->by($request->ip());
+    });
+
+    RateLimiter::for('contact', function (Request $request) {
+        return Limit::perMinute(5)->by($request->ip());
     });
 
     RateLimiter::for('auth', function (Request $request) {
         return Limit::perMinute(10)->by($request->ip());
     });
-
-    RateLimiter::for('checkout', function (Request $request) {
-        return Limit::perMinute(30)->by($request->ip());
-    });
-}
+})
 ```
 
-### 10.3 CORS Configuration (Laravel)
-
-**`config/cors.php`**:
+**Aplicar às rotas**:
 
 ```php
-return [
-    'paths' => ['api/*'],
-
-    'allowed_methods' => ['*'],
-
-    'allowed_origins' => [
-        'https://praiadonortenazare.pt',
-        'https://www.praiadonortenazare.pt',
-    ],
-
-    'allowed_origins_patterns' => [],
-
-    'allowed_headers' => ['*'],
-
-    'exposed_headers' => [],
-
-    'max_age' => 0,
-
-    'supports_credentials' => true,
-];
+// Contact form com rate limiting
+Route::post('/contacto', [ContactController::class, 'send'])
+    ->name('contacto.send')
+    ->middleware('throttle:contact');
 ```
 
-### 10.4 Input Sanitization
+---
 
-**Frontend (Zod já implementado):**
+### 5.3 Form Validation (Laravel Request)
 
-```typescript
-// Todas as entradas devem passar por Zod antes de processar
-import { z } from 'zod'
-
-const userInput = z.string()
-  .trim()
-  .min(1)
-  .max(1000)
-  .refine(val => !/<script/i.test(val), 'Scripts not allowed')
-```
-
-**Backend (Laravel Form Requests):**
+**`app/Http/Requests/ContactRequest.php`**:
 
 ```php
-class CheckoutRequest extends FormRequest
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class ContactRequest extends FormRequest
 {
+    public function authorize(): bool
+    {
+        return true;
+    }
+
     public function rules(): array
     {
         return [
-            'first_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
-            'items' => ['required', 'array', 'min:1'],
-            'items.*.id' => ['required', 'string', 'exists:mshop_product,id'],
-            'items.*.quantity' => ['required', 'integer', 'min:1', 'max:100'],
+            'name' => ['required', 'string', 'min:2', 'max:100'],
+            'email' => ['required', 'email:rfc,dns', 'max:255'],
+            'subject' => ['required', 'string', 'min:5', 'max:200'],
+            'message' => ['required', 'string', 'min:10', 'max:5000'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => __('validation.required', ['attribute' => 'nome']),
+            'email.required' => __('validation.required', ['attribute' => 'email']),
+            'email.email' => __('validation.email'),
+            'subject.required' => __('validation.required', ['attribute' => 'assunto']),
+            'message.required' => __('validation.required', ['attribute' => 'mensagem']),
         ];
     }
 }
 ```
 
-### 10.5 Dependency Audit
+---
 
-```bash
-# Frontend
-npm audit
-npm audit fix
+### 5.4 CSRF Protection
 
-# Backend
-composer audit
+O Laravel inclui protecção CSRF automaticamente. Garantir que todos os formulários incluem o token:
+
+```blade
+<form method="POST" action="{{ route('contacto.send', ['locale' => $locale]) }}">
+    @csrf
+    {{-- campos do formulário --}}
+</form>
 ```
 
-### 10.6 Checklist de Segurança
+---
 
-- [ ] HTTPS forçado em todas as rotas
-- [ ] CORS configurado apenas para domínio autorizado
-- [ ] Rate limiting em endpoints sensíveis
-- [ ] Validação server-side de todos os preços
-- [ ] Credenciais Easypay apenas no backend
-- [ ] Webhooks com validação HMAC
-- [ ] SQL injection prevenido (Eloquent ORM)
-- [ ] XSS prevenido (sanitização de HTML)
-- [ ] CSRF protection ativo
-- [ ] npm audit / composer audit sem vulnerabilidades críticas
+### 5.5 XSS Prevention
 
-### 10.7 Testes Unitários (Laravel)
+O Blade escapa automaticamente output com `{{ }}`. Para HTML seguro usar:
 
-**`tests/Unit/EasypayServiceTest.php`**:
+```blade
+{{-- SEGURO: escapa HTML --}}
+{{ $user_input }}
+
+{{-- CUIDADO: permite HTML (apenas para conteúdo confiável do CMS) --}}
+{!! $trusted_html_from_cms !!}
+```
+
+**Sanitizar HTML do CMS** (`app/Helpers/HtmlPurifier.php`):
 
 ```php
-class EasypayServiceTest extends TestCase
+<?php
+
+namespace App\Helpers;
+
+use HTMLPurifier;
+use HTMLPurifier_Config;
+
+class HtmlSanitizer
 {
-    public function test_webhook_signature_validation()
+    public static function clean(string $html): string
     {
-        $service = new EasypayService();
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML.Allowed', 'p,br,strong,em,ul,ol,li,a[href],h2,h3,h4,blockquote');
 
-        $payload = '{"type":"payment.success"}';
-        $secret = config('services.easypay.webhook_secret');
-        $validSignature = hash_hmac('sha256', $payload, $secret);
-
-        $this->assertTrue($service->validateWebhook($payload, $validSignature));
-        $this->assertFalse($service->validateWebhook($payload, 'invalid'));
+        $purifier = new HTMLPurifier($config);
+        return $purifier->purify($html);
     }
 }
 ```
 
-### 10.8 Testes E2E (Playwright)
+---
 
-**`e2e/checkout.spec.ts`**:
+### 5.6 Dependency Audit
 
-```typescript
-import { test, expect } from '@playwright/test'
+```bash
+# Verificar vulnerabilidades PHP
+composer audit
 
-test('complete checkout flow', async ({ page }) => {
-  // Adicionar produto ao carrinho
-  await page.goto('/loja')
-  await page.click('[data-testid="product-card"]:first-child button')
+# Verificar vulnerabilidades npm
+npm audit
 
-  // Ir para checkout
-  await page.click('[data-testid="cart-icon"]')
-  await page.click('text=Finalizar Compra')
-
-  // Preencher formulário
-  await page.fill('[name="firstName"]', 'João')
-  await page.fill('[name="lastName"]', 'Silva')
-  await page.fill('[name="email"]', 'joao@example.com')
-  // ...
-
-  // Submeter
-  await page.click('button[type="submit"]')
-
-  // Verificar redirecionamento para pagamento
-  await expect(page).toHaveURL(/easypay/)
-})
+# Corrigir automaticamente
+npm audit fix
 ```
+
+---
+
+### 5.7 Testes de Segurança
+
+**`tests/Feature/SecurityTest.php`**:
+
+```php
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+
+class SecurityTest extends TestCase
+{
+    public function test_security_headers_are_present(): void
+    {
+        $response = $this->get('/pt');
+
+        $response->assertHeader('X-Content-Type-Options', 'nosniff');
+        $response->assertHeader('X-Frame-Options', 'DENY');
+        $response->assertHeader('X-XSS-Protection', '1; mode=block');
+    }
+
+    public function test_contact_form_has_csrf_protection(): void
+    {
+        $response = $this->post('/pt/contacto', [
+            'name' => 'Test',
+            'email' => 'test@example.com',
+            'subject' => 'Test Subject',
+            'message' => 'Test message content',
+        ]);
+
+        // Without CSRF token, should fail
+        $response->assertStatus(419);
+    }
+
+    public function test_contact_form_rate_limiting(): void
+    {
+        // Make 6 requests (limit is 5)
+        for ($i = 0; $i < 6; $i++) {
+            $response = $this->withSession(['_token' => 'test'])
+                ->post('/pt/contacto', [
+                    '_token' => 'test',
+                    'name' => 'Test',
+                    'email' => 'test@example.com',
+                    'subject' => 'Test Subject',
+                    'message' => 'Test message content',
+                ]);
+        }
+
+        // 6th request should be rate limited
+        $response->assertStatus(429);
+    }
+
+    public function test_admin_requires_authentication(): void
+    {
+        $response = $this->get('/admin');
+
+        $response->assertRedirect('/admin/login');
+    }
+}
+```
+
+---
+
+### 5.8 Checklist de Segurança
+
+- [ ] HTTPS forçado em todas as rotas (Cloudflare SSL)
+- [ ] Security headers implementados
+- [ ] Rate limiting em endpoints sensíveis
+- [ ] CSRF protection activo em todos os forms
+- [ ] XSS prevenido (Blade auto-escaping)
+- [ ] SQL injection prevenido (Eloquent ORM)
+- [ ] Validação server-side de todos os inputs
+- [ ] Admin panel protegido com autenticação
+- [ ] composer audit sem vulnerabilidades críticas
+- [ ] npm audit sem vulnerabilidades críticas
+
+---
+
+### 5.9 Vantagens de Segurança (Arquitectura Monolítica)
+
+| Aspecto | Benefício |
+|---------|-----------|
+| **Sem API pública** | Menor superfície de ataque |
+| **Sessions** | Mais seguro que JWT tokens |
+| **Server-side rendering** | Menos lógica exposta no cliente |
+| **CSRF nativo** | Protecção automática do Laravel |
+| **Sem CORS** | Zero configuração de CORS para errar |
+| **Single server** | Menos pontos de falha |
 
 ---
 
@@ -230,30 +325,36 @@ test('complete checkout flow', async ({ page }) => {
 |---------|--------|
 | Security Headers Grade | A |
 | SSL Labs Rating | A+ |
-| npm audit vulnerabilities | 0 críticas |
 | composer audit vulnerabilities | 0 críticas |
+| npm audit vulnerabilities | 0 críticas |
 | OWASP Top 10 | Mitigado |
 
 ---
 
 ## Entregáveis
 
-- [ ] Security headers implementados
+- [ ] Security headers middleware implementado
 - [ ] Rate limiting configurado
-- [ ] Testes unitários para funções críticas
-- [ ] Testes de integração para checkout
-- [ ] Testes E2E para fluxos principais
-- [ ] Documentação de API atualizada
-- [ ] Runbook de operações
+- [ ] Testes de segurança escritos
+- [ ] Dependency audits limpos
+- [ ] Documentação de segurança actualizada
 
 ---
 
 ## Critérios de Conclusão
 
 1. securityheaders.com mostra grade A
-2. SSL Labs mostra A+
+2. SSL Labs mostra A+ (via Cloudflare)
 3. Zero vulnerabilidades críticas em audits
-4. Testes unitários com > 80% coverage em código crítico
-5. Testes E2E passam para checkout completo
-6. Rate limiting bloqueia requests excessivos
-7. Logs de segurança funcionam corretamente
+4. Testes de segurança passam
+5. Rate limiting bloqueia requests excessivos
+
+---
+
+## Próxima Fase
+
+→ [Fase 6: E-commerce Setup](./FASE_06_ECOMMERCE.md)
+
+---
+
+*Actualizado: 11 Dezembro 2025 - Arquitectura monolítica*

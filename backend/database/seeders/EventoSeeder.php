@@ -3,12 +3,31 @@
 namespace Database\Seeders;
 
 use App\Models\Evento;
+use Database\Seeders\Traits\DownloadsImages;
 use Illuminate\Database\Seeder;
 
 class EventoSeeder extends Seeder
 {
+    use DownloadsImages;
+
     public function run(): void
     {
+        // Unsplash direct image URLs for events
+        $images = [
+            // Tow surfing competition
+            'https://images.unsplash.com/photo-1509914398892-963f53e6e2f1?w=1200&h=800&fit=crop',
+            // Safety workshop/training
+            'https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=1200&h=800&fit=crop',
+            // Exhibition/museum
+            'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&h=800&fit=crop',
+            // Young surfers/kids
+            'https://images.unsplash.com/photo-1530870110042-98b2cb110834?w=1200&h=800&fit=crop',
+            // Conference
+            'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=800&fit=crop',
+            // Beach cleanup
+            'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=1200&h=800&fit=crop',
+        ];
+
         $eventos = [
             [
                 'title' => [
@@ -24,7 +43,7 @@ class EventoSeeder extends Seeder
                 'end_date' => now()->addMonths(2)->endOfMonth(),
                 'location' => 'Praia do Norte, Nazaré',
                 'entity' => 'praia-norte',
-                'image' => null,
+                'image_url' => $images[0],
                 'ticket_url' => 'https://www.worldsurfleague.com',
                 'featured' => true,
             ],
@@ -42,7 +61,7 @@ class EventoSeeder extends Seeder
                 'end_date' => now()->addWeeks(3)->addDays(1),
                 'location' => 'Carsurf - Centro de Alto Rendimento',
                 'entity' => 'carsurf',
-                'image' => null,
+                'image_url' => $images[1],
                 'ticket_url' => null,
                 'featured' => true,
             ],
@@ -60,7 +79,7 @@ class EventoSeeder extends Seeder
                 'end_date' => now()->addMonths(4),
                 'location' => 'Forte de São Miguel Arcanjo',
                 'entity' => 'praia-norte',
-                'image' => null,
+                'image_url' => $images[2],
                 'ticket_url' => null,
                 'featured' => false,
             ],
@@ -78,7 +97,7 @@ class EventoSeeder extends Seeder
                 'end_date' => now()->addMonths(6),
                 'location' => 'Carsurf - Centro de Alto Rendimento',
                 'entity' => 'carsurf',
-                'image' => null,
+                'image_url' => $images[3],
                 'ticket_url' => null,
                 'featured' => false,
             ],
@@ -96,7 +115,7 @@ class EventoSeeder extends Seeder
                 'end_date' => now()->addMonths(3)->startOfMonth()->addDays(15),
                 'location' => 'Centro Cultural da Nazaré',
                 'entity' => 'nazare-qualifica',
-                'image' => null,
+                'image_url' => $images[4],
                 'ticket_url' => null,
                 'featured' => true,
             ],
@@ -114,13 +133,24 @@ class EventoSeeder extends Seeder
                 'end_date' => null,
                 'location' => 'Praia do Norte, Nazaré',
                 'entity' => 'nazare-qualifica',
-                'image' => null,
+                'image_url' => $images[5],
                 'ticket_url' => null,
                 'featured' => false,
             ],
         ];
 
         foreach ($eventos as $evento) {
+            // Download the image
+            $imageUrl = $evento['image_url'] ?? null;
+            unset($evento['image_url']);
+
+            $image = null;
+            if ($imageUrl) {
+                $filename = "evento-{$evento['slug']}.jpg";
+                $image = $this->downloadImage($imageUrl, 'eventos', $filename);
+            }
+
+            $evento['image'] = $image;
             Evento::create($evento);
         }
     }

@@ -80,13 +80,108 @@ export interface Pagina {
   id: number;
   title: I18nField;
   slug: string;
-  content: I18nField | null;
+  content: I18nField | CarsurfLandingContent | HomepageContent | null;
+  video_url: string | null;
   entity: 'praia-norte' | 'carsurf' | 'nazare-qualifica';
   seo_title: I18nField | null;
   seo_description: I18nField | null;
   published: boolean;
   created_at: string;
   updated_at: string;
+}
+
+// Carsurf Landing Page Content (structured)
+export interface CarsurfLandingContent {
+  pt: CarsurfLandingSection;
+  en: CarsurfLandingSection;
+}
+
+export interface CarsurfLandingSection {
+  hero: {
+    title: string;
+    subtitle: string;
+    cta_primary: string;
+    cta_secondary: string;
+    youtube_url?: string;
+  };
+  about: {
+    title: string;
+    text: string;
+    highlight: string;
+  };
+  facilities: CarsurfFacility[];
+  activities: CarsurfActivity[];
+  team: CarsurfTeamMember[];
+  contact: {
+    phone: string;
+    email: string;
+    hours: string;
+    address: string;
+    maps_url: string;
+  };
+  partners: {
+    text: string;
+  };
+}
+
+export interface CarsurfFacility {
+  name: string;
+  description: string;
+  icon: string;
+  price?: string;
+  capacity?: string;
+}
+
+export interface CarsurfActivity {
+  name: string;
+  icon: string;
+}
+
+export interface CarsurfTeamMember {
+  name: string;
+  role: string;
+  description: string;
+  email: string;
+}
+
+// Homepage Content (Praia do Norte)
+export interface HomepageContent {
+  pt: HomepageSection;
+  en: HomepageSection;
+}
+
+export interface HomepageSection {
+  hero: {
+    title: string;
+    subtitle: string;
+    cta_text: string;
+    cta_url: string;
+    youtube_url?: string;
+  };
+}
+
+// Type guard for Homepage content
+export function isHomepageContent(content: unknown): content is HomepageContent {
+  if (!content || typeof content !== 'object') return false;
+  const c = content as Record<string, unknown>;
+  return (
+    typeof c.pt === 'object' &&
+    c.pt !== null &&
+    'hero' in (c.pt as object) &&
+    !('facilities' in (c.pt as object)) // Distinguir de CarsurfLandingContent
+  );
+}
+
+// Type guard for Carsurf landing content
+export function isCarsurfLandingContent(content: unknown): content is CarsurfLandingContent {
+  if (!content || typeof content !== 'object') return false;
+  const c = content as Record<string, unknown>;
+  return (
+    typeof c.pt === 'object' &&
+    c.pt !== null &&
+    'hero' in (c.pt as object) &&
+    'facilities' in (c.pt as object)
+  );
 }
 
 // Pagination

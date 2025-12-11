@@ -48,7 +48,7 @@ export function Footer() {
             </h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href={`/${locale}/carsurf/sobre`} className="hover:text-performance transition-colors">
+                <Link href={`/${locale}/carsurf`} className="hover:text-performance transition-colors">
                   {tNav('about')}
                 </Link>
               </li>

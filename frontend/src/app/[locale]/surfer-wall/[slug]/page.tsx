@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -94,8 +95,21 @@ function SurferContent({ locale, surfer, otherSurfers }: SurferContentProps) {
       <section className="relative bg-gradient-to-br from-ocean via-ocean-dark to-ocean-light py-20 text-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-3">
-            {/* Photo placeholder */}
-            <div className="aspect-square rounded-full bg-white/10 md:aspect-[3/4] md:rounded-lg" />
+            {/* Photo */}
+            <div className="relative aspect-square overflow-hidden rounded-full md:aspect-[3/4] md:rounded-lg">
+              {surfer.photo ? (
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${surfer.photo}`}
+                  alt={surfer.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  priority
+                />
+              ) : (
+                <div className="h-full w-full bg-white/10" />
+              )}
+            </div>
 
             {/* Info */}
             <div className="md:col-span-2">
@@ -252,8 +266,20 @@ function SurferContent({ locale, surfer, otherSurfers }: SurferContentProps) {
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {otherSurfers.map((other) => (
                 <Link key={other.id} href={`/${locale}/surfer-wall/${other.slug}`}>
-                  <Card className="h-full cursor-pointer overflow-hidden transition-shadow hover:shadow-lg">
-                    <div className="aspect-square bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                  <Card className="group h-full cursor-pointer overflow-hidden transition-shadow hover:shadow-lg">
+                    <div className="relative aspect-square">
+                      {other.photo ? (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${other.photo}`}
+                          alt={other.name}
+                          fill
+                          className="object-cover transition-transform group-hover:scale-105"
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                      )}
+                    </div>
                     <CardContent className="p-4">
                       <h3 className="font-semibold">{other.name}</h3>
                       {other.nationality && (

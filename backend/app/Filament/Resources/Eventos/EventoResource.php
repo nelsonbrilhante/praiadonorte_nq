@@ -20,7 +20,7 @@ class EventoResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Conteúdo';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 11;
 
     protected static ?string $modelLabel = 'Evento';
 

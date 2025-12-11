@@ -2,9 +2,9 @@
 
 ## Praia do Norte Unified Platform
 
-**Versão**: 5.0
-**Data**: 3 de Dezembro de 2025
-**Status**: Pronto para Implementação (Blocos 1-3)
+**Versão**: 6.0
+**Data**: 11 de Dezembro de 2025
+**Status**: Migração de Arquitectura em Curso
 
 ---
 
@@ -31,80 +31,90 @@ O projeto "Praia do Norte Unified Platform" visa criar um website único que uni
 
 O website funcionará como uma plataforma institucional, informativa e de e-commerce, com a **Praia do Norte como elemento central**.
 
-### 1.2 Objetivos Principais
+### 1.2 Objectivos Principais
 
 1. **Unificação Estratégica**: Criar uma experiência digital coesa entre as três entidades
 2. **E-commerce Robusto**: Implementar loja online completa para merchandising
 3. **Visibilidade Internacional**: Suporte multi-idioma (PT/EN)
-4. **Segurança Máxima**: Proteção contra ciberataques
-5. **Performance Excecional**: SEO otimizado e tempos de carregamento rápidos
+4. **Segurança Máxima**: Protecção contra ciberataques
+5. **Performance Excepcional**: SEO optimizado e tempos de carregamento rápidos
 6. **Integração de Pagamentos**: Sistema completo com Easypay
 
-### 1.3 Desafios Identificados
+### 1.3 Mudança de Arquitectura (v6.0)
 
-- Balancear conteúdo das três entidades mantendo Praia do Norte como foco
-- Segurança robusta contra ciberataques
-- Gestão de conteúdo multi-idioma consistente
-- Performance com grande volume de conteúdo multimédia
+**Data da Decisão**: 11 de Dezembro de 2025
+
+A arquitectura foi alterada de **split** (Next.js + Laravel API) para **monolítica** (Laravel + Blade + Livewire).
+
+**Motivos**:
+- Eliminar problemas de API/CORS/proxy de imagens
+- Reduzir superfície de ataque (segurança)
+- Simplificar deployment e manutenção
+- Facilitar integração futura com Easypay e Sage
 
 ---
 
 ## 2. ARQUITETURA TÉCNICA
 
-### 2.1 Stack Tecnológica
+### 2.1 Stack Tecnológica (ACTUALIZADA)
 
 ```
                     ┌─────────────────────────────────────┐
                     │         CLOUDFLARE (CDN/SSL)        │
                     └──────────────┬──────────────────────┘
                                    │
-            ┌──────────────────────┼──────────────────────┐
-            │                      │                      │
-            ▼                      ▼                      ▼
-┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐
-│ praiadonortenazare│  │api.praiadonorte   │  │ Redirects (301)   │
-│       .pt         │  │   nazare.pt       │  │                   │
-│   VERCEL          │  │   VPS (cPanel)    │  │ carsurf.nazare.pt │
-│   (Next.js 15)    │  │   (Laravel 12)    │  │ nazarequalifica.pt│
-└───────────────────┘  └───────────────────┘  └───────────────────┘
+                                   ▼
+                    ┌─────────────────────────────────────┐
+                    │    praiadonortenazare.pt            │
+                    │         VPS (cPanel)                │
+                    │    Laravel 12 + Blade + Livewire    │
+                    │         + Filament Admin            │
+                    └─────────────────────────────────────┘
 ```
 
 | Camada | Tecnologia | Localização |
 |--------|-----------|-------------|
-| **Frontend** | Next.js 15 + TypeScript | Vercel |
-| **UI** | Tailwind CSS + shadcn/ui | Vercel |
-| **State** | Zustand | Vercel |
+| **Frontend Views** | Blade + Livewire | VPS |
+| **Styling** | Tailwind CSS 4 | VPS |
 | **Backend** | Laravel 12 | VPS |
-| **E-commerce** | Aimeos ou API SAGE (pendente) | VPS |
+| **Admin Panel** | Filament 4.x | VPS |
 | **Database** | MySQL 8.0 | VPS |
-| **Auth** | Laravel Sanctum | VPS |
-| **Payments** | Easypay v2.0 | VPS |
-| **i18n** | next-intl + Aimeos | Ambos |
+| **Auth** | Laravel Sessions | VPS |
+| **Payments** | Easypay v2.0 (futuro) | VPS |
+| **i18n** | Laravel Localization | VPS |
 
-### 2.2 Infraestrutura VPS
+### 2.2 Arquitectura Anterior (DEPRECATED)
+
+~~A arquitectura anterior usava:~~
+- ~~Next.js 16 no Vercel (frontend)~~
+- ~~Laravel API no VPS (backend)~~
+- ~~REST API com Sanctum tokens~~
+
+Esta arquitectura foi abandonada devido a problemas técnicos com proxy de imagens e complexidade de CORS.
+
+### 2.3 Infraestrutura VPS
 
 **Servidor**: vm01.cm-nazare.pt
 
 | Recurso | Especificação |
 |---------|--------------|
 | CPU | 4 vCPUs @ 2.1GHz |
-| RAM | 4GB |
+| RAM | 4GB (suficiente para Laravel monolítico) |
 | Armazenamento | 114GB livre |
-| SO | CentOS 7 |
+| SO | CentOS 7 (migração recomendada) |
 | PHP | 8.3 com FPM |
 | MySQL | 8.0.42 |
 
-### 2.3 Decisões Arquiteturais
+### 2.4 Benefícios da Nova Arquitectura
 
-**Por que Laravel + Aimeos?**
-- VPS suporta PHP 8.3 (via EasyApache 4) + MySQL 8.0
-- Aimeos não tem CVEs críticos conhecidos
-- i18n nativo superior (30+ idiomas)
-
-**Por que Next.js no Vercel?**
-- Offload de processamento do VPS
-- CDN global para performance
-- Free tier suficiente
+| Aspecto | Antes (Split) | Depois (Monolítico) |
+|---------|---------------|---------------------|
+| Codebases | 2 | 1 |
+| Deployments | 2 (Vercel + VPS) | 1 (VPS) |
+| Autenticação | API tokens | Sessions (mais seguro) |
+| Imagens | Proxy com erros | Directo (funciona) |
+| CORS | Configuração complexa | N/A |
+| E-commerce | API complexa | Integração directa |
 
 ---
 
@@ -114,72 +124,95 @@ O website funcionará como uma plataforma institucional, informativa e de e-comm
 
 ```
 praia-do-norte-unified/
-├── frontend/                    # Next.js 15 (Vercel)
-│   ├── src/
-│   │   ├── app/[locale]/        # Rotas i18n
-│   │   │   ├── (praia-norte)/   # Route group - marca principal
-│   │   │   ├── (carsurf)/       # Route group - Carsurf
-│   │   │   └── (nazare-qualifica)/ # Route group - NQ
-│   │   ├── components/          # UI components
-│   │   ├── lib/api/             # API client
-│   │   ├── store/               # Zustand stores
-│   │   └── types/               # TypeScript definitions
-│   └── package.json
-│
-├── backend/                     # Laravel 12 (VPS)
+├── backend/                        # Laravel 12 + Blade + Livewire
 │   ├── app/
-│   │   ├── Http/Controllers/    # API controllers
-│   │   ├── Models/              # Eloquent models
-│   │   └── Services/            # Business logic
-│   ├── config/                  # Configurações
-│   └── composer.json
+│   │   ├── Http/
+│   │   │   ├── Controllers/        # Web controllers
+│   │   │   └── Middleware/         # Localization, etc.
+│   │   ├── Livewire/              # Livewire components
+│   │   ├── Filament/              # Admin panel
+│   │   ├── Models/                # Eloquent models
+│   │   └── Services/              # Business logic
+│   ├── resources/
+│   │   ├── views/
+│   │   │   ├── layouts/           # Master layouts
+│   │   │   ├── components/        # Blade components (UI)
+│   │   │   ├── pages/             # Page views
+│   │   │   └── livewire/          # Livewire views
+│   │   ├── css/                   # Tailwind CSS
+│   │   └── js/                    # JavaScript
+│   ├── lang/
+│   │   ├── pt/                    # Português
+│   │   └── en/                    # English
+│   ├── routes/
+│   │   └── web.php                # Public routes
+│   ├── public/
+│   │   └── storage/               # Uploaded files symlink
+│   └── database/
+│       ├── migrations/
+│       └── seeders/
+│
+├── frontend/                       # DEPRECATED (arquivar após migração)
+│   └── (Next.js - referência para conversão)
 │
 └── docs/
-    ├── phases/                  # Guias de implementação
-    ├── architecture/            # Documentação técnica
-    └── archive/                 # Documentos históricos
+    ├── phases/                     # Guias de implementação
+    ├── architecture/               # Documentação técnica
+    └── archive/                    # Documentos históricos
 ```
 
 ---
 
 ## 4. FASES DE IMPLEMENTAÇÃO
 
-O desenvolvimento está dividido em **11 fases** organizadas em **4 blocos**. As fases de e-commerce foram movidas para o final, aguardando definição da integração com API SAGE.
+O desenvolvimento está dividido em **11 fases** organizadas em **4 blocos**.
 
-> **Nota**: A decisão sobre Aimeos vs API SAGE está pendente. O Bloco 4 será definido após análise da documentação SAGE.
+### Bloco 1: Fundações ✅ Completo
 
-### Bloco 1: Fundações (Semanas 1-2)
+| Fase | Nome | Descrição | Status |
+|------|------|-----------|--------|
+| **0** | Setup | Laravel 12 + Filament 4 | ✅ Completo |
+| **1** | Design | Tailwind CSS, componentes base | ✅ Completo |
 
-| Fase | Nome | Descrição | Documentação |
-|------|------|-----------|--------------|
-| **0** | Setup | Laravel 12 + Next.js 15, CI/CD | [FASE_00_SETUP.md](docs/phases/FASE_00_SETUP.md) |
-| **1** | Design | Tailwind, shadcn/ui, layout | [FASE_01_DESIGN.md](docs/phases/FASE_01_DESIGN.md) |
+### Bloco 2: Institucional 🔄 Migração em Curso
 
-### Bloco 2: Institucional (Semanas 3-4)
+| Fase | Nome | Descrição | Status |
+|------|------|-----------|--------|
+| **2** | Homepage | CMS backend, seeders | ✅ Completo |
+| **3** | Conteúdo | Notícias, Surfers, Eventos | 🔄 Migrar para Blade |
 
-| Fase | Nome | Descrição | Documentação |
-|------|------|-----------|--------------|
-| **2** | Homepage | Páginas institucionais, i18n | [FASE_02_HOMEPAGE.md](docs/phases/FASE_02_HOMEPAGE.md) |
-| **3** | Conteúdo | Notícias, Surfer Wall, Eventos | [FASE_03_CONTEUDO.md](docs/phases/FASE_03_CONTEUDO.md) |
+**Tarefas de Migração (Fase 3)**:
+1. [ ] Configurar Tailwind + Vite no Laravel
+2. [ ] Instalar Livewire + Laravel Localization
+3. [ ] Criar layout master Blade
+4. [ ] Converter componentes UI (button, card, badge)
+5. [ ] Converter Homepage
+6. [ ] Converter Notícias (listagem + detalhe)
+7. [ ] Converter Eventos (listagem + detalhe)
+8. [ ] Converter Surfer Wall (listagem + detalhe)
+9. [ ] Converter Previsões marítimas
+10. [ ] Converter Carsurf pages
+11. [ ] Converter Nazaré Qualifica pages
+12. [ ] Testar i18n (PT/EN)
 
-### Bloco 3: Qualidade (Semana 5)
+### Bloco 3: Qualidade (Após Migração)
 
-| Fase | Nome | Descrição | Documentação |
-|------|------|-----------|--------------|
-| **4** | SEO | Meta tags, structured data | [FASE_04_SEO.md](docs/phases/FASE_04_SEO.md) |
-| **5** | Segurança | Headers, rate limiting, validação | [FASE_05_SEGURANCA.md](docs/phases/FASE_05_SEGURANCA.md) |
+| Fase | Nome | Descrição | Status |
+|------|------|-----------|--------|
+| **4** | SEO | Meta tags, structured data | ⏳ Pendente |
+| **5** | Segurança | Headers, rate limiting, validação | ⏳ Pendente |
 
-### Bloco 4: E-commerce (Semanas 6-10) ⏸️ Aguarda API SAGE
+### Bloco 4: E-commerce (Futuro)
 
-| Fase | Nome | Descrição | Documentação |
-|------|------|-----------|--------------|
-| **6** | E-commerce Setup | Aimeos OU integração SAGE | [FASE_06_ECOMMERCE.md](docs/phases/FASE_06_ECOMMERCE.md) |
-| **7** | Catálogo | Listagem, página de produto | [FASE_07_CATALOGO.md](docs/phases/FASE_07_CATALOGO.md) |
-| **8** | Checkout | Carrinho, fluxo de compra | [FASE_08_CHECKOUT.md](docs/phases/FASE_08_CHECKOUT.md) |
-| **9** | Pagamentos | Integração Easypay | [FASE_09_EASYPAY.md](docs/phases/FASE_09_EASYPAY.md) |
-| **10** | Área Cliente | Auth completa, histórico | [FASE_10_AUTH.md](docs/phases/FASE_10_AUTH.md) |
+| Fase | Nome | Descrição | Status |
+|------|------|-----------|--------|
+| **6** | E-commerce Setup | Laravel nativo ou WooCommerce | ⏳ Pendente |
+| **7** | Catálogo | Listagem, página de produto | ⏳ Pendente |
+| **8** | Checkout | Carrinho, fluxo de compra | ⏳ Pendente |
+| **9** | Pagamentos | Integração Easypay | ⏳ Pendente |
+| **10** | Área Cliente | Auth completa, histórico | ⏳ Pendente |
 
-**Índice completo**: [docs/phases/README.md](docs/phases/README.md)
+**Nota**: A decisão sobre e-commerce nativo vs WooCommerce headless aguarda validação do conector Sage.
 
 ---
 
@@ -187,26 +220,31 @@ O desenvolvimento está dividido em **11 fases** organizadas em **4 blocos**. As
 
 ### 5.1 Princípios Fundamentais
 
-1. **Zero Trust no Frontend**: Nunca confiar em dados vindos do cliente
-2. **Menor Privilégio**: Cada componente tem apenas permissões necessárias
-3. **Defesa em Profundidade**: Múltiplas camadas de segurança
-4. **Segurança por Design**: Integrada desde o início
+1. **Arquitectura Monolítica**: Menos superfície de ataque (sem API exposta)
+2. **Sessions, não Tokens**: Autenticação baseada em sessões é mais segura
+3. **Server-Side Validation**: Toda validação feita no servidor
+4. **CSRF Protection**: Protecção nativa do Laravel em todos os forms
 
 ### 5.2 Medidas Implementadas
 
 | Camada | Medida | Implementação |
 |--------|--------|---------------|
-| **CDN** | WAF | Cloudflare Managed Rules |
-| **CDN** | DDoS | Cloudflare (automático) |
-| **Frontend** | Headers | next.config.js |
-| **Frontend** | Validation | Zod |
-| **Backend** | Auth | Laravel Sanctum |
-| **Backend** | Rate Limiting | Laravel Throttle |
-| **Database** | Queries | Eloquent ORM |
-| **Payments** | Server-only | EasypayService |
-| **Webhooks** | HMAC | ValidateEasypayWebhook |
+| **CDN** | WAF + DDoS | Cloudflare |
+| **Application** | CSRF | Laravel built-in |
+| **Application** | XSS | Blade auto-escaping |
+| **Application** | SQL Injection | Eloquent ORM |
+| **Auth** | Sessions | Laravel Sessions |
+| **Payments** | Server-only | Easypay PHP SDK |
+| **Webhooks** | HMAC | Signature validation |
 
-### 5.3 Conformidade GDPR
+### 5.3 Vantagens de Segurança (Monolítico)
+
+- **Sem API exposta**: Não há endpoints públicos para atacar
+- **Sem CORS**: Não há configuração de CORS para errar
+- **Sessions**: Mais seguras que JWT tokens
+- **Server-side rendering**: Menos exposição de lógica no cliente
+
+### 5.4 Conformidade GDPR
 
 - Minimização de dados
 - Consentimento explícito para marketing
@@ -225,8 +263,8 @@ O desenvolvimento está dividido em **11 fases** organizadas em **4 blocos**. As
 | Lighthouse Performance | > 90 |
 | Lighthouse Accessibility | > 95 |
 | Lighthouse SEO | > 95 |
+| TTFB | < 200ms |
 | LCP | < 2.5s |
-| FID | < 100ms |
 | CLS | < 0.1 |
 
 ### 6.2 Segurança
@@ -235,7 +273,6 @@ O desenvolvimento está dividido em **11 fases** organizadas em **4 blocos**. As
 |---------|--------|
 | Security Headers | Grade A |
 | SSL Labs | A+ |
-| npm audit | 0 críticas |
 | composer audit | 0 críticas |
 
 ### 6.3 Funcionalidade
@@ -251,13 +288,12 @@ O desenvolvimento está dividido em **11 fases** organizadas em **4 blocos**. As
 ## Documentação Relacionada
 
 - **Referência Técnica**: [CLAUDE.md](CLAUDE.md)
+- **Handoff de Sessão**: [SESSION-HANDOFF.md](SESSION-HANDOFF.md)
 - **Estrutura de Pastas**: [docs/architecture/FOLDER_STRUCTURE.md](docs/architecture/FOLDER_STRUCTURE.md)
 - **Convenções de Nomenclatura**: [docs/architecture/NAMING_CONVENTIONS.md](docs/architecture/NAMING_CONVENTIONS.md)
 - **Guia de Deploy**: [MIGRATION_PLAN.md](MIGRATION_PLAN.md)
 - **Segurança**: [CYBERSECURITY_ASSESSMENT.md](CYBERSECURITY_ASSESSMENT.md)
-- **Utilizadores**: [USER_POLICY_PREVIEW.md](USER_POLICY_PREVIEW.md)
 - **Design**: [DESIGN_GUIDELINES.md](DESIGN_GUIDELINES.md)
-- **Análise E-commerce**: [docs/archive/E-COMMERCE_PLATFORMS_COMPARISON.md](docs/archive/E-COMMERCE_PLATFORMS_COMPARISON.md)
 
 ---
 
@@ -270,6 +306,7 @@ O desenvolvimento está dividido em **11 fases** organizadas em **4 blocos**. As
 | 3.0 | 2025-11-25 | Reescrita para Laravel + Aimeos + MySQL |
 | 4.0 | 2025-11-25 | Reorganização: fases extraídas para docs/phases/ |
 | 5.0 | 2025-12-03 | E-commerce movido para final; aguarda API SAGE |
+| **6.0** | **2025-12-11** | **Migração para arquitectura monolítica (Blade + Livewire)** |
 
 ---
 

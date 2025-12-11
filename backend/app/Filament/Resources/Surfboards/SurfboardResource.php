@@ -18,9 +18,9 @@ class SurfboardResource extends Resource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Surfer Wall';
+    protected static string|\UnitEnum|null $navigationGroup = 'Praia do Norte';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 12;
 
     protected static ?string $modelLabel = 'Prancha';
 

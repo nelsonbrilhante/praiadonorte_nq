@@ -22,6 +22,14 @@ class PaginaResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    /**
+     * Hide from navigation - replaced by entity-specific resources.
+     * @see \App\Filament\Resources\PraiaNorte\PraiaNortePageResource
+     * @see \App\Filament\Resources\Carsurf\CarsurfPageResource
+     * @see \App\Filament\Resources\NazareQualifica\NQPageResource
+     */
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $modelLabel = 'Página';
 
     protected static ?string $pluralModelLabel = 'Páginas';

@@ -13,6 +13,7 @@ class Pagina extends Model
         'title',
         'slug',
         'content',
+        'video_url',
         'entity',
         'seo_title',
         'seo_description',

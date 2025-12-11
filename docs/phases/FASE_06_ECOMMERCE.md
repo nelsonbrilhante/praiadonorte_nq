@@ -1,65 +1,203 @@
 # Fase 6: E-commerce Setup
 
-**Duração Estimada**: 1-2 semanas
+**Status**: ⏳ Pendente (Aguarda Decisão API SAGE)
 **Dependências**: Fase 5 + Decisão API SAGE
 **Bloco**: 4 - E-commerce
 
 > **IMPORTANTE**: Esta fase aguarda análise da documentação API SAGE para decidir entre:
-> - **Opção A**: Aimeos para gestão de produtos + SAGE para faturação/stock
-> - **Opção B**: Integração direta com API SAGE
-> - **Opção C**: Camada intermédia Laravel que abstrai SAGE
+> - **Opção A**: WooCommerce headless para gestão de produtos + Laravel para checkout
+> - **Opção B**: Laravel nativo com Easypay (produtos geridos em Filament)
+> - **Opção C**: Integração directa com API SAGE para stock/facturação
+
+---
+
+## Vantagens da Arquitectura Monolítica para E-commerce
+
+| Aspecto | Benefício |
+|---------|-----------|
+| **Easypay** | Integração directa via PHP SDK, sem camada API |
+| **Sessions** | Carrinho persistente via sessions (mais seguro) |
+| **Checkout** | Server-side rendering, sem exposição de preços no cliente |
+| **Webhooks** | Recepção directa no Laravel |
+| **SAGE** | Conexão directa ao ERP via PHP |
 
 ---
 
 ## Objetivos
 
-- Configurar tipos de conteúdo no Aimeos
-- Criar estrutura de produtos
-- Configurar i18n
+- Decidir abordagem e-commerce (WooCommerce vs Laravel nativo)
+- Configurar estrutura de produtos
+- Preparar integração com Easypay
+- Planear sincronização SAGE (se aplicável)
 
 ---
 
 ## Tarefas
 
-### 2.1 Configuração do Aimeos
+### 6.1 Estrutura de Produtos (Filament)
 
-**`config/shop.php`**:
+Se opção **Laravel nativo**, criar Resource para produtos no Filament:
+
+**Model**: `app/Models/Product.php`
 
 ```php
-return [
-    'routes' => [
-        'admin' => ['prefix' => 'admin', 'middleware' => ['web', 'auth']],
-        'jsonapi' => ['prefix' => 'api', 'middleware' => ['api']],
-    ],
+<?php
 
-    'page' => [
-        'account-index' => ['account/profile', 'account/history'],
-        'basket-index' => ['basket/standard', 'basket/related'],
-        'catalog-list' => ['catalog/filter', 'catalog/list'],
-    ],
+namespace App\Models;
 
-    'client' => [
-        'html' => [
-            'common' => [
-                'template' => [
-                    'baseurl' => 'packages/aimeos/shop/themes/default',
-                ],
-            ],
-        ],
-    ],
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 
-    // Multi-site para as 3 entidades
-    'mshop' => [
-        'locale' => [
-            'site' => 'praia-norte', // default
-        ],
-    ],
-];
+class Product extends Model
+{
+    protected $fillable = [
+        'sku',
+        'name',           // JSON: pt, en
+        'description',    // JSON: pt, en
+        'price',
+        'compare_price',
+        'stock',
+        'images',
+        'category_id',
+        'entity',
+        'featured',
+        'active',
+    ];
+
+    protected $casts = [
+        'name' => 'array',
+        'description' => 'array',
+        'images' => 'array',
+        'price' => 'decimal:2',
+        'compare_price' => 'decimal:2',
+        'featured' => 'boolean',
+        'active' => 'boolean',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class);
+    }
+
+    public function getTranslation(string $field, string $locale): string
+    {
+        return $this->{$field}[$locale] ?? $this->{$field}['pt'] ?? '';
+    }
+}
 ```
 
-### 2.2 Estrutura de Produtos
+**Filament Resource**: `app/Filament/Resources/ProductResource.php`
 
-**Categorias:**
+```php
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\ProductResource\Pages;
+use App\Models\Product;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+
+class ProductResource extends Resource
+{
+    protected static ?string $model = Product::class;
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
+    protected static ?string $navigationGroup = 'E-commerce';
+    protected static ?string $modelLabel = 'Produto';
+    protected static ?string $pluralModelLabel = 'Produtos';
+
+    public static function form(Form $form): Form
+    {
+        return $form->schema([
+            Forms\Components\Section::make('Identificação')->schema([
+                Forms\Components\TextInput::make('sku')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+            ]),
+
+            Forms\Components\Tabs::make('Traduções')->tabs([
+                Forms\Components\Tabs\Tab::make('Português')->schema([
+                    Forms\Components\TextInput::make('name.pt')
+                        ->label('Nome')
+                        ->required(),
+                    Forms\Components\RichEditor::make('description.pt')
+                        ->label('Descrição'),
+                ]),
+                Forms\Components\Tabs\Tab::make('English')->schema([
+                    Forms\Components\TextInput::make('name.en')
+                        ->label('Name'),
+                    Forms\Components\RichEditor::make('description.en')
+                        ->label('Description'),
+                ]),
+            ]),
+
+            Forms\Components\Section::make('Preços & Stock')->schema([
+                Forms\Components\TextInput::make('price')
+                    ->label('Preço')
+                    ->numeric()
+                    ->prefix('€')
+                    ->required(),
+                Forms\Components\TextInput::make('compare_price')
+                    ->label('Preço Original')
+                    ->numeric()
+                    ->prefix('€'),
+                Forms\Components\TextInput::make('stock')
+                    ->numeric()
+                    ->default(0),
+            ])->columns(3),
+
+            Forms\Components\Section::make('Imagens')->schema([
+                Forms\Components\FileUpload::make('images')
+                    ->multiple()
+                    ->image()
+                    ->directory('products'),
+            ]),
+
+            Forms\Components\Section::make('Organização')->schema([
+                Forms\Components\Select::make('category_id')
+                    ->relationship('category', 'name')
+                    ->label('Categoria'),
+                Forms\Components\Select::make('entity')
+                    ->options([
+                        'praia-norte' => 'Praia do Norte',
+                        'carsurf' => 'Carsurf',
+                        'nazare-qualifica' => 'Nazaré Qualifica',
+                    ])
+                    ->default('praia-norte'),
+                Forms\Components\Toggle::make('featured')
+                    ->label('Destaque'),
+                Forms\Components\Toggle::make('active')
+                    ->label('Activo')
+                    ->default(true),
+            ])->columns(2),
+        ]);
+    }
+}
+```
+
+---
+
+### 6.2 Categorias de Produtos
+
+**Migration**: `database/migrations/create_product_categories_table.php`
+
+```php
+Schema::create('product_categories', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->string('slug')->unique();
+    $table->unsignedBigInteger('parent_id')->nullable();
+    $table->integer('sort_order')->default(0);
+    $table->timestamps();
+
+    $table->foreign('parent_id')->references('id')->on('product_categories');
+});
+```
+
+**Estrutura de Categorias**:
 
 ```
 Loja Praia do Norte
@@ -77,67 +215,90 @@ Loja Praia do Norte
     └── Edições Limitadas
 ```
 
-**Campos de Produto (Aimeos):**
+---
 
-| Campo | Tipo | i18n | Obrigatório |
-|-------|------|------|-------------|
-| label | string | Sim | Sim |
-| code (SKU) | string | Não | Sim |
-| description | text | Sim | Sim |
-| price | decimal | Não | Sim |
-| stock | integer | Não | Sim |
-| images | media[] | Não | Sim |
-| category | relation | Não | Sim |
-| variants | relation[] | Não | Não |
-| entity | enum | Não | Sim |
+### 6.3 Preparação Easypay
 
-### 2.3 Tipos de Conteúdo Customizados
+**Configuração** (`.env`):
 
-**Artigos/Notícias:**
-
-```php
-// Usando Aimeos CMS Manager
-// Campos: title, slug, content, coverImage, author, category, entity, tags, publishedAt
+```env
+EASYPAY_ACCOUNT_ID=your_account_id
+EASYPAY_API_KEY=your_api_key
+EASYPAY_BASE_URL=https://api.prod.easypay.pt/2.0
+EASYPAY_WEBHOOK_SECRET=your_webhook_secret
 ```
 
-**Surfistas (Surfer Wall):**
+**Service Provider**: `app/Providers/EasypayServiceProvider.php`
 
 ```php
-// Campos: name, slug, bio, photo, nationality, achievements, surfboards, socialMedia, featured
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use App\Services\EasypayService;
+
+class EasypayServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->singleton(EasypayService::class, function ($app) {
+            return new EasypayService(
+                config('services.easypay.account_id'),
+                config('services.easypay.api_key'),
+                config('services.easypay.base_url')
+            );
+        });
+    }
+}
 ```
 
-**Eventos:**
+---
 
-```php
-// Campos: title, description, startDate, endDate, location, entity, image, ticketUrl
-```
+### 6.4 Decisão Pendente: SAGE
 
-### 2.4 Configurar Admin Users
+A integração com SAGE determinará:
 
-```php
-// Criar utilizadores no admin panel
-// 1. Super Admin (desenvolvimento)
-// 2. Content Manager (Janete)
-// 3. Store Manager (Alexandre)
-```
+1. **Origem dos produtos**: SAGE (sync) vs Filament (manual)
+2. **Gestão de stock**: SAGE (automático) vs Filament (manual)
+3. **Facturação**: SAGE (automática) vs manual
+
+**Cenários**:
+
+| Cenário | Produtos | Stock | Facturação |
+|---------|----------|-------|------------|
+| **A** - SAGE completo | SAGE → Laravel | SAGE → Laravel | Laravel → SAGE |
+| **B** - SAGE facturação | Filament | Filament | Laravel → SAGE |
+| **C** - Sem SAGE | Filament | Filament | Easypay recibos |
 
 ---
 
 ## Entregáveis
 
-- [ ] Aimeos configurado com multi-site
+- [ ] Decisão arquitectura e-commerce (SAGE vs nativo)
+- [ ] Product model e migration
+- [ ] ProductCategory model e migration
+- [ ] Filament ProductResource
 - [ ] Categorias de produtos criadas
+- [ ] Configuração Easypay preparada
 - [ ] Produtos de teste inseridos (PT + EN)
-- [ ] Tipos de conteúdo customizados (Artigos, Surfistas, Eventos)
-- [ ] Admin panel acessível com roles configuradas
-- [ ] API endpoints testados
 
 ---
 
 ## Critérios de Conclusão
 
-1. Admin panel funcional em `/admin`
-2. Produtos visíveis via API `/api/jsonapi/product`
-3. Traduções PT/EN funcionando
-4. Categorias hierárquicas criadas
+1. Decisão documentada sobre integração SAGE
+2. Filament admin permite criar/editar produtos
+3. Produtos com traduções PT/EN
+4. Categorias hierárquicas funcionam
 5. Pelo menos 5 produtos de teste inseridos
+
+---
+
+## Próxima Fase
+
+→ [Fase 7: Catálogo](./FASE_07_CATALOGO.md)
+
+---
+
+*Actualizado: 11 Dezembro 2025 - Arquitectura monolítica*

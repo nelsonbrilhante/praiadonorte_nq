@@ -123,6 +123,26 @@
     "programs": "Programas",
     "services": "Serviços"
   },
+  "carsurf": {
+    "facilities": {
+      "title": "Instalações",
+      "subtitle": "Tudo o que precisa num único local para treinar, descansar e evoluir"
+    },
+    "team": {
+      "title": "Equipa",
+      "subtitle": "Conheça os responsáveis pelo Carsurf"
+    },
+    "contact": {
+      "title": "Contacto",
+      "subtitle": "Entre em contacto connosco para mais informações",
+      "phone": "Telefone",
+      "email": "Email",
+      "hours": "Horário",
+      "location": "Localização",
+      "viewMap": "Ver no Google Maps",
+      "partnership": "Parceria"
+    }
+  },
   "breadcrumbs": {
     "home": "Início",
     "sobre": "Sobre",

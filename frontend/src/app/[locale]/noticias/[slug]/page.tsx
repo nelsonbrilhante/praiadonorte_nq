@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -138,9 +139,17 @@ function NoticiaContent({ locale, noticia, relatedNoticias }: NoticiaContentProp
               </Button>
             </div>
 
-            {/* Cover image placeholder */}
+            {/* Cover image */}
             {noticia.cover_image && (
-              <div className="mb-8 h-64 rounded-lg bg-gradient-to-br from-ocean/20 to-ocean/5 md:h-96" />
+              <div className="relative mb-8 h-64 overflow-hidden rounded-lg md:h-96">
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${noticia.cover_image}`}
+                  alt={getLocalizedField(noticia.title, locale)}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 800px"
+                />
+              </div>
             )}
 
             {/* Article content */}
@@ -173,8 +182,20 @@ function NoticiaContent({ locale, noticia, relatedNoticias }: NoticiaContentProp
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               {relatedNoticias.map((related) => (
                 <Link key={related.id} href={`/${locale}/noticias/${related.slug}`}>
-                  <Card className="h-full cursor-pointer overflow-hidden transition-shadow hover:shadow-lg">
-                    <div className="h-32 bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                  <Card className="group h-full cursor-pointer overflow-hidden transition-shadow hover:shadow-lg">
+                    <div className="relative h-32">
+                      {related.cover_image ? (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${related.cover_image}`}
+                          alt={getLocalizedField(related.title, locale)}
+                          fill
+                          className="object-cover transition-transform group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                      )}
+                    </div>
                     <CardHeader>
                       <CardTitle className="line-clamp-2 text-lg">
                         {getLocalizedField(related.title, locale)}

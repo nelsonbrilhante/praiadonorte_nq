@@ -3,12 +3,31 @@
 namespace Database\Seeders;
 
 use App\Models\Noticia;
+use Database\Seeders\Traits\DownloadsImages;
 use Illuminate\Database\Seeder;
 
 class NoticiaSeeder extends Seeder
 {
+    use DownloadsImages;
+
     public function run(): void
     {
+        // Unsplash direct image URLs (free, high-quality surf/wave images)
+        $images = [
+            // Giant wave surfing
+            'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1200&h=800&fit=crop',
+            // WSL competition surfing
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=800&fit=crop',
+            // Surf training/fitness
+            'https://images.unsplash.com/photo-1455264745730-cb3b76250ae8?w=1200&h=800&fit=crop',
+            // Infrastructure/construction
+            'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&h=800&fit=crop',
+            // Tourism/viewpoint
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop',
+            // Female surfer
+            'https://images.unsplash.com/photo-1531722569936-825d3dd91b15?w=1200&h=800&fit=crop',
+        ];
+
         $noticias = [
             [
                 'title' => [
@@ -24,7 +43,7 @@ class NoticiaSeeder extends Seeder
                     'pt' => 'As primeiras ondulações do outono trouxeram ondas de até 15 metros à Praia do Norte, marcando o início de uma temporada promissora.',
                     'en' => 'The first autumn swells brought waves up to 15 meters to Praia do Norte, marking the start of a promising season.',
                 ],
-                'cover_image' => null,
+                'image_url' => $images[0],
                 'author' => 'Redação',
                 'category' => 'Surf',
                 'entity' => 'praia-norte',
@@ -48,7 +67,7 @@ class NoticiaSeeder extends Seeder
                     'pt' => 'O prestigiado evento da WSL regressa à Nazaré em fevereiro de 2025 com os melhores surfistas do mundo.',
                     'en' => 'The prestigious WSL event returns to Nazaré in February 2025 with the world\'s best surfers.',
                 ],
-                'cover_image' => null,
+                'image_url' => $images[1],
                 'author' => 'Redação',
                 'category' => 'Competição',
                 'entity' => 'praia-norte',
@@ -72,7 +91,7 @@ class NoticiaSeeder extends Seeder
                     'pt' => 'Programa intensivo de treino para surfistas que querem evoluir nas ondas da Nazaré.',
                     'en' => 'Intensive training program for surfers looking to improve in Nazaré\'s waves.',
                 ],
-                'cover_image' => null,
+                'image_url' => $images[2],
                 'author' => 'Carsurf',
                 'category' => 'Formação',
                 'entity' => 'carsurf',
@@ -96,7 +115,7 @@ class NoticiaSeeder extends Seeder
                     'pt' => 'Novo investimento em balneários, armazenamento e posto médico na Praia do Norte.',
                     'en' => 'New investment in changing rooms, storage, and medical station at Praia do Norte.',
                 ],
-                'cover_image' => null,
+                'image_url' => $images[3],
                 'author' => 'Nazaré Qualifica',
                 'category' => 'Infraestrutura',
                 'entity' => 'nazare-qualifica',
@@ -120,7 +139,7 @@ class NoticiaSeeder extends Seeder
                     'pt' => 'Mais de 5.000 visitantes no forte durante fim de semana de ondas grandes.',
                     'en' => 'More than 5,000 visitors at the fort during a big wave weekend.',
                 ],
-                'cover_image' => null,
+                'image_url' => $images[4],
                 'author' => 'Redação',
                 'category' => 'Turismo',
                 'entity' => 'praia-norte',
@@ -144,7 +163,7 @@ class NoticiaSeeder extends Seeder
                     'pt' => 'Surfista portuguesa alcança top 10 mundial após performances impressionantes.',
                     'en' => 'Portuguese surfer reaches world top 10 after impressive performances.',
                 ],
-                'cover_image' => null,
+                'image_url' => $images[5],
                 'author' => 'Redação',
                 'category' => 'Atletas',
                 'entity' => 'praia-norte',
@@ -156,7 +175,18 @@ class NoticiaSeeder extends Seeder
             ],
         ];
 
-        foreach ($noticias as $noticia) {
+        foreach ($noticias as $index => $noticia) {
+            // Download the image
+            $imageUrl = $noticia['image_url'] ?? null;
+            unset($noticia['image_url']);
+
+            $coverImage = null;
+            if ($imageUrl) {
+                $filename = "noticia-{$noticia['slug']}.jpg";
+                $coverImage = $this->downloadImage($imageUrl, 'noticias', $filename);
+            }
+
+            $noticia['cover_image'] = $coverImage;
             Noticia::create($noticia);
         }
     }

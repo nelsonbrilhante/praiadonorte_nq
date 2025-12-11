@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -149,9 +150,17 @@ function EventoContent({ locale, evento, relatedEventos }: EventoContentProps) {
                 </Button>
               </div>
 
-              {/* Event image placeholder */}
+              {/* Event image */}
               {evento.image && (
-                <div className="mb-8 h-64 rounded-lg bg-gradient-to-br from-ocean/20 to-ocean/5 md:h-96" />
+                <div className="relative mb-8 h-64 overflow-hidden rounded-lg md:h-96">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${evento.image}`}
+                    alt={getLocalizedField(evento.title, locale)}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 800px"
+                  />
+                </div>
               )}
 
               {/* Description */}

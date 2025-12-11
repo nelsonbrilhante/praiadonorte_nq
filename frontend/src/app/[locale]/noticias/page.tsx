@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Breadcrumbs } from '@/components/ui/breadcrumbs';
@@ -137,7 +138,19 @@ function NoticiasContent({ locale, noticias, currentEntity, currentPage, lastPag
               {noticias.map((noticia) => (
                 <Link key={noticia.id} href={`/${locale}/noticias/${noticia.slug}`}>
                   <Card className="h-full cursor-pointer overflow-hidden transition-shadow hover:shadow-lg">
-                    <div className="h-48 bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                    <div className="relative h-48">
+                      {noticia.cover_image ? (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${noticia.cover_image}`}
+                          alt={getLocalizedField(noticia.title, locale)}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-ocean/20 to-ocean/5" />
+                      )}
+                    </div>
                     <CardHeader>
                       <div className="mb-2 flex items-center gap-2">
                         <Badge className={entityColors[noticia.entity]}>

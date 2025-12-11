@@ -20,7 +20,7 @@ class NoticiaResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Conteúdo';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $modelLabel = 'Notícia';
 

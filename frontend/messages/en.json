@@ -123,6 +123,26 @@
     "programs": "Programs",
     "services": "Services"
   },
+  "carsurf": {
+    "facilities": {
+      "title": "Facilities",
+      "subtitle": "Everything you need in one place to train, rest and evolve"
+    },
+    "team": {
+      "title": "Team",
+      "subtitle": "Meet the people behind Carsurf"
+    },
+    "contact": {
+      "title": "Contact",
+      "subtitle": "Get in touch for more information",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Hours",
+      "location": "Location",
+      "viewMap": "View on Google Maps",
+      "partnership": "Partnership"
+    }
+  },
   "breadcrumbs": {
     "home": "Home",
     "sobre": "About",

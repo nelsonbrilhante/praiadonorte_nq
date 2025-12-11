@@ -2,12 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> **Status: Phase 3 Complete + Admin UX Improvements**
+> **Status: Architecture Migration - Next.js → Laravel Blade**
 >
-> All dynamic content pages implemented: News, Events, Surfer Wall with listing and detail pages.
-> Frontend fully integrated with backend API. All content fetched from database.
-> Filament Admin UX improved: navigation groups, distinct icons, dashboard widgets.
-> Next step: Phase 4 - SEO + Performance optimization.
+> Migrating from split architecture (Next.js + Laravel API) to monolithic Laravel (Blade + Livewire).
+> All content pages being converted to Blade views with pixel-perfect design preservation.
+> Motivation: Eliminate API complexity, improve security, simplify deployment.
 
 ## Project Overview
 
@@ -23,118 +22,180 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Constraint | Requirement |
 |------------|-------------|
 | **Primary Brand** | Praia do Norte is always the focus |
-| **Payment Processing** | Server-side ONLY (Laravel backend) |
+| **Payment Processing** | Server-side ONLY (Laravel) |
 | **Languages** | PT (primary) + EN from day one |
-| **VPS RAM** | 4GB limit - no Node.js on server |
-| **Frontend** | TypeScript required |
+| **Architecture** | Monolithic Laravel (single codebase) |
+| **Frontend** | Blade templates + Livewire |
 | **Security** | OWASP Top 10 mitigations mandatory |
 
 ## Project Status
 
-**Current Phase**: Phase 3 Complete - Starting Phase 4
+**Current Phase**: Architecture Migration (Blade conversion)
 
 - [x] Backend: Laravel 12.41.1 + Filament 4.2.4 installed
-- [x] Frontend: Next.js 16.0.7 + React 19 + Tailwind 4 installed
-- [x] Design System: shadcn/ui components (Button, Card, Badge, etc.)
 - [x] Backend CMS: All Filament Resources (Noticias, Eventos, Surfers, Surfboards, Paginas)
-- [x] API: REST endpoints for all content types
-- [x] Database Seeders: Realistic PT/EN dummy content
-- [x] Frontend API Client: TypeScript types and fetch functions
-- [x] Homepage Integration: Real data from API
-- [x] News Pages: Listing with filters + individual article pages
-- [x] Events Pages: Listing with upcoming/past filters + individual event pages
-- [x] Surfer Wall: Grid with featured surfers + individual profile pages
+- [x] Database: All migrations and seeders complete
 - [x] Admin UX: Navigation groups, distinct icons, dashboard widgets, Navy Blue theme
-- [ ] Next: SEO metadata, performance optimization, security headers
+- [ ] **IN PROGRESS**: Blade templates migration (from Next.js)
+- [ ] Livewire components for interactivity
+- [ ] Tailwind CSS setup in Laravel
+- [ ] i18n with Laravel localization
+- [ ] SEO metadata, performance optimization
 
 ## Technical Architecture
 
 ### Core Stack Decision
 
-The project uses a **split architecture** optimized for the available VPS infrastructure (vm01.cm-nazare.pt):
+The project uses a **monolithic architecture** on a single VPS (vm01.cm-nazare.pt):
 
-- **Backend**: Laravel 12 + Filament 4.x on cPanel VPS (PHP 8.3, MySQL 8.0)
-- **Frontend**: Next.js 16 on Vercel (free tier)
+- **Backend + Frontend**: Laravel 12 + Blade + Livewire + Tailwind CSS 4
+- **Admin Panel**: Filament 4.x
+- **Database**: MySQL 8.0
+- **Server**: PHP 8.3 on cPanel VPS
 
-This architecture was chosen because:
-1. VPS requires PHP 8.3 upgrade via EasyApache 4 (Laravel 12 requirement)
-2. RAM constraints (4GB, swap full) prevent running Node.js alongside PHP
-3. Filament provides a beautiful, intuitive admin panel for content editors
-4. Laravel handles all CMS and future e-commerce (WooCommerce integration planned)
-5. Vercel free tier offloads frontend processing (zero extra cost)
+**Why Monolithic**:
+1. **Simpler security** - No API exposure, no CORS, session-based auth
+2. **Easier deployment** - Single codebase, single server
+3. **No image proxy issues** - Direct file serving
+4. **Better for e-commerce** - Direct Easypay/Sage integration
+5. **Lower complexity** - One stack to maintain (PHP only)
 
-**E-commerce Strategy**: Institutional platform first, e-commerce via WooCommerce headless in future phase (pending Sage connector validation).
+**Previous Architecture** (deprecated):
+- ~~Next.js 16 on Vercel~~ → Replaced by Blade templates
+- ~~REST API~~ → Direct Eloquent queries
+- ~~API tokens~~ → Session-based authentication
 
 ### Technology Stack
 
-| Layer | Technology | Location | Notes |
-|-------|-----------|----------|-------|
-| **Frontend** | Next.js 16 (App Router) + TypeScript | Vercel | SSR for SEO |
-| **UI Framework** | Tailwind CSS 4 + shadcn/ui | Vercel | Radix UI primitives |
-| **State Management** | Zustand | Vercel | Future: shopping cart |
-| **Backend/CMS** | Laravel 12 + Filament 4.x | VPS | Admin panel, API |
-| **Database** | MySQL 8.0 | VPS | All data storage |
-| **Authentication** | Laravel Sanctum | VPS | API tokens for frontend |
-| **Payments** | Easypay API v2.0 | VPS | Future: custom Laravel integration |
-| **Validation** | Zod (frontend) + Laravel (backend) | Both | All forms + API |
-| **i18n** | next-intl (frontend) + Laravel (backend) | Both | PT (primary) + EN |
-
-**Tech Stack Documentation**: See `docs/tech-stack/` for detailed reference guides.
+| Layer | Technology | Notes |
+|-------|-----------|-------|
+| **Frontend Views** | Blade + Livewire | SSR, reactive components |
+| **Styling** | Tailwind CSS 4 | Same design system as before |
+| **Backend** | Laravel 12 | Controllers, Services, Models |
+| **Admin Panel** | Filament 4.x | CMS for content management |
+| **Database** | MySQL 8.0 | All data storage |
+| **Authentication** | Laravel Sessions | Secure, server-side |
+| **Payments** | Easypay API v2.0 | Direct Laravel integration |
+| **i18n** | Laravel Localization | `mcamara/laravel-localization` |
 
 ### Project Structure
 
 ```
-praiadonorte_nq/
-├── backend/                       # Laravel 12 + Filament 4.x (deploys to VPS)
-│   ├── app/
-│   │   ├── Filament/
-│   │   │   ├── Resources/         # NoticiaResource, SurferResource, etc.
-│   │   │   └── Widgets/           # Dashboard widgets (Stats, Latest, Upcoming)
-│   │   ├── Http/Controllers/Api/  # API controllers
-│   │   ├── Models/                # Eloquent models
-│   │   └── Providers/
-│   │       └── Filament/
-│   │           └── AdminPanelProvider.php
-│   ├── database/migrations/
-│   ├── routes/api.php
-│   └── composer.json
-│
-├── frontend/                      # Next.js 16 + React 19 (deploys to Vercel)
-│   ├── src/
-│   │   └── app/
-│   │       ├── [locale]/          # i18n routes (to create)
-│   │       │   ├── (praia-do-norte)/
-│   │       │   ├── (carsurf)/
-│   │       │   └── (nazare-qualifica)/
-│   │       ├── layout.tsx
-│   │       └── page.tsx
-│   ├── messages/                  # i18n (pt.json, en.json)
-│   └── package.json
-│
-└── docs/
-    ├── tech-stack/                # Technical reference docs
-    ├── phases/                    # Implementation guides
-    └── architecture/              # Architecture docs
+backend/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/           # Web controllers
+│   │   │   ├── HomeController.php
+│   │   │   ├── NoticiaController.php
+│   │   │   ├── EventoController.php
+│   │   │   ├── SurferController.php
+│   │   │   ├── ForecastController.php
+│   │   │   ├── CarsurfController.php
+│   │   │   ├── NazareQualificaController.php
+│   │   │   └── ContactController.php
+│   │   ├── Controllers/Api/       # API controllers (legacy, may remove)
+│   │   └── Middleware/
+│   │       └── LocalizationMiddleware.php
+│   ├── Livewire/                  # Livewire components
+│   │   ├── LanguageSwitcher.php
+│   │   ├── NewsFilter.php
+│   │   ├── EventsFilter.php
+│   │   └── ContactForm.php
+│   ├── Filament/
+│   │   ├── Resources/             # NoticiaResource, SurferResource, etc.
+│   │   └── Widgets/               # Dashboard widgets
+│   ├── Models/                    # Eloquent models
+│   └── Services/
+│       └── ForecastService.php    # Open-Meteo API integration
+├── resources/
+│   ├── views/
+│   │   ├── layouts/
+│   │   │   └── app.blade.php      # Master layout
+│   │   ├── components/
+│   │   │   ├── layout/
+│   │   │   │   ├── header.blade.php
+│   │   │   │   └── footer.blade.php
+│   │   │   └── ui/
+│   │   │       ├── button.blade.php
+│   │   │       ├── card.blade.php
+│   │   │       ├── badge.blade.php
+│   │   │       └── ...
+│   │   ├── pages/
+│   │   │   ├── home.blade.php
+│   │   │   ├── noticias/
+│   │   │   │   ├── index.blade.php
+│   │   │   │   └── show.blade.php
+│   │   │   ├── eventos/
+│   │   │   ├── surfer-wall/
+│   │   │   ├── previsoes.blade.php
+│   │   │   ├── carsurf/
+│   │   │   └── nazare-qualifica/
+│   │   └── livewire/
+│   │       ├── language-switcher.blade.php
+│   │       ├── news-filter.blade.php
+│   │       └── ...
+│   ├── css/
+│   │   └── app.css                # Tailwind + custom styles
+│   └── js/
+│       └── app.js
+├── lang/
+│   ├── pt/                        # Portuguese translations
+│   │   ├── messages.php
+│   │   └── navigation.php
+│   └── en/                        # English translations
+├── routes/
+│   ├── web.php                    # Public routes
+│   └── api.php                    # API routes (legacy)
+├── public/
+│   ├── storage/                   # Symlink to storage/app/public
+│   ├── pn-ai-wave-hero.png
+│   └── ...
+└── database/
+    ├── migrations/
+    └── seeders/
+
+frontend/                          # DEPRECATED - being migrated to Blade
+└── (to be archived after migration)
+
+docs/
+├── tech-stack/
+├── phases/
+└── architecture/
 ```
 
 ## Key Architectural Decisions
 
-### 1. Laravel + Filament CMS Platform
+### 1. Monolithic Laravel Architecture
 
-**Rationale**: Filament provides a beautiful, intuitive admin panel that content editors will love, while Laravel handles all backend logic.
+**Rationale**: Eliminates complexity of split architecture while maintaining all functionality.
 
-**Why Filament**:
-- Modern, clean UI that's intuitive for non-technical users
-- Full control over admin interface customization
-- Native Laravel integration (no separate system)
-- Excellent form builder with i18n support via JSON fields
-- Extensible via plugins
+**Benefits**:
+- Single codebase, single deployment
+- No CORS configuration needed
+- Session-based auth (more secure than tokens)
+- Direct database access (no API layer)
+- Images served directly (no proxy issues)
+- Easier debugging and maintenance
 
-**Implementation**:
-- Content (News, Surfers, Events) managed via Filament Resources
-- API endpoints for frontend consumption
-- i18n via JSON columns in database
-- Future: WooCommerce headless for e-commerce
+**Trade-offs**:
+- No Vercel CDN (mitigated by Laravel caching)
+- Server must handle all traffic (VPS has 4GB RAM, should be sufficient)
+
+### 2. Blade + Livewire for Frontend
+
+**Why Blade**:
+- Native Laravel templating
+- Server-side rendering for SEO
+- Same Tailwind CSS classes work identically
+- Blade components replace React components
+
+**Why Livewire**:
+- Reactive components without JavaScript complexity
+- Perfect for filters, forms, language switcher
+- Server-side state management
+- No build step for interactivity
+
+### 3. Laravel + Filament CMS Platform
 
 **Admin Panel Configuration** (Nazaré Qualifica branding):
 - Theme: Navy Blue (#1e3a5f)
@@ -142,7 +203,7 @@ praiadonorte_nq/
 - Dashboard with stats widgets (totals) + recent content tables
 - Labels em português (Notícias, Eventos, Surfers, Pranchas, Páginas)
 
-### 2. Multi-Entity Content Strategy
+### 4. Multi-Entity Content Strategy
 
 The platform serves three distinct brands within one codebase:
 
@@ -151,34 +212,31 @@ The platform serves three distinct brands within one codebase:
 'entity' => 'praia-norte' | 'carsurf' | 'nazare-qualifica'
 ```
 
-This allows content filtering and ensures proper brand association throughout the platform.
-
-### 3. Internationalization (i18n)
+### 5. Internationalization (i18n)
 
 **Languages**: Portuguese (PT) - primary, English (EN) - secondary
 
 **Implementation**:
 - Route-based locales: `/pt/sobre`, `/en/about`
-- JSON columns for translatable fields (title, content, bio, etc.)
-- `next-intl` for frontend UI translations
-- All content fields support translations via JSON structure
+- Laravel localization package (`mcamara/laravel-localization`)
+- JSON columns for translatable content (title, content, bio, etc.)
+- PHP lang files for UI strings (`lang/pt/`, `lang/en/`)
 
-### 4. Payment Integration Pattern
+### 6. Payment Integration Pattern
 
 **Easypay Integration Architecture**:
 - API credentials stored in Laravel `.env` ONLY
 - Custom Laravel Service Provider for Easypay
-- All payment communication server-side (never client)
-- Webhook handlers in Laravel with signature validation
+- All payment communication server-side
+- Webhook handlers with signature validation
 - Support for: Credit/Debit cards, MB WAY, Multibanco, Direct Debit
-- TypeScript types in frontend from `api/swagger.json`
 
 **Security Requirements**:
-- Never expose Easypay credentials to frontend
+- Never expose Easypay credentials
 - Always use idempotency keys
 - Validate webhook signatures (HMAC)
 - Log all transactions for audit
-- Server-side price validation (never trust frontend prices)
+- Server-side price validation
 
 ## Content Management (Filament)
 
@@ -210,21 +268,15 @@ All content is managed via Filament Resources with i18n support through JSON col
 
 **Pagina** (institutional pages):
 - title (JSON), slug, content (JSON)
-- entity, seo_title, seo_description
+- video_url, entity, seo_title, seo_description
 
-### Future E-commerce (WooCommerce Headless)
+### Future E-commerce
 
 When e-commerce is implemented:
-- WooCommerce as product/order backend
-- Easypay plugin for payments
+- Native Laravel e-commerce OR WooCommerce headless
+- Easypay direct integration (PHP SDK)
 - Sage connector for inventory sync
-- API integration with Next.js frontend
-
-### SEO
-
-All content supports SEO fields:
-- seo_title (i18n), seo_description (i18n)
-- og:image via cover_image field
+- Session-based shopping cart
 
 ## Security Requirements
 
@@ -232,51 +284,51 @@ All content supports SEO fields:
 
 1. **Protection against cyber attacks** is a PRIMARY concern
 2. Implement all OWASP Top 10 mitigations
-3. Rate limiting on all API routes
-4. Input validation with Zod on every form/API
+3. CSRF protection on all forms (Laravel default)
+4. Input validation with Laravel Form Requests
 5. Never store credit card data (use Easypay tokenization)
 6. HTTPS enforcement in production
 7. Security headers (CSP, HSTS, etc.)
 8. GDPR compliance (PT/EU regulations)
 
+**Monolithic Security Advantages**:
+- No exposed API surface
+- Session-based auth (not JWT tokens)
+- No CORS vulnerabilities
+- Server-side validation only
+
 ## Development Workflow
 
 ### Build & Test Commands
 
-**Backend (Laravel)**:
+**Laravel (Backend + Frontend)**:
 ```bash
 cd backend
 php artisan serve          # Start dev server (localhost:8000)
+npm run dev                # Vite dev server for assets
 php artisan migrate        # Run migrations
 php artisan migrate:fresh --seed  # Reset DB with seeds
-php artisan make:filament-resource Noticia  # Create Filament resource
-```
-
-**Frontend (Next.js)**:
-```bash
-cd frontend
-npm run dev      # Start dev server (localhost:3000)
-npm run build    # Production build
-npm run lint     # ESLint check
+php artisan make:livewire ComponentName  # Create Livewire component
+php artisan livewire:layout  # Publish Livewire layout
 ```
 
 ### Development URLs
 
-| Service | URL | Command |
-|---------|-----|---------|
-| Frontend | http://localhost:3000 | `npm run dev` |
-| Backend API | http://localhost:8000/api | `php artisan serve` |
-| Filament Admin | http://localhost:8000/admin | `php artisan serve` |
+| Service | URL | Notes |
+|---------|-----|-------|
+| Public Site | http://localhost:8000/pt | Portuguese |
+| Public Site | http://localhost:8000/en | English |
+| Filament Admin | http://localhost:8000/admin | CMS |
 
 ### Scripts de Desenvolvimento
 
-Scripts disponíveis em `scripts/` para gestão dos servidores:
+Scripts disponíveis em `scripts/` para gestão do servidor:
 
 | Script | Descrição |
 |--------|-----------|
-| `scripts/start.sh` | Inicia backend (Laravel) e frontend (Next.js) em background |
-| `scripts/stop.sh` | Para todos os servidores e limpa processos órfãos |
-| `scripts/restart.sh` | Executa stop.sh seguido de start.sh |
+| `scripts/start.sh` | Inicia Laravel + Vite em background |
+| `scripts/stop.sh` | Para todos os servidores |
+| `scripts/restart.sh` | Reinicia servidores |
 
 **Uso:**
 ```bash
@@ -285,45 +337,44 @@ Scripts disponíveis em `scripts/` para gestão dos servidores:
 ./scripts/restart.sh  # Reiniciar servidores
 ```
 
-**Notas:**
-- Os PIDs são guardados em `.pids/` (ignorado pelo git)
-- Os scripts matam processos órfãos nas portas 3000 e 8000
-- Output dos servidores é silenciado (correm em background)
-
-> **IMPORTANTE**: Estes scripts devem ser atualizados sempre que houver alterações na infraestrutura do projeto: novas portas, novos serviços, novos containers Docker, novas dependências de runtime, etc.
-
 ### Phase Overview
 
-The project is organized in 4 blocks, with e-commerce in future phase:
-
 **Block 1 - Foundations** ✅ Complete
-- **Phase 0**: ✅ Project setup - Laravel 12 + Filament 4 + Next.js 16 installed
-- **Phase 1**: ✅ Design system (Next.js), shadcn/ui, layout components
+- **Phase 0**: ✅ Project setup - Laravel 12 + Filament 4 installed
+- **Phase 1**: ✅ Design system, Tailwind CSS, component patterns
 
-**Block 2 - Institutional** ✅ Complete
-- **Phase 2**: ✅ Homepage and CMS backend (Filament resources, API, seeders)
-- **Phase 3**: ✅ Dynamic content pages (news, events, surfer wall - listing + detail)
+**Block 2 - Institutional** 🔄 In Progress (Migration)
+- **Phase 2**: ✅ CMS backend (Filament resources, seeders)
+- **Phase 3**: 🔄 Blade templates migration (converting from Next.js)
 
 **Block 3 - Quality**
 - **Phase 4**: SEO + Performance optimization
 - **Phase 5**: Security hardening
 
 **Block 4 - E-commerce** *(future phase)*
-- WooCommerce headless integration (pending Sage connector validation)
+- Native Laravel e-commerce or WooCommerce headless
 - Easypay payment integration
-
-> **Note**: E-commerce implementation postponed to future phase. Current focus is institutional platform with CMS.
+- Sage inventory sync
 
 ### Deployment
 
-- **Backend (Laravel)**: Deploy to VPS via GitHub Actions + SSH
-- **Frontend (Next.js)**: Deploy to Vercel (free tier, Git integration)
+**Single VPS Deployment**:
+- Deploy via GitHub Actions + SSH
+- Vite build for assets
+- PHP-FPM + Apache
+- MySQL on same server
 
 ### Environment Variables Required
 
-**Backend (Laravel `.env`)**:
+**Laravel `.env`**:
 ```env
-# Database (VPS MySQL)
+# App
+APP_NAME="Praia do Norte"
+APP_URL=https://praiadonortenazare.pt
+APP_LOCALE=pt
+APP_FALLBACK_LOCALE=en
+
+# Database
 DB_CONNECTION=mysql
 DB_HOST=localhost
 DB_DATABASE=praia_do_norte
@@ -336,18 +387,9 @@ EASYPAY_API_KEY=
 EASYPAY_BASE_URL=https://api.prod.easypay.pt/2.0
 EASYPAY_WEBHOOK_SECRET=
 
-# App
-APP_URL=https://api.praiadonortenazare.pt
-SANCTUM_STATEFUL_DOMAINS=praiadonortenazare.pt,www.praiadonortenazare.pt
-```
-
-**Frontend (Vercel Environment Variables)**:
-```env
-# API
-NEXT_PUBLIC_API_URL=https://api.praiadonortenazare.pt
-
-# Cloudinary (media)
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+# Open-Meteo (no key needed - free API)
+OPEN_METEO_LATITUDE=39.6012
+OPEN_METEO_LONGITUDE=-9.0709
 ```
 
 ## Special Features
@@ -362,18 +404,18 @@ Unique feature showcasing big wave surfers who ride Praia do Norte:
 
 ### Multi-Entity Navigation
 
-Navigation must clearly distinguish between the three entities while maintaining Praia do Norte prominence:
+Navigation clearly distinguishes between three entities while maintaining Praia do Norte prominence:
 - Primary navigation highlights Praia do Norte (shop, news, events, surfer wall)
 - Secondary navigation for Carsurf and Nazaré Qualifica
 - Footer organized in three columns (one per entity)
 
-### Wave Forecast & Live Webcams ✅ IMPLEMENTED
+### Wave Forecast & Live Webcams
 
-**Página**: `/[locale]/previsoes`
+**Route**: `/{locale}/previsoes`
 
 **APIs Integradas**:
-- **Open-Meteo Marine API** - Ondas, swell, temperatura da água (gratuita, sem chave)
-- **Open-Meteo Weather API** - Vento, rajadas (gratuita, sem chave)
+- **Open-Meteo Marine API** - Ondas, swell, temperatura da água (gratuita)
+- **Open-Meteo Weather API** - Vento, rajadas (gratuita)
 - **MONICAN** - Previsão oficial Instituto Hidrográfico (iframe)
 
 **Funcionalidades**:
@@ -383,8 +425,6 @@ Navigation must clearly distinguish between the three entities while maintaining
 - Código de cores para direção do vento (offshore/onshore)
 - Recomendações de fato baseadas na temperatura da água
 
-**Ficheiros**: `frontend/src/lib/api/forecast.ts`, `frontend/src/app/[locale]/previsoes/page.tsx`
-
 ## Testing & Quality Standards
 
 ### Performance Targets
@@ -393,17 +433,16 @@ Navigation must clearly distinguish between the three entities while maintaining
 - Lighthouse Accessibility: > 95
 - Lighthouse Best Practices: > 95
 - Lighthouse SEO: > 95
+- TTFB (Time to First Byte): < 200ms
 - LCP (Largest Contentful Paint): < 2.5s
-- FID (First Input Delay): < 100ms
-- CLS (Cumulative Layout Shift): < 0.1
 
 ### Security Standards
 
-- Zero critical/high npm audit vulnerabilities
+- Zero critical/high vulnerabilities (composer audit)
 - Security headers score: A (securityheaders.com)
 - SSL Labs rating: A+
-- All user input validated with Zod
-- All API responses validated
+- All user input validated with Form Requests
+- CSRF protection on all forms
 - No sensitive data in client-side code
 
 ## Documentation References
@@ -411,10 +450,10 @@ Navigation must clearly distinguish between the three entities while maintaining
 **Session Continuity** (IMPORTANT):
 - **Session Handoff**: `SESSION-HANDOFF.md` - Read at start of each session, update at end
 
-**Tech Stack Reference** (start here):
+**Tech Stack Reference**:
 - **Laravel 12 Guide**: `docs/tech-stack/LARAVEL_12.md`
 - **Filament 4.x Guide**: `docs/tech-stack/FILAMENT_4.md`
-- **Next.js 16 Guide**: `docs/tech-stack/NEXTJS_16.md`
+- **Livewire 3 Guide**: `docs/tech-stack/LIVEWIRE_3.md` (to create)
 - **Setup Log**: `docs/tech-stack/SETUP_LOG.md` (versions, issues, solutions)
 
 **Planning Docs**:
@@ -422,50 +461,97 @@ Navigation must clearly distinguish between the three entities while maintaining
 - **Phase-by-Phase Guides**: `docs/phases/` (implementation guides)
 - **Folder Structure**: `docs/architecture/FOLDER_STRUCTURE.md`
 - **Naming Conventions**: `docs/architecture/NAMING_CONVENTIONS.md`
-- **Migration/Deployment Guide**: `MIGRATION_PLAN.md`
-- **E-commerce Analysis**: `docs/archive/E-COMMERCE_PLATFORMS_COMPARISON.md`
+- **Migration Plan**: `MIGRATION_PLAN.md`
 - **Security Strategy**: `CYBERSECURITY_ASSESSMENT.md`
-- **Project Concept**: `docs/concept.txt` (Portuguese, business requirements)
+
+**Archived**:
+- **Next.js 16 Guide**: `docs/archive/NEXTJS_16.md` (deprecated)
 
 ## Important Notes for Future Claude Instances
 
-1. **E-commerce Postponed** - E-commerce will be implemented in a future phase using WooCommerce headless. Current focus is the institutional platform with Laravel + Filament CMS.
+1. **Monolithic Architecture** - The project uses Laravel for everything (backend + frontend). There is no separate Next.js frontend anymore.
 
-2. **Praia do Norte is PRIMARY** - When balancing content from the three entities, always prioritize Praia do Norte visibility
+2. **Blade Templates** - Frontend uses Blade templates with Livewire for interactivity. Same Tailwind CSS classes as before.
 
-3. **Security is non-negotiable** - The client specifically emphasized protection against cyber attacks. Never compromise on security for convenience.
+3. **Praia do Norte is PRIMARY** - When balancing content from the three entities, always prioritize Praia do Norte visibility.
 
-4. **Multi-language from day one** - All content must support PT/EN via JSON columns. Never create single-language solutions.
+4. **Security is non-negotiable** - The client specifically emphasized protection against cyber attacks. Monolithic architecture reduces attack surface.
 
-5. **Easypay credentials are sacred** - Never suggest client-side payment processing. All payment logic must be in Laravel backend.
+5. **Multi-language from day one** - All content must support PT/EN via JSON columns. UI strings via Laravel lang files.
 
-6. **VPS Constraints** - The VPS has 4GB RAM with swap fully utilized. Do not add Node.js services to the VPS. Frontend runs on Vercel.
+6. **Easypay credentials are sacred** - All payment logic in Laravel backend with PHP SDK.
 
-7. **CentOS 7 EOL Warning** - The VPS runs CentOS 7 which reached EOL June 2024. Migration to AlmaLinux/Rocky Linux is recommended.
+7. **VPS Constraints** - The VPS has 4GB RAM. Monolithic Laravel is more efficient than split architecture.
 
-8. **TypeScript for frontend** - Next.js frontend must use TypeScript. Laravel backend uses PHP.
+8. **CentOS 7 EOL Warning** - The VPS runs CentOS 7 which reached EOL June 2024. Migration to AlmaLinux/Rocky Linux is recommended.
 
-9. **Phase 3 Complete** - All dynamic content pages implemented. News, Events, and Surfer Wall with listing and detail views. Continue with Phase 4 (SEO + Performance).
-
-10. **Tech Stack Docs** - See `docs/tech-stack/` for Laravel, Filament, and Next.js reference guides with code patterns.
-
-11. **Filament 4.x Type Hints** - When adding navigation properties to Resources, use the correct types:
+9. **Filament 4.x Type Hints** - When adding navigation properties to Resources, use correct types:
     - `$navigationIcon`: `string|\BackedEnum|null`
     - `$navigationGroup`: `string|\UnitEnum|null`
-    - Example: `protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-newspaper';`
 
-12. **Admin Panel is Nazaré Qualifica** - The Filament admin panel represents Nazaré Qualifica (the municipal company), not Praia do Norte. The Navy Blue theme (#1e3a5f) aligns with NQ branding. Praia do Norte branding is for the public frontend only.
+10. **Admin Panel is Nazaré Qualifica** - The Filament admin panel represents Nazaré Qualifica branding. Navy Blue theme (#1e3a5f). Praia do Norte branding is for public frontend only.
 
-13. **Session Handoff** - Always update `SESSION-HANDOFF.md` at the end of each session with what was done, files changed, and next steps. This ensures continuity between sessions.
+11. **Session Handoff** - Always update `SESSION-HANDOFF.md` at the end of each session with what was done, files changed, and next steps.
+
+12. **Design Pixel-Perfect** - The Blade templates must match the original Next.js design exactly. Same Tailwind classes, same layout, same responsive behavior.
 
 ## VPS Infrastructure
 
 **Server**: vm01.cm-nazare.pt
 - CPU: 4 vCPUs @ 2.1GHz
-- RAM: 4GB (constraint - swap 100% used)
+- RAM: 4GB (sufficient for monolithic Laravel)
 - Storage: 114GB free
 - OS: CentOS 7 (EOL - migration recommended)
-- PHP: 8.3 with FPM (requires upgrade from 8.1 via EasyApache 4)
+- PHP: 8.3 with FPM
 - MySQL: 8.0.42
 - Apache: 2.4
 - cPanel: 110.0.50
+
+## Routes Reference
+
+```php
+// routes/web.php
+
+Route::prefix('{locale}')
+    ->where(['locale' => 'pt|en'])
+    ->middleware('localization')
+    ->group(function () {
+        Route::get('/', [HomeController::class, 'index'])->name('home');
+
+        // Notícias
+        Route::get('/noticias', [NoticiaController::class, 'index'])->name('noticias.index');
+        Route::get('/noticias/{slug}', [NoticiaController::class, 'show'])->name('noticias.show');
+
+        // Eventos
+        Route::get('/eventos', [EventoController::class, 'index'])->name('eventos.index');
+        Route::get('/eventos/{slug}', [EventoController::class, 'show'])->name('eventos.show');
+
+        // Surfer Wall
+        Route::get('/surfer-wall', [SurferController::class, 'index'])->name('surfers.index');
+        Route::get('/surfer-wall/{slug}', [SurferController::class, 'show'])->name('surfers.show');
+
+        // Previsões
+        Route::get('/previsoes', [ForecastController::class, 'index'])->name('forecast');
+
+        // Carsurf
+        Route::prefix('carsurf')->name('carsurf.')->group(function () {
+            Route::get('/', [CarsurfController::class, 'index'])->name('index');
+            Route::get('/sobre', [CarsurfController::class, 'sobre'])->name('sobre');
+            Route::get('/programas', [CarsurfController::class, 'programas'])->name('programas');
+        });
+
+        // Nazaré Qualifica
+        Route::prefix('nazare-qualifica')->name('nq.')->group(function () {
+            Route::get('/sobre', [NazareQualificaController::class, 'sobre'])->name('sobre');
+            Route::get('/servicos', [NazareQualificaController::class, 'servicos'])->name('servicos');
+        });
+
+        // Outras
+        Route::get('/sobre', [PageController::class, 'sobre'])->name('sobre');
+        Route::get('/contacto', [ContactController::class, 'index'])->name('contacto');
+        Route::post('/contacto', [ContactController::class, 'send'])->name('contacto.send');
+    });
+
+// Redirect root to default locale
+Route::get('/', fn() => redirect('/pt'));
+```

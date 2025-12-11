@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Breadcrumbs } from '@/components/ui/breadcrumbs';
@@ -120,14 +121,25 @@ function SurferCard({ surfer, locale, featured = false }: SurferCardProps) {
           featured ? 'border-2 border-ocean' : ''
         }`}
       >
-        {/* Photo placeholder */}
+        {/* Photo */}
         <div
-          className={`relative bg-gradient-to-br from-ocean/20 to-ocean/5 ${
+          className={`relative ${
             featured ? 'aspect-[3/4]' : 'aspect-square'
           }`}
         >
+          {surfer.photo ? (
+            <Image
+              src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${surfer.photo}`}
+              alt={surfer.name}
+              fill
+              className="object-cover transition-transform group-hover:scale-105"
+              sizes={featured ? "(max-width: 768px) 100vw, 33vw" : "(max-width: 768px) 50vw, 20vw"}
+            />
+          ) : (
+            <div className="h-full w-full bg-gradient-to-br from-ocean/20 to-ocean/5" />
+          )}
           {featured && (
-            <Badge className="absolute left-2 top-2 bg-ocean text-white">
+            <Badge className="absolute left-2 top-2 z-10 bg-ocean text-white">
               Destaque
             </Badge>
           )}
