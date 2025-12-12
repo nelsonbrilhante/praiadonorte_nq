@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Geral;
 use App\Filament\Resources\Geral\Pages\EditHomepage;
 use App\Filament\Resources\Geral\Pages\ListHomepages;
 use App\Models\Pagina;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -62,17 +63,50 @@ class HomepageResource extends Resource
                             ->afterStateHydrated(fn ($state, $set, $record) =>
                                 $set('video_url', $record?->video_url ?? $state)),
 
+                        Toggle::make('hero_use_logo')
+                            ->label('Usar Logótipo')
+                            ->helperText('Se ativo, mostra imagem em vez de texto no título')
+                            ->default(false)
+                            ->live()
+                            ->columnSpanFull(),
+
+                        FileUpload::make('hero_logo')
+                            ->label('Logótipo do Hero')
+                            ->image()
+                            ->directory('hero')
+                            ->disk('public')
+                            ->imagePreviewHeight('80')
+                            ->helperText('Recomendado: PNG transparente, branco, ~400px largura')
+                            ->columnSpanFull()
+                            ->visible(fn (callable $get) => $get('hero_use_logo')),
+
+                        TextInput::make('hero_logo_height')
+                            ->label('Tamanho do Logótipo')
+                            ->type('range')
+                            ->extraInputAttributes([
+                                'min' => 80,
+                                'max' => 300,
+                                'step' => 10,
+                                'class' => 'w-full accent-primary',
+                                'oninput' => 'document.getElementById("logo-size-display").textContent = this.value + "px"',
+                            ])
+                            ->default(120)
+                            ->suffix(fn ($state) => new \Illuminate\Support\HtmlString('<span id="logo-size-display" class="font-bold text-primary-600 min-w-[60px] text-right">' . ($state ?? 120) . 'px</span>'))
+                            ->helperText('Arraste para ajustar (80px - 300px)')
+                            ->columnSpanFull()
+                            ->visible(fn (callable $get) => $get('hero_use_logo')),
+
                         Grid::make(2)->schema([
                             TextInput::make('content.pt.hero.title')
                                 ->label('Título (PT)')
-                                ->required()
+                                ->required(fn (callable $get) => !$get('hero_use_logo'))
                                 ->afterStateHydrated(fn ($state, $set, $record) =>
                                     $set('content.pt.hero.title', $record?->content['pt']['hero']['title'] ?? $state)),
                             TextInput::make('content.en.hero.title')
                                 ->label('Title (EN)')
                                 ->afterStateHydrated(fn ($state, $set, $record) =>
                                     $set('content.en.hero.title', $record?->content['en']['hero']['title'] ?? $state)),
-                        ]),
+                        ])->visible(fn (callable $get) => !$get('hero_use_logo')),
 
                         Grid::make(2)->schema([
                             TextInput::make('content.pt.hero.subtitle')

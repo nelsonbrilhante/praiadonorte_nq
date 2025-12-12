@@ -55,6 +55,9 @@
     {{-- Header --}}
     <x-layout.header />
 
+    {{-- Search Spotlight --}}
+    <livewire:search-spotlight />
+
     {{-- Main Content --}}
     <main @class(['pt-16' => !request()->routeIs('home')])>
         {{ $slot }}

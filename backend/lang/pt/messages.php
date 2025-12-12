@@ -134,6 +134,7 @@ return [
         ],
     ],
     'pages' => [
+        'pages' => 'Páginas',
         'about' => 'Sobre',
         'programs' => 'Programas',
         'services' => 'Serviços',
@@ -424,11 +425,13 @@ return [
         'featured' => 'Destaque',
     ],
     'search' => [
-        'placeholder' => 'Pesquisar...',
+        'placeholder' => 'Pesquisar',
         'loading' => 'A pesquisar...',
         'noResults' => 'Nenhum resultado encontrado',
         'minChars' => 'Digite pelo menos 2 caracteres',
-        'hint' => 'Use ↑↓ para navegar, Enter para selecionar, Esc para fechar',
+        'hint' => 'Digite pelo menos 2 caracteres para pesquisar...',
+        'select' => 'selecionar',
+        'close' => 'fechar',
         'types' => [
             'news' => 'Notícia',
             'event' => 'Evento',

@@ -8,13 +8,24 @@
 ## Última Sessão
 
 - **Data**: 2025-12-12
-- **Resumo**: Verificação e actualização do estado do projeto - confirmação que migração Blade está 100% completa
+- **Resumo**: Implementação de logótipo dinâmico no Hero Section com slider de tamanho
 
 ### O que foi feito:
-1. Verificação do estado real do projeto vs documentação
-2. Actualização do SESSION-HANDOFF.md com estado correcto
-3. Actualização do CLAUDE.md (Project Status, Phase Overview)
-4. Adição da instrução "Session Closure Protocol" (#13) no CLAUDE.md
+1. **Logótipo no Hero Section**
+   - Adicionados campos `hero_logo`, `hero_use_logo`, `hero_logo_height` à tabela `paginas`
+   - Toggle no admin para escolher entre texto ou imagem
+   - FileUpload para carregar logótipo
+   - Slider (80px-300px) para ajustar tamanho com feedback em tempo real
+
+2. **Ficheiros criados/modificados:**
+   - `database/migrations/2025_12_12_141145_add_hero_logo_to_paginas_table.php`
+   - `database/migrations/2025_12_12_141939_add_hero_logo_scale_to_paginas_table.php`
+   - `app/Models/Pagina.php` - adicionados campos ao fillable/casts
+   - `app/Filament/Resources/Geral/HomepageResource.php` - toggle, FileUpload, slider
+   - `resources/views/components/praia-norte/hero-section.blade.php` - props e condicional logo/texto
+   - `resources/views/pages/home.blade.php` - novos props passados
+
+3. **Logótipo utilizado:** `LOGOTIPO PN POSITIVO.png` (branco, transparente)
 
 ---
 

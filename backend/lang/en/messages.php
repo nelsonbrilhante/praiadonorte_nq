@@ -134,6 +134,7 @@ return [
         ],
     ],
     'pages' => [
+        'pages' => 'Pages',
         'about' => 'About',
         'programs' => 'Programs',
         'services' => 'Services',
@@ -424,11 +425,13 @@ return [
         'featured' => 'Featured',
     ],
     'search' => [
-        'placeholder' => 'Search...',
+        'placeholder' => 'Search',
         'loading' => 'Searching...',
         'noResults' => 'No results found',
         'minChars' => 'Type at least 2 characters',
-        'hint' => 'Use ↑↓ to navigate, Enter to select, Esc to close',
+        'hint' => 'Type at least 2 characters to search...',
+        'select' => 'select',
+        'close' => 'close',
         'types' => [
             'news' => 'News',
             'event' => 'Event',

@@ -7,6 +7,9 @@
     'fallbackImage' => '/pn-ai-wave-hero.png',
     'isLive' => false,
     'audioEnabled' => false,
+    'heroLogo' => null,
+    'useLogoAsTitle' => false,
+    'heroLogoHeight' => 120,
 ])
 
 @php
@@ -94,9 +97,18 @@
 
     {{-- Content - positioned at bottom --}}
     <div class="container relative z-10 mx-auto px-4 pb-12 text-center">
-        <h1 class="mb-4 text-5xl font-bold md:text-7xl">
-            {{ $heroTitle }}
-        </h1>
+        @if($useLogoAsTitle && $heroLogo)
+            <img
+                src="{{ asset('storage/' . $heroLogo) }}"
+                alt="Praia do Norte"
+                class="mx-auto mb-4 w-auto"
+                style="height: {{ $heroLogoHeight }}px;"
+            />
+        @else
+            <h1 class="mb-4 text-5xl font-bold md:text-7xl">
+                {{ $heroTitle }}
+            </h1>
+        @endif
         <p class="mb-8 text-xl md:text-2xl">
             {{ $heroSubtitle }}
         </p>

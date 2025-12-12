@@ -16,6 +16,9 @@ class Pagina extends Model
         'video_url',
         'is_live',
         'audio_enabled',
+        'hero_logo',
+        'hero_use_logo',
+        'hero_logo_height',
         'entity',
         'seo_title',
         'seo_description',
@@ -30,5 +33,6 @@ class Pagina extends Model
         'published' => 'boolean',
         'is_live' => 'boolean',
         'audio_enabled' => 'boolean',
+        'hero_use_logo' => 'boolean',
     ];
 }

@@ -113,9 +113,10 @@
 
         {{-- Right Side --}}
         <div class="flex items-center gap-2">
-            {{-- Search Button --}}
+            {{-- Search Button (Desktop) --}}
             <button
                 type="button"
+                @click="$dispatch('openSearch')"
                 :class="(isHomepage && !scrolled) ? 'border-white/30 bg-white/10 text-white hover:bg-white/20' : 'border bg-muted/50 text-muted-foreground hover:bg-muted'"
                 class="hidden lg:inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -128,6 +129,18 @@
                     class="pointer-events-none hidden h-5 select-none items-center gap-1 rounded px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
                     <span class="text-xs">⌘</span>K
                 </kbd>
+            </button>
+
+            {{-- Search Button (Mobile/Tablet) --}}
+            <button
+                type="button"
+                @click="$dispatch('openSearch')"
+                :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
+                class="lg:hidden inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.3-4.3"/>
+                </svg>
             </button>
 
             {{-- Dark Mode Toggle --}}
@@ -159,15 +172,27 @@
             {{-- Auth Button (Login/Dashboard) --}}
             @auth
                 <a href="{{ url('/admin') }}"
-                   :class="(isHomepage && !scrolled) ? 'bg-white text-ocean hover:bg-white/90' : 'bg-ocean text-white hover:bg-ocean-dark'"
-                   class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 transition-colors">
-                    Dashboard
+                   :class="(isHomepage && !scrolled) ? 'border-white/30 bg-white/10 text-white hover:bg-white/20' : 'border bg-transparent hover:bg-accent'"
+                   class="hidden sm:inline-flex items-center justify-center rounded-md text-xs font-semibold h-8 w-8 border transition-all duration-200"
+                   title="Dashboard">
+                    {{-- Grid/Dashboard icon --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="7" height="9" x="3" y="3" rx="1"/>
+                        <rect width="7" height="5" x="14" y="3" rx="1"/>
+                        <rect width="7" height="9" x="14" y="12" rx="1"/>
+                        <rect width="7" height="5" x="3" y="16" rx="1"/>
+                    </svg>
                 </a>
             @else
                 <a href="{{ url('/admin/login') }}"
-                   :class="(isHomepage && !scrolled) ? 'bg-white text-ocean hover:bg-white/90' : 'bg-ocean text-white hover:bg-ocean-dark'"
-                   class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 transition-colors">
-                    Login
+                   :class="(isHomepage && !scrolled) ? 'border-white/30 bg-white/10 text-white hover:bg-white/20' : 'border bg-transparent hover:bg-accent'"
+                   class="hidden sm:inline-flex items-center justify-center rounded-md text-xs font-semibold h-8 w-8 border transition-all duration-200"
+                   title="Login">
+                    {{-- User icon --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
                 </a>
             @endauth
 

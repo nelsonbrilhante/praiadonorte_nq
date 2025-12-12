@@ -25,6 +25,9 @@
             :youtubeUrl="$homepage->video_url ?? null"
             :isLive="$homepage->is_live ?? false"
             :audioEnabled="$homepage->audio_enabled ?? false"
+            :heroLogo="$homepage->hero_logo ?? null"
+            :useLogoAsTitle="$homepage->hero_use_logo ?? false"
+            :heroLogoHeight="$homepage->hero_logo_height ?? 120"
         />
     @else
         <x-praia-norte.hero-section />
