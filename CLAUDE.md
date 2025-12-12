@@ -507,6 +507,8 @@ Navigation clearly distinguishes between three entities while maintaining Praia 
     3. Commit changes if user requests (never auto-commit)
     4. Provide a brief summary to the user of what was accomplished
 
+14. **Always Ask Before Committing** - NEVER create git commits automatically. Always ask the user for permission before committing changes (e.g., "Posso fazer o commit destas alterações?"). Wait for explicit confirmation before running `git commit`.
+
 ## VPS Infrastructure
 
 **Server**: vm01.cm-nazare.pt

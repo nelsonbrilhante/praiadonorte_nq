@@ -156,12 +156,20 @@
             {{-- Language Switcher --}}
             <livewire:language-switcher />
 
-            {{-- Contact Button --}}
-            <a href="{{ LaravelLocalization::localizeURL('/contacto') }}"
-               :class="(isHomepage && !scrolled) ? 'bg-white text-ocean hover:bg-white/90' : 'bg-ocean text-white hover:bg-ocean-dark'"
-               class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 transition-colors">
-                {{ __('messages.navigation.contact') }}
-            </a>
+            {{-- Auth Button (Login/Dashboard) --}}
+            @auth
+                <a href="{{ url('/admin') }}"
+                   :class="(isHomepage && !scrolled) ? 'bg-white text-ocean hover:bg-white/90' : 'bg-ocean text-white hover:bg-ocean-dark'"
+                   class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 transition-colors">
+                    Dashboard
+                </a>
+            @else
+                <a href="{{ url('/admin/login') }}"
+                   :class="(isHomepage && !scrolled) ? 'bg-white text-ocean hover:bg-white/90' : 'bg-ocean text-white hover:bg-ocean-dark'"
+                   class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 transition-colors">
+                    Login
+                </a>
+            @endauth
 
             {{-- Mobile Menu Button --}}
             <button

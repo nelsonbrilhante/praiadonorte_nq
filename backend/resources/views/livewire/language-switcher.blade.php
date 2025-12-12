@@ -9,7 +9,7 @@
 <div>
     <a
         href="{{ $targetUrl }}"
-        class="language-toggle inline-flex items-center justify-center rounded-full text-xs font-semibold h-8 w-8 border transition-all duration-200"
+        class="language-toggle inline-flex items-center justify-center rounded-md text-xs font-semibold h-8 w-8 border transition-all duration-200"
         aria-label="{{ __('messages.accessibility.languageSelector') }}"
         title="{{ $currentLocale === 'pt' ? 'Switch to English' : 'Mudar para Português' }}"
     >
