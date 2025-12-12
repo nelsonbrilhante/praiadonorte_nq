@@ -7,8 +7,8 @@
 
 ## Última Sessão
 
-- **Data**: 2025-12-11
-- **Resumo**: Reorganização do menu Filament por entidade + correção da hidratação de formulários NQ
+- **Data**: 2025-12-12
+- **Resumo**: Verificação do estado do projeto - todas as páginas Blade já migradas
 
 ---
 
@@ -16,29 +16,79 @@
 
 | Item | Valor |
 |------|-------|
-| **Fase** | CMS Completo - Frontend em migração |
+| **Fase** | Migração Blade COMPLETA - Pronto para Quality Assurance |
 | **Branch** | `main` |
 | **Backend** | Laravel 12.41.1 + Filament 4.2.4 |
-| **Frontend** | Blade + Livewire (em migração de Next.js) |
+| **Frontend** | Blade + Livewire (migração concluída) |
 | **i18n** | Laravel localization configurado |
 | **Admin Theme** | Navy Blue (#1e3a5f) |
 
 ---
 
-## O Que Foi Feito (Sessão Actual)
+## Migração Blade - COMPLETA
 
-### 1. Reorganização do Menu Filament por Entidade
+### Páginas Principais (100% concluídas)
 
-O menu lateral do Filament foi completamente reorganizado para separar conteúdos por entidade:
+| Página | Ficheiro | Estado |
+|--------|----------|--------|
+| Homepage | `pages/home.blade.php` | ✅ |
+| Notícias (lista) | `pages/noticias/index.blade.php` | ✅ |
+| Notícias (detalhe) | `pages/noticias/show.blade.php` | ✅ |
+| Eventos (lista) | `pages/eventos/index.blade.php` | ✅ |
+| Eventos (detalhe) | `pages/eventos/show.blade.php` | ✅ |
+| Surfer Wall (lista) | `pages/surfer-wall/index.blade.php` | ✅ |
+| Surfer Wall (detalhe) | `pages/surfer-wall/show.blade.php` | ✅ |
+| Previsões | `pages/previsoes.blade.php` | ✅ |
+| Sobre | `pages/sobre.blade.php` | ✅ |
+| Contacto | `pages/contacto.blade.php` | ✅ |
 
-**Estrutura Anterior:**
-```
-Páginas (todas misturadas)
-Surfer Wall
-Conteúdo
-```
+### Carsurf (100% concluídas)
 
-**Nova Estrutura:**
+| Página | Ficheiro | Estado |
+|--------|----------|--------|
+| Landing | `pages/carsurf/index.blade.php` | ✅ |
+| Sobre | `pages/carsurf/sobre.blade.php` | ✅ |
+| Programas | `pages/carsurf/programas.blade.php` | ✅ |
+
+### Nazaré Qualifica (100% concluídas)
+
+| Página | Ficheiro | Estado |
+|--------|----------|--------|
+| Sobre | `pages/nazare-qualifica/sobre.blade.php` | ✅ |
+| Equipa | `pages/nazare-qualifica/equipa.blade.php` | ✅ |
+| Serviços | `pages/nazare-qualifica/servicos.blade.php` | ✅ |
+| Carsurf | `pages/nazare-qualifica/carsurf.blade.php` | ✅ |
+| Estacionamento | `pages/nazare-qualifica/estacionamento.blade.php` | ✅ |
+| Forte | `pages/nazare-qualifica/forte.blade.php` | ✅ |
+| ALE | `pages/nazare-qualifica/ale.blade.php` | ✅ |
+
+### Componentes (100% concluídos)
+
+| Componente | Ficheiro | Estado |
+|------------|----------|--------|
+| Layout App | `components/layouts/app.blade.php` | ✅ |
+| Header | `components/layout/header.blade.php` | ✅ |
+| Footer | `components/layout/footer.blade.php` | ✅ |
+| Hero Section | `components/praia-norte/hero-section.blade.php` | ✅ |
+| Button | `components/ui/button.blade.php` | ✅ |
+| Card (+ header, title, description, content, footer) | `components/ui/card*.blade.php` | ✅ |
+| Badge | `components/ui/badge.blade.php` | ✅ |
+| Input | `components/ui/input.blade.php` | ✅ |
+| Textarea | `components/ui/textarea.blade.php` | ✅ |
+| Breadcrumbs | `components/ui/breadcrumbs.blade.php` | ✅ |
+
+### Livewire (configurado)
+
+| Componente | Ficheiro | Estado |
+|------------|----------|--------|
+| Language Switcher | `livewire/language-switcher.blade.php` | ✅ |
+
+---
+
+## Filament Admin - Organização
+
+### Estrutura do Menu
+
 ```
 📊 Dashboard
 
@@ -64,48 +114,23 @@ Conteúdo
    └── Ver Website (abre em nova aba)
 ```
 
-### 2. Ficheiros Criados
+### Resources por Entidade
 
 ```
 backend/app/Filament/Resources/
 ├── Geral/
-│   ├── HomepageResource.php          # Resource dedicado para Homepage
+│   ├── HomepageResource.php
 │   └── Pages/
 │       ├── ListHomepages.php
 │       └── EditHomepage.php
 ├── Paginas/
-│   └── BasePageResource.php          # Classe base abstracta para Resources por entidade
+│   └── BasePageResource.php          # Classe base abstracta
 ├── PraiaNorte/
-│   └── PraiaNortePageResource.php    # Páginas Praia do Norte (exclui homepage)
+│   └── PraiaNortePageResource.php
 ├── Carsurf/
-│   └── CarsurfPageResource.php       # Páginas Carsurf
+│   └── CarsurfPageResource.php
 └── NazareQualifica/
-    └── NQPageResource.php            # Páginas Nazaré Qualifica
-```
-
-### 3. Correcção da Hidratação de Formulários NQ
-
-Os formulários das páginas Nazaré Qualifica não carregavam os dados da BD. Corrigido com `afterStateHydrated()` em todos os campos:
-
-- **Sobre a Empresa**: intro, objectives, CTA
-- **Corpos Sociais**: conselho, assembleia, fiscal
-- **Lista de Serviços**: services repeaters
-- **Detalhes do Serviço**: description, features, stats, contact
-
-### 4. Modificações em Ficheiros Existentes
-
-```
-backend/app/Filament/Resources/
-├── Paginas/
-│   ├── PaginaResource.php            # Oculto da navegação ($shouldRegisterNavigation = false)
-│   └── Schemas/PaginaForm.php        # Adicionado afterStateHydrated() a todos os campos NQ
-├── Surfers/
-│   └── SurferResource.php            # Movido para grupo "Praia do Norte"
-└── Surfboards/
-    └── SurfboardResource.php         # Movido para grupo "Praia do Norte"
-
-backend/app/Providers/Filament/
-└── AdminPanelProvider.php            # Adicionado link "Ver Website" no menu
+    └── NQPageResource.php
 ```
 
 ---
@@ -130,71 +155,30 @@ backend/app/Providers/Filament/
 
 ---
 
-## Arquitectura dos Resources por Entidade
-
-### Padrão Implementado
-
-```php
-// BasePageResource.php - Classe base abstracta
-abstract class BasePageResource extends Resource
-{
-    abstract public static function getEntityFilter(): string;
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->where('entity', static::getEntityFilter());
-    }
-}
-
-// NQPageResource.php - Exemplo de implementação
-class NQPageResource extends BasePageResource
-{
-    protected static string|\UnitEnum|null $navigationGroup = 'Nazaré Qualifica';
-
-    public static function getEntityFilter(): string
-    {
-        return 'nazare-qualifica';
-    }
-}
-```
-
-### Hidratação de Campos JSON Aninhados
-
-O Filament 4 não hidrata automaticamente campos com paths como `content.pt.intro.title`. Solução:
-
-```php
-TextInput::make('content.pt.intro.title')
-    ->afterStateHydrated(fn ($state, $set, $record) =>
-        $set('content.pt.intro.title', $record?->content['pt']['intro']['title'] ?? $state))
-```
-
----
-
 ## Próximas Tarefas
 
-### Prioridade Alta
-1. [ ] Continuar migração de páginas Next.js → Blade
-2. [ ] Converter Homepage para Blade
-3. [ ] Converter páginas de Notícias para Blade
-4. [ ] Converter páginas de Eventos para Blade
+### Prioridade Alta (Phase 4 - Quality)
+1. [ ] Testes funcionais de todas as páginas
+2. [ ] Verificar responsividade (mobile, tablet, desktop)
+3. [ ] SEO metadata em todas as páginas
+4. [ ] Lighthouse audit (target: >90 em todas as métricas)
 
-### Prioridade Média
-1. [ ] Converter Surfer Wall para Blade
-2. [ ] Converter Previsões para Blade
-3. [ ] Converter Carsurf landing para Blade
+### Prioridade Média (Phase 5 - Security)
+1. [ ] Security headers (CSP, HSTS, X-Frame-Options)
+2. [ ] Rate limiting nas rotas públicas
+3. [ ] CSRF validation review
+4. [ ] Input sanitization audit
 
-### Prioridade Baixa
+### Prioridade Baixa (Polish)
 1. [ ] Reduzir espaçamento vertical no menu Filament (CSS customizado)
-2. [ ] SEO metadata
-3. [ ] Performance optimization
-4. [ ] Security headers
+2. [ ] Performance optimization (caching, lazy loading)
+3. [ ] Arquivar pasta `frontend/` (Next.js deprecated)
 
 ---
 
 ## Notas Técnicas Importantes
 
-### Filament 4 - Namespaces Diferentes
+### Filament 4 - Namespaces
 
 ```php
 // Correcto no Filament 4
@@ -207,7 +191,7 @@ use Filament\Tables\Actions\EditAction; // ❌
 
 ### viteTheme() Causa Problemas
 
-Não usar `->viteTheme()` no AdminPanelProvider - quebra o carregamento do CSS do Filament. Para CSS customizado, usar outro método.
+Não usar `->viteTheme()` no AdminPanelProvider - quebra o carregamento do CSS do Filament.
 
 ### Entity Filter nas Queries
 
@@ -216,6 +200,16 @@ Cada Resource de páginas filtra por `entity`:
 - `carsurf` - Carsurf
 - `nazare-qualifica` - Nazaré Qualifica
 - Homepage usa query `where('slug', 'homepage')` (sem filtro de entity)
+
+### Hidratação de Campos JSON Aninhados
+
+O Filament 4 não hidrata automaticamente campos com paths como `content.pt.intro.title`. Solução:
+
+```php
+TextInput::make('content.pt.intro.title')
+    ->afterStateHydrated(fn ($state, $set, $record) =>
+        $set('content.pt.intro.title', $record?->content['pt']['intro']['title'] ?? $state))
+```
 
 ---
 
@@ -232,6 +226,6 @@ cd backend && npm run dev
 # 4. Aceder ao admin
 open http://localhost:8000/admin
 
-# 5. Continuar migração das páginas para Blade
+# 5. Continuar com testes e quality assurance
 # 6. Actualizar este ficheiro no final da sessão
 ```

@@ -30,17 +30,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Status
 
-**Current Phase**: Architecture Migration (Blade conversion)
+**Current Phase**: Quality Assurance (Phase 4)
 
 - [x] Backend: Laravel 12.41.1 + Filament 4.2.4 installed
 - [x] Backend CMS: All Filament Resources (Noticias, Eventos, Surfers, Surfboards, Paginas)
 - [x] Database: All migrations and seeders complete
 - [x] Admin UX: Navigation groups, distinct icons, dashboard widgets, Navy Blue theme
-- [ ] **IN PROGRESS**: Blade templates migration (from Next.js)
-- [ ] Livewire components for interactivity
-- [ ] Tailwind CSS setup in Laravel
-- [ ] i18n with Laravel localization
-- [ ] SEO metadata, performance optimization
+- [x] Blade templates migration (from Next.js) - **COMPLETE**
+- [x] Livewire components (LanguageSwitcher)
+- [x] Tailwind CSS setup in Laravel
+- [x] i18n with Laravel localization
+- [ ] **NEXT**: SEO metadata, performance optimization
+- [ ] **NEXT**: Security hardening (Phase 5)
 
 ## Technical Architecture
 
@@ -343,12 +344,12 @@ Scripts disponíveis em `scripts/` para gestão do servidor:
 - **Phase 0**: ✅ Project setup - Laravel 12 + Filament 4 installed
 - **Phase 1**: ✅ Design system, Tailwind CSS, component patterns
 
-**Block 2 - Institutional** 🔄 In Progress (Migration)
+**Block 2 - Institutional** ✅ Complete
 - **Phase 2**: ✅ CMS backend (Filament resources, seeders)
-- **Phase 3**: 🔄 Blade templates migration (converting from Next.js)
+- **Phase 3**: ✅ Blade templates migration (all pages converted)
 
-**Block 3 - Quality**
-- **Phase 4**: SEO + Performance optimization
+**Block 3 - Quality** 🔄 In Progress
+- **Phase 4**: 🔄 SEO + Performance optimization
 - **Phase 5**: Security hardening
 
 **Block 4 - E-commerce** *(future phase)*
@@ -494,6 +495,17 @@ Navigation clearly distinguishes between three entities while maintaining Praia 
 11. **Session Handoff** - Always update `SESSION-HANDOFF.md` at the end of each session with what was done, files changed, and next steps.
 
 12. **Design Pixel-Perfect** - The Blade templates must match the original Next.js design exactly. Same Tailwind classes, same layout, same responsive behavior.
+
+13. **Session Closure Protocol** - When the user says they want to close/end the session (e.g., "quero fechar a sessão", "vamos terminar", "end session", "wrap up"), you MUST:
+    1. Update `SESSION-HANDOFF.md` with:
+       - Current date
+       - Summary of what was done in this session
+       - Updated project status
+       - Files created/modified
+       - Next tasks (prioritized)
+    2. Update `CLAUDE.md` Project Status section if phase changed
+    3. Commit changes if user requests (never auto-commit)
+    4. Provide a brief summary to the user of what was accomplished
 
 ## VPS Infrastructure
 
