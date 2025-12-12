@@ -56,7 +56,7 @@
     <x-layout.header />
 
     {{-- Main Content --}}
-    <main>
+    <main @class(['pt-16' => !request()->routeIs('home')])>
         {{ $slot }}
     </main>
 

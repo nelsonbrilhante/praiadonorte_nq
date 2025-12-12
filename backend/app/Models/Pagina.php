@@ -14,6 +14,8 @@ class Pagina extends Model
         'slug',
         'content',
         'video_url',
+        'is_live',
+        'audio_enabled',
         'entity',
         'seo_title',
         'seo_description',
@@ -26,5 +28,7 @@ class Pagina extends Model
         'seo_title' => 'array',
         'seo_description' => 'array',
         'published' => 'boolean',
+        'is_live' => 'boolean',
+        'audio_enabled' => 'boolean',
     ];
 }

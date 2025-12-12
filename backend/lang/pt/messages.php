@@ -25,6 +25,7 @@ return [
             'title' => 'Praia do Norte',
             'subtitle' => 'Onde nascem as ondas gigantes',
             'cta' => 'Descobrir',
+            'toggleAudio' => 'Ativar/desativar áudio',
         ],
         'news' => [
             'title' => 'Últimas Notícias',

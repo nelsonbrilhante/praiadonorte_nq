@@ -2,26 +2,40 @@
     $locale = LaravelLocalization::getCurrentLocale();
 @endphp
 
-<header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<header
+    x-data="{ scrolled: false, mobileMenuOpen: false }"
+    x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 50 })"
+    :class="scrolled ? 'bg-background/95 backdrop-blur border-b shadow-sm' : 'bg-transparent border-transparent'"
+    class="fixed top-0 z-50 w-full transition-all duration-300"
+>
     <div class="container mx-auto flex h-16 items-center justify-between px-4">
         {{-- Logo --}}
         <a href="{{ LaravelLocalization::localizeURL('/') }}" class="flex items-center gap-2">
             <div class="flex flex-col">
-                <span class="text-xl font-bold text-ocean">Nazaré Qualifica</span>
-                <span class="text-[10px] text-muted-foreground">Nazaré, Portugal</span>
+                <span
+                    :class="scrolled ? 'text-ocean' : 'text-white'"
+                    class="text-xl font-bold transition-colors duration-300"
+                >Nazaré Qualifica</span>
+                <span
+                    :class="scrolled ? 'text-muted-foreground' : 'text-white/70'"
+                    class="text-[10px] transition-colors duration-300"
+                >Nazaré, Portugal</span>
             </div>
         </a>
 
         {{-- Navigation (Desktop) --}}
         <nav class="hidden md:flex items-center gap-1">
             <a href="{{ LaravelLocalization::localizeURL('/') }}"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 {{ request()->is($locale) ? 'bg-accent' : '' }}">
+               :class="scrolled ? 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale) ? 'bg-accent' : '' }}' : 'text-white hover:bg-white/10 {{ request()->is($locale) ? 'bg-white/10' : '' }}'"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
                 {{ __('messages.navigation.home') }}
             </a>
 
             {{-- About Dropdown --}}
             <div class="relative group">
-                <button class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 gap-1">
+                <button
+                    :class="scrolled ? 'hover:bg-accent hover:text-accent-foreground' : 'text-white hover:bg-white/10'"
+                    class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2 gap-1">
                     {{ __('messages.navigation.about') }}
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:rotate-180">
                         <path d="m6 9 6 6 6-6"/>
@@ -72,22 +86,26 @@
             </div>
 
             <a href="{{ LaravelLocalization::localizeURL('/noticias') }}"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 {{ request()->is($locale.'/noticias*') ? 'bg-accent' : '' }}">
+               :class="scrolled ? 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale.'/noticias*') ? 'bg-accent' : '' }}' : 'text-white hover:bg-white/10 {{ request()->is($locale.'/noticias*') ? 'bg-white/10' : '' }}'"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
                 {{ __('messages.navigation.news') }}
             </a>
 
             <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 {{ request()->is($locale.'/surfer-wall*') ? 'bg-accent' : '' }}">
+               :class="scrolled ? 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale.'/surfer-wall*') ? 'bg-accent' : '' }}' : 'text-white hover:bg-white/10 {{ request()->is($locale.'/surfer-wall*') ? 'bg-white/10' : '' }}'"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
                 {{ __('messages.navigation.surferWall') }}
             </a>
 
             <a href="{{ LaravelLocalization::localizeURL('/eventos') }}"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 {{ request()->is($locale.'/eventos*') ? 'bg-accent' : '' }}">
+               :class="scrolled ? 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale.'/eventos*') ? 'bg-accent' : '' }}' : 'text-white hover:bg-white/10 {{ request()->is($locale.'/eventos*') ? 'bg-white/10' : '' }}'"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
                 {{ __('messages.navigation.events') }}
             </a>
 
             <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 {{ request()->is($locale.'/previsoes*') ? 'bg-accent' : '' }}">
+               :class="scrolled ? 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale.'/previsoes*') ? 'bg-accent' : '' }}' : 'text-white hover:bg-white/10 {{ request()->is($locale.'/previsoes*') ? 'bg-white/10' : '' }}'"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
                 {{ __('messages.navigation.forecast') }}
             </a>
         </nav>
@@ -95,19 +113,29 @@
         {{-- Right Side --}}
         <div class="flex items-center gap-2">
             {{-- Search Button --}}
-            <button type="button" class="hidden lg:inline-flex items-center gap-2 rounded-md border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted">
+            <button
+                type="button"
+                :class="scrolled ? 'border bg-muted/50 text-muted-foreground hover:bg-muted' : 'border-white/30 bg-white/10 text-white hover:bg-white/20'"
+                class="hidden lg:inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"/>
                     <path d="m21 21-4.3-4.3"/>
                 </svg>
                 <span>{{ __('messages.search.placeholder') }}</span>
-                <kbd class="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+                <kbd
+                    :class="scrolled ? 'border bg-background' : 'border-white/30 bg-white/10'"
+                    class="pointer-events-none hidden h-5 select-none items-center gap-1 rounded px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
                     <span class="text-xs">⌘</span>K
                 </kbd>
             </button>
 
             {{-- Dark Mode Toggle --}}
-            <button type="button" onclick="document.documentElement.classList.toggle('dark')" class="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 hover:bg-accent transition-colors" title="Toggle dark mode">
+            <button
+                type="button"
+                onclick="document.documentElement.classList.toggle('dark')"
+                :class="scrolled ? 'hover:bg-accent' : 'text-white hover:bg-white/10'"
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 transition-colors"
+                title="Toggle dark mode">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dark:hidden">
                     <circle cx="12" cy="12" r="4"/>
                     <path d="M12 2v2"/>
@@ -129,12 +157,17 @@
 
             {{-- Contact Button --}}
             <a href="{{ LaravelLocalization::localizeURL('/contacto') }}"
-               class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 bg-ocean text-white hover:bg-ocean-dark transition-colors">
+               :class="scrolled ? 'bg-ocean text-white hover:bg-ocean-dark' : 'bg-white text-ocean hover:bg-white/90'"
+               class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 transition-colors">
                 {{ __('messages.navigation.contact') }}
             </a>
 
             {{-- Mobile Menu Button --}}
-            <button type="button" class="md:hidden inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 hover:bg-accent" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+            <button
+                type="button"
+                @click="mobileMenuOpen = !mobileMenuOpen"
+                :class="scrolled ? 'hover:bg-accent' : 'text-white hover:bg-white/10'"
+                class="md:hidden inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="4" x2="20" y1="12" y2="12"/>
                     <line x1="4" x2="20" y1="6" y2="6"/>
@@ -145,7 +178,16 @@
     </div>
 
     {{-- Mobile Menu --}}
-    <div id="mobile-menu" class="hidden md:hidden border-t">
+    <div
+        x-show="mobileMenuOpen"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-1"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-1"
+        class="md:hidden border-t bg-background"
+    >
         <nav class="container mx-auto px-4 py-4 space-y-2">
             <a href="{{ LaravelLocalization::localizeURL('/') }}" class="block py-2 text-sm hover:text-ocean">
                 {{ __('messages.navigation.home') }}

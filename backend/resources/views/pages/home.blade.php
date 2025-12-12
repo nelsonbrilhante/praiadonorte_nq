@@ -23,6 +23,8 @@
             :ctaText="$heroData['cta_text'] ?? null"
             :ctaUrl="$heroData['cta_url'] ?? null"
             :youtubeUrl="$homepage->video_url ?? null"
+            :isLive="$homepage->is_live ?? false"
+            :audioEnabled="$homepage->audio_enabled ?? false"
         />
     @else
         <x-praia-norte.hero-section />

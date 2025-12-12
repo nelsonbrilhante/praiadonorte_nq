@@ -25,6 +25,7 @@ return [
             'title' => 'Praia do Norte',
             'subtitle' => 'Where giant waves are born',
             'cta' => 'Discover',
+            'toggleAudio' => 'Toggle audio',
         ],
         'news' => [
             'title' => 'Latest News',

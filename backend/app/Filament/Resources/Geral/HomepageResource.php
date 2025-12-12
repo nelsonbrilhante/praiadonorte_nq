@@ -7,6 +7,7 @@ use App\Filament\Resources\Geral\Pages\ListHomepages;
 use App\Models\Pagina;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
@@ -104,6 +105,22 @@ class HomepageResource extends Resource
                                 ->label('Button URL (EN)')
                                 ->afterStateHydrated(fn ($state, $set, $record) =>
                                     $set('content.en.hero.cta_url', $record?->content['en']['hero']['cta_url'] ?? $state)),
+                        ]),
+                    ]),
+
+                Section::make('Live Stream')
+                    ->description('Configurações para transmissão ao vivo')
+                    ->icon('heroicon-o-video-camera')
+                    ->schema([
+                        Grid::make(2)->schema([
+                            Toggle::make('is_live')
+                                ->label('Em Direto')
+                                ->helperText('Ativa o badge LIVE vermelho no hero')
+                                ->default(false),
+                            Toggle::make('audio_enabled')
+                                ->label('Áudio Disponível')
+                                ->helperText('Mostra botão para ativar áudio (só quando em direto)')
+                                ->default(false),
                         ]),
                     ]),
 
