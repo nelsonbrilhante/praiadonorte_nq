@@ -7,7 +7,26 @@
 
 ## Última Sessão
 
-- **Data**: 2025-12-12
+- **Data**: 2025-12-15
+- **Resumo**: Correção do captcha do YouTube no Hero Section
+
+### O que foi feito:
+1. **Correção do Captcha do YouTube**
+   - O YouTube mostrava "Sign in to confirm you're not a bot" no vídeo embedado
+   - Alterado domínio do embed de `youtube.com` para `youtube-nocookie.com`
+   - Domínio nocookie é oficial do YouTube para embeds com privacidade melhorada
+   - Não define cookies de tracking e reduz verificações anti-bot
+
+2. **Ficheiros modificados:**
+   - `resources/views/components/praia-norte/hero-section.blade.php` - linha 43, mudança de domínio
+
+3. **Notas:**
+   - Se o captcha voltar, considerar: self-hosted video, Vimeo, ou imagem estática
+
+---
+
+## Sessão Anterior (2025-12-12)
+
 - **Resumo**: Implementação de logótipo dinâmico no Hero Section com slider de tamanho
 
 ### O que foi feito:
@@ -99,6 +118,14 @@
 | Componente | Ficheiro | Estado |
 |------------|----------|--------|
 | Language Switcher | `livewire/language-switcher.blade.php` | ✅ |
+| Search Spotlight | `livewire/search-spotlight.blade.php` | ✅ |
+
+**SearchSpotlight Features:**
+- Atalho: `Cmd+K` (Mac) / `Ctrl+K` (Windows)
+- Pesquisa em: Notícias, Eventos, Surfers, Páginas
+- Debounce 300ms, resultados agrupados por tipo
+- Máximo 3 resultados por tipo
+- Ficheiros: `app/Livewire/SearchSpotlight.php` + view
 
 ---
 
@@ -172,13 +199,25 @@ backend/app/Filament/Resources/
 
 ---
 
+## Gaps Conhecidos
+
+| Item | Estado | Notas |
+|------|--------|-------|
+| Páginas Legais (`/privacidade`, `/termos`, `/cookies`) | ⚠️ Não implementado | Links no footer, páginas não existem |
+| Formulário de Contacto backend | ⚠️ Não implementado | `action="#"` sem handler POST |
+| `app/Services/ForecastService.php` | ⚠️ Não criado | Documentado no CLAUDE.md mas não existe (baixa prioridade) |
+
+---
+
 ## Próximas Tarefas
 
 ### Prioridade Alta (Phase 4 - Quality)
-1. [ ] Testes funcionais de todas as páginas
-2. [ ] Verificar responsividade (mobile, tablet, desktop)
-3. [ ] SEO metadata em todas as páginas
-4. [ ] Lighthouse audit (target: >90 em todas as métricas)
+1. [ ] Criar páginas legais (privacidade, termos, cookies)
+2. [ ] Implementar backend do formulário de contacto
+3. [ ] Testes funcionais de todas as páginas
+4. [ ] Verificar responsividade (mobile, tablet, desktop)
+5. [ ] SEO metadata em todas as páginas
+6. [ ] Lighthouse audit (target: >90 em todas as métricas)
 
 ### Prioridade Média (Phase 5 - Security)
 1. [ ] Security headers (CSP, HSTS, X-Frame-Options)

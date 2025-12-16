@@ -40,7 +40,7 @@
         <div class="absolute inset-0 overflow-hidden">
             <iframe
                 id="hero-youtube-player"
-                src="https://www.youtube.com/embed/{{ $youtubeVideoId }}?autoplay=1&mute=1&loop=1&playlist={{ $youtubeVideoId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&vq=hd1080&enablejsapi=1&origin={{ url('/') }}"
+                src="https://www.youtube-nocookie.com/embed/{{ $youtubeVideoId }}?autoplay=1&mute=1&loop=1&playlist={{ $youtubeVideoId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&vq=hd1080&enablejsapi=1&origin={{ url('/') }}"
                 allow="autoplay; encrypted-media"
                 allowfullscreen
                 class="pointer-events-none absolute left-1/2 top-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2"
