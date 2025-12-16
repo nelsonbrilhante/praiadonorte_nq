@@ -120,7 +120,7 @@
             {{-- Search Button (Desktop) --}}
             <button
                 type="button"
-                @click="$dispatch('openSearch')"
+                @click="$dispatch('open-search')"
                 :class="(isHomepage && !scrolled) ? 'border-white/30 bg-white/10 text-white hover:bg-white/20' : 'border bg-muted/50 text-muted-foreground hover:bg-muted'"
                 class="hidden lg:inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -138,7 +138,7 @@
             {{-- Search Button (Mobile/Tablet) --}}
             <button
                 type="button"
-                @click="$dispatch('openSearch')"
+                @click="$dispatch('open-search')"
                 :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
                 class="lg:hidden inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -147,14 +147,20 @@
                 </svg>
             </button>
 
-            {{-- Dark Mode Toggle --}}
+            {{-- Dark Mode Toggle (persisted to localStorage) --}}
             <button
                 type="button"
-                onclick="document.documentElement.classList.toggle('dark')"
+                x-data="{ isDark: document.documentElement.classList.contains('dark') }"
+                @click="
+                    isDark = !isDark;
+                    document.documentElement.classList.toggle('dark', isDark);
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                "
                 :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
                 class="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 transition-colors"
-                title="Toggle dark mode">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dark:hidden">
+                :title="isDark ? '{{ __('messages.theme.switchToLight') ?? 'Mudar para modo claro' }}' : '{{ __('messages.theme.switchToDark') ?? 'Mudar para modo escuro' }}'">
+                {{-- Sun icon (shown in dark mode - click to go light) --}}
+                <svg x-show="isDark" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="4"/>
                     <path d="M12 2v2"/>
                     <path d="M12 20v2"/>
@@ -165,7 +171,8 @@
                     <path d="m6.34 17.66-1.41 1.41"/>
                     <path d="m19.07 4.93-1.41 1.41"/>
                 </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block">
+                {{-- Moon icon (shown in light mode - click to go dark) --}}
+                <svg x-show="!isDark" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
                 </svg>
             </button>

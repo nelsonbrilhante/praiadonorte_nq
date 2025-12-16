@@ -7,30 +7,12 @@ use App\Models\Evento;
 use App\Models\Surfer;
 use App\Models\Pagina;
 use Livewire\Component;
-use Livewire\Attributes\On;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class SearchSpotlight extends Component
 {
     public string $query = '';
-    public bool $isOpen = false;
     public array $results = [];
-
-    protected $listeners = ['openSearch' => 'open'];
-
-    public function open(): void
-    {
-        $this->isOpen = true;
-        $this->query = '';
-        $this->results = [];
-    }
-
-    public function close(): void
-    {
-        $this->isOpen = false;
-        $this->query = '';
-        $this->results = [];
-    }
 
     public function updatedQuery(): void
     {

@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="{{ LaravelLocalization::getCurrentLocale() }}">
 <head>
+    {{-- Theme initialization - Must run before content renders to prevent flash --}}
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'system';
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (theme === 'system' && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -55,8 +65,8 @@
     {{-- Header --}}
     <x-layout.header />
 
-    {{-- Search Spotlight --}}
-    <livewire:search-spotlight />
+    {{-- Search Spotlight (Alpine.js - bypasses Livewire server issues) --}}
+    <x-search-spotlight />
 
     {{-- Main Content --}}
     <main @class(['pt-16' => !request()->routeIs('home')])>

@@ -487,4 +487,8 @@ return [
         'closeMenu' => 'Fechar menu',
         'skipToContent' => 'Saltar para o conteúdo',
     ],
+    'theme' => [
+        'switchToDark' => 'Mudar para modo escuro',
+        'switchToLight' => 'Mudar para modo claro',
+    ],
 ];

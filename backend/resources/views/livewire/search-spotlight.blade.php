@@ -1,10 +1,10 @@
 <div
-    x-data="{ show: @entangle('isOpen') }"
+    x-data="{ show: false }"
     x-show="show"
-    x-on:keydown.escape.window="show = false; $wire.close()"
-    x-on:keydown.meta.k.window.prevent="show = !show; if(show) $wire.open()"
-    x-on:keydown.ctrl.k.window.prevent="show = !show; if(show) $wire.open()"
-    @open-search.window="show = true; $wire.open()"
+    x-on:keydown.escape.window="if(show) { show = false; $refs.searchInput.value = ''; }"
+    x-on:keydown.meta.k.window.prevent="show = !show; if(show) { $refs.searchInput.value = ''; setTimeout(() => $refs.searchInput.focus(), 100); }"
+    x-on:keydown.ctrl.k.window.prevent="show = !show; if(show) { $refs.searchInput.value = ''; setTimeout(() => $refs.searchInput.focus(), 100); }"
+    @open-search.window="show = true; $refs.searchInput.value = ''; setTimeout(() => $refs.searchInput.focus(), 100);"
     x-cloak
     class="fixed inset-0 z-[100]"
 >
@@ -17,7 +17,7 @@
         x-transition:leave="ease-in duration-150"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        @click="show = false; $wire.close()"
+        @click="show = false; $refs.searchInput.value = '';"
         class="fixed inset-0 bg-black/50 backdrop-blur-sm"
     ></div>
 
@@ -41,7 +41,6 @@
                 </svg>
                 <input
                     x-ref="searchInput"
-                    x-init="$watch('show', value => { if(value) setTimeout(() => $refs.searchInput.focus(), 100) })"
                     wire:model.live.debounce.300ms="query"
                     type="text"
                     placeholder="{{ __('messages.search.placeholder') }}..."
