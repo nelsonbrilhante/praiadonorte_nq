@@ -7,7 +7,39 @@
 
 ## Última Sessão
 
-- **Data**: 2025-12-16
+- **Data**: 2025-12-16 (tarde)
+- **Resumo**: Correção do search 404 e tema persistente dark/light
+
+### O que foi feito:
+1. **Correção do Search Spotlight (erro 404)**
+   - **Problema**: Livewire `wire:model` retornava 404 devido a problemas com PHP built-in server single-threaded
+   - **Solução**: Convertido de Livewire para Alpine.js puro
+   - Novo componente: `components/search-spotlight.blade.php` (Alpine.js + API fetch)
+   - Usa endpoint `/api/v1/search` em vez de `/livewire/update`
+   - Corrigido evento do botão: `openSearch` → `open-search` (Alpine é case-sensitive)
+   - Funciona agora com clique no botão E com Cmd+K
+
+2. **Tema Dark/Light Persistente**
+   - Adicionado script inline no `<head>` para aplicar tema antes do render (evita flash)
+   - Toggle guarda preferência no localStorage
+   - Suporta: dark, light, ou system (segue preferência do SO)
+   - Traduções adicionadas em PT/EN (`messages.theme.switchToDark/switchToLight`)
+
+3. **Ficheiros criados/modificados:**
+   - `components/search-spotlight.blade.php` - **NOVO** (Alpine.js)
+   - `components/layouts/app.blade.php` - script de inicialização do tema
+   - `components/layout/header.blade.php` - toggle persistente + fix evento search
+   - `livewire/search-spotlight.blade.php` - simplificado (Alpine.js para modal)
+   - `app/Livewire/SearchSpotlight.php` - simplificado (removido isOpen)
+   - `lang/pt/messages.php` - traduções tema
+   - `lang/en/messages.php` - traduções tema
+
+4. **Commit**: `890dba6` - feat(search+theme): fix search 404 and add persistent dark mode
+
+---
+
+## Sessão Anterior (2025-12-16 manhã)
+
 - **Resumo**: Páginas legais, logo no header, inversão do botão de idioma
 
 ### O que foi feito:
@@ -27,17 +59,6 @@
    - Invertida lógica: agora mostra idioma destino em vez do atual
    - Se está em PT → mostra "EN" (ação: mudar para inglês)
    - Se está em EN → mostra "PT" (ação: mudar para português)
-
-4. **Ficheiros criados/modificados:**
-   - `routes/web.php` - rotas legais
-   - `lang/pt/legal.php` - traduções PT
-   - `lang/en/legal.php` - traduções EN
-   - `pages/privacidade.blade.php` - página privacidade
-   - `pages/termos.blade.php` - página termos
-   - `pages/cookies.blade.php` - página cookies
-   - `components/layout/header.blade.php` - logo dinâmico
-   - `livewire/language-switcher.blade.php` - lógica invertida
-   - `public/images/logos/` - logos copiados
 
 ---
 
@@ -149,14 +170,20 @@
 | Componente | Ficheiro | Estado |
 |------------|----------|--------|
 | Language Switcher | `livewire/language-switcher.blade.php` | ✅ |
-| Search Spotlight | `livewire/search-spotlight.blade.php` | ✅ |
+
+### Alpine.js Components
+
+| Componente | Ficheiro | Estado |
+|------------|----------|--------|
+| Search Spotlight | `components/search-spotlight.blade.php` | ✅ |
 
 **SearchSpotlight Features:**
 - Atalho: `Cmd+K` (Mac) / `Ctrl+K` (Windows)
+- Clique no botão de pesquisa também funciona
 - Pesquisa em: Notícias, Eventos, Surfers, Páginas
+- Usa API endpoint `/api/v1/search` (Alpine.js + fetch)
 - Debounce 300ms, resultados agrupados por tipo
-- Máximo 3 resultados por tipo
-- Ficheiros: `app/Livewire/SearchSpotlight.php` + view
+- **Nota**: Convertido de Livewire para Alpine.js para evitar problemas com PHP built-in server
 
 ---
 
