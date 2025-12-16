@@ -8,9 +8,13 @@
         <div class="grid grid-cols-1 gap-8 md:grid-cols-4">
             {{-- Praia do Norte --}}
             <div>
-                <h3 class="mb-4 text-lg font-semibold text-ocean">
-                    {{ __('messages.entities.praiaDoNorte') }}
-                </h3>
+                <a href="{{ LaravelLocalization::localizeURL('/sobre') }}" class="mb-4 block">
+                    <img
+                        src="{{ asset('images/logos/LOGOTIPO PN.png') }}"
+                        alt="Praia do Norte"
+                        class="h-10 w-auto"
+                    />
+                </a>
                 <ul class="space-y-2 text-sm text-muted-foreground">
                     <li>
                         <a href="{{ LaravelLocalization::localizeURL('/sobre') }}" class="hover:text-ocean transition-colors">
@@ -37,9 +41,13 @@
 
             {{-- Carsurf --}}
             <div>
-                <h3 class="mb-4 text-lg font-semibold text-performance">
-                    {{ __('messages.entities.carsurf') }}
-                </h3>
+                <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}" class="mb-4 block">
+                    <img
+                        src="{{ asset('images/logos/CARSURF_001.png') }}"
+                        alt="Carsurf"
+                        class="h-10 w-auto"
+                    />
+                </a>
                 <ul class="space-y-2 text-sm text-muted-foreground">
                     <li>
                         <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}" class="hover:text-performance transition-colors">
@@ -56,9 +64,13 @@
 
             {{-- Nazaré Qualifica --}}
             <div>
-                <h3 class="mb-4 text-lg font-semibold text-institutional">
-                    {{ __('messages.entities.nazareQualifica') }}
-                </h3>
+                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/sobre') }}" class="mb-4 block">
+                    <img
+                        src="{{ asset('images/logos/imagem-grafica-nq-original-name.svg') }}"
+                        alt="Nazaré Qualifica"
+                        class="h-10 w-auto"
+                    />
+                </a>
                 <ul class="space-y-2 text-sm text-muted-foreground">
                     <li>
                         <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/sobre') }}" class="hover:text-institutional transition-colors">

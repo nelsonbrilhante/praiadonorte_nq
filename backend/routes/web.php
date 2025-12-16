@@ -130,4 +130,17 @@ Route::group([
     Route::get('/contacto', function () {
         return view('pages.contacto');
     })->name('contacto');
+
+    // Legal pages
+    Route::get('/privacidade', function () {
+        return view('pages.privacidade');
+    })->name('privacidade');
+
+    Route::get('/termos', function () {
+        return view('pages.termos');
+    })->name('termos');
+
+    Route::get('/cookies', function () {
+        return view('pages.cookies');
+    })->name('cookies');
 });

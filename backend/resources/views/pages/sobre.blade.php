@@ -42,6 +42,12 @@
                     />
                 </div>
                 <div>
+                    {{-- Logo --}}
+                    <img
+                        src="{{ asset('images/logos/LOGOTIPO PN.png') }}"
+                        alt="Praia do Norte"
+                        class="mb-6 h-16 w-auto md:h-20"
+                    />
                     <h2 class="mb-6 text-3xl font-bold">{{ __('messages.about.intro.title') }}</h2>
                     <div class="prose max-w-none">
                         @if($pagina && $pagina->content)

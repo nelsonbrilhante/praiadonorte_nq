@@ -7,7 +7,42 @@
 
 ## Última Sessão
 
-- **Data**: 2025-12-15
+- **Data**: 2025-12-16
+- **Resumo**: Páginas legais, logo no header, inversão do botão de idioma
+
+### O que foi feito:
+1. **Páginas Legais (RGPD/Cookies)**
+   - Criadas 3 páginas: `/privacidade`, `/termos`, `/cookies`
+   - Rotas adicionadas ao `web.php`
+   - Traduções PT/EN completas em `lang/pt/legal.php` e `lang/en/legal.php`
+   - Links do footer já funcionais
+
+2. **Logo no Header**
+   - Substituído texto "Nazaré Qualifica" por imagem de logo
+   - Versão branca para header transparente (homepage)
+   - Versão original para header com fundo sólido
+   - Logos copiados para `public/images/logos/`
+
+3. **Botão de Idioma (UX)**
+   - Invertida lógica: agora mostra idioma destino em vez do atual
+   - Se está em PT → mostra "EN" (ação: mudar para inglês)
+   - Se está em EN → mostra "PT" (ação: mudar para português)
+
+4. **Ficheiros criados/modificados:**
+   - `routes/web.php` - rotas legais
+   - `lang/pt/legal.php` - traduções PT
+   - `lang/en/legal.php` - traduções EN
+   - `pages/privacidade.blade.php` - página privacidade
+   - `pages/termos.blade.php` - página termos
+   - `pages/cookies.blade.php` - página cookies
+   - `components/layout/header.blade.php` - logo dinâmico
+   - `livewire/language-switcher.blade.php` - lógica invertida
+   - `public/images/logos/` - logos copiados
+
+---
+
+## Sessão Anterior (2025-12-15)
+
 - **Resumo**: Correção do captcha do YouTube no Hero Section
 
 ### O que foi feito:
@@ -15,13 +50,6 @@
    - O YouTube mostrava "Sign in to confirm you're not a bot" no vídeo embedado
    - Alterado domínio do embed de `youtube.com` para `youtube-nocookie.com`
    - Domínio nocookie é oficial do YouTube para embeds com privacidade melhorada
-   - Não define cookies de tracking e reduz verificações anti-bot
-
-2. **Ficheiros modificados:**
-   - `resources/views/components/praia-norte/hero-section.blade.php` - linha 43, mudança de domínio
-
-3. **Notas:**
-   - Se o captcha voltar, considerar: self-hosted video, Vimeo, ou imagem estática
 
 ---
 
@@ -77,6 +105,9 @@
 | Previsões | `pages/previsoes.blade.php` | ✅ |
 | Sobre | `pages/sobre.blade.php` | ✅ |
 | Contacto | `pages/contacto.blade.php` | ✅ |
+| Privacidade | `pages/privacidade.blade.php` | ✅ |
+| Termos | `pages/termos.blade.php` | ✅ |
+| Cookies | `pages/cookies.blade.php` | ✅ |
 
 ### Carsurf (100% concluídas)
 
@@ -203,7 +234,7 @@ backend/app/Filament/Resources/
 
 | Item | Estado | Notas |
 |------|--------|-------|
-| Páginas Legais (`/privacidade`, `/termos`, `/cookies`) | ⚠️ Não implementado | Links no footer, páginas não existem |
+| Páginas Legais (`/privacidade`, `/termos`, `/cookies`) | ✅ Implementado | Sessão 16/12 |
 | Formulário de Contacto backend | ⚠️ Não implementado | `action="#"` sem handler POST |
 | `app/Services/ForecastService.php` | ⚠️ Não criado | Documentado no CLAUDE.md mas não existe (baixa prioridade) |
 
@@ -212,7 +243,7 @@ backend/app/Filament/Resources/
 ## Próximas Tarefas
 
 ### Prioridade Alta (Phase 4 - Quality)
-1. [ ] Criar páginas legais (privacidade, termos, cookies)
+1. [x] Criar páginas legais (privacidade, termos, cookies) ✅
 2. [ ] Implementar backend do formulário de contacto
 3. [ ] Testes funcionais de todas as páginas
 4. [ ] Verificar responsividade (mobile, tablet, desktop)

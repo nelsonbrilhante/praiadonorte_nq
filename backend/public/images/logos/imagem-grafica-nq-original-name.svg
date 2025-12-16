@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 395.61 165.67">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: Montserrat-Bold, Montserrat;
+        font-size: 49.16px;
+        font-variation-settings: 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #606161;
+      }
+
+      .cls-3 {
+        fill: #06a1cc;
+      }
+
+      .cls-4 {
+        fill: #6d6e71;
+      }
+
+      .cls-5 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-6 {
+        fill: #ed1c24;
+      }
+
+      .cls-7 {
+        fill: #808285;
+      }
+
+      .cls-8 {
+        letter-spacing: 0em;
+      }
+
+      .cls-9 {
+        fill: #27748a;
+      }
+
+      .cls-10 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-11 {
+        letter-spacing: -.01em;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="58.32" y1="21.69" x2="98.53" y2="21.69" gradientUnits="userSpaceOnUse">
+      <stop offset=".47" stop-color="#2484c6"/>
+      <stop offset=".48" stop-color="#2484c6" stop-opacity=".98"/>
+      <stop offset=".74" stop-color="#2484c6" stop-opacity=".46"/>
+      <stop offset=".92" stop-color="#2484c6" stop-opacity=".13"/>
+      <stop offset="1" stop-color="#2484c6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="MASTER">
+    <g id="ig-horizontal-white-name">
+      <g id="lettering">
+        <text class="cls-1" transform="translate(112.08 143.4)"><tspan x="0" y="0">Q</tspan><tspan class="cls-10" x="41.49" y="0">U</tspan><tspan x="79.49" y="0">ALIFI</tspan><tspan class="cls-11" x="210.49" y="0">C</tspan><tspan class="cls-8" x="245.39" y="0">A</tspan></text>
+        <text class="cls-1" transform="translate(112.08 99.98)"><tspan x="0" y="0">NAZARÉ</tspan></text>
+      </g>
+      <g id="logo">
+        <polygon id="carsurf" class="cls-3" points="7.53 0 98.53 0 98.53 105.71 84.71 115 67.74 89.79 67.74 30.79 28.24 30.79 7.53 0"/>
+        <polygon id="servicos" class="cls-2" points="0 .15 30.79 45.91 30.79 117 55.42 117 55.42 147.79 0 147.79 0 .15"/>
+        <polygon id="praiadonorte" class="cls-6" points="61.58 91.67 61.58 147.79 99.35 147.79 61.58 91.67"/>
+        <path class="cls-9" d="M33.69,30.79h24.63L89.11,0s-30.79,30.79-55.42,30.79Z"/>
+        <polygon class="cls-5" points="58.32 30.79 89.11 0 98.53 0 98.53 43.38 72.56 30.79 58.32 30.79"/>
+        <g id="squares">
+          <rect class="cls-4" y="130.86" width="15.4" height="15.4"/>
+          <rect class="cls-4" x="15.4" y="115.46" width="15.4" height="15.4"/>
+          <rect class="cls-7" x="15.4" y="100.07" width="15.4" height="15.4"/>
+          <rect class="cls-7" y="115.46" width="15.4" height="15.4"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -42,6 +42,12 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
                 <div>
+                    {{-- Logo --}}
+                    <img
+                        src="{{ asset('images/logos/CARSURF_001.png') }}"
+                        alt="Carsurf"
+                        class="mb-6 h-16 w-auto md:h-20"
+                    />
                     <h2 class="mb-6 text-3xl font-bold">{{ __('messages.carsurf.about.title') }}</h2>
                     <div class="prose max-w-none">
                         <p class="text-lg text-muted-foreground">
@@ -54,8 +60,13 @@
                         </p>
                     </div>
                 </div>
-                <div class="relative aspect-video overflow-hidden rounded-lg bg-gradient-to-br from-performance/20 to-performance/5">
-                    {{-- Placeholder for image --}}
+                <div class="relative aspect-video overflow-hidden rounded-lg bg-gradient-to-br from-performance/20 to-performance/5 flex items-center justify-center">
+                    {{-- Logo large version --}}
+                    <img
+                        src="{{ asset('images/logos/CARSURF_001.png') }}"
+                        alt="Carsurf"
+                        class="h-32 w-auto opacity-50 md:h-48"
+                    />
                 </div>
             </div>
         </div>

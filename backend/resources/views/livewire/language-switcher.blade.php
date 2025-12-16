@@ -13,7 +13,7 @@
         aria-label="{{ __('messages.accessibility.languageSelector') }}"
         title="{{ $currentLocale === 'pt' ? 'Switch to English' : 'Mudar para Português' }}"
     >
-        {{ strtoupper($currentLocale) }}
+        {{ strtoupper($targetLocale) }}
     </a>
 
     <style>

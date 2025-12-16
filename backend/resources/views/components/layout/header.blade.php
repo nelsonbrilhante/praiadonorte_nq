@@ -11,17 +11,21 @@
 >
     <div class="container mx-auto flex h-16 items-center justify-between px-4">
         {{-- Logo --}}
-        <a href="{{ LaravelLocalization::localizeURL('/') }}" class="flex items-center gap-2">
-            <div class="flex flex-col">
-                <span
-                    :class="(isHomepage && !scrolled) ? 'text-white' : 'text-ocean'"
-                    class="text-xl font-bold transition-colors duration-300"
-                >Nazaré Qualifica</span>
-                <span
-                    :class="(isHomepage && !scrolled) ? 'text-white/70' : 'text-muted-foreground'"
-                    class="text-[10px] transition-colors duration-300"
-                >Nazaré, Portugal</span>
-            </div>
+        <a href="{{ LaravelLocalization::localizeURL('/') }}" class="flex items-center">
+            {{-- White logo for transparent header (homepage, not scrolled) --}}
+            <img
+                src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}"
+                alt="Nazaré Qualifica"
+                :class="(isHomepage && !scrolled) ? 'block' : 'hidden'"
+                class="h-10 w-auto transition-opacity duration-300"
+            />
+            {{-- Original logo for solid header --}}
+            <img
+                src="{{ asset('images/logos/imagem-grafica-nq-original-name.svg') }}"
+                alt="Nazaré Qualifica"
+                :class="(isHomepage && !scrolled) ? 'hidden' : 'block'"
+                class="h-10 w-auto transition-opacity duration-300"
+            />
         </a>
 
         {{-- Navigation (Desktop) --}}

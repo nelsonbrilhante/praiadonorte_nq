@@ -22,10 +22,21 @@
     {{-- Intro Section --}}
     <section class="py-12">
         <div class="container mx-auto px-4">
-            <div class="mx-auto max-w-3xl">
-                <div class="prose max-w-none">
-                    <h2>{{ $content['intro']['title'] ?? __('messages.nq.about.intro.title') }}</h2>
-                    <p class="text-lg text-muted-foreground">{{ $content['intro']['text'] ?? '' }}</p>
+            <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center">
+                {{-- Logo --}}
+                <div class="lg:col-span-4 flex justify-center">
+                    <img
+                        src="{{ asset('images/logos/imagem-grafica-nq-vertical-elements.svg') }}"
+                        alt="Nazaré Qualifica - Empresa Municipal"
+                        class="h-48 w-auto md:h-64 lg:h-72"
+                    />
+                </div>
+                {{-- Text --}}
+                <div class="lg:col-span-8">
+                    <div class="prose max-w-none">
+                        <h2>{{ $content['intro']['title'] ?? __('messages.nq.about.intro.title') }}</h2>
+                        <p class="text-lg text-muted-foreground">{{ $content['intro']['text'] ?? '' }}</p>
+                    </div>
                 </div>
             </div>
         </div>
