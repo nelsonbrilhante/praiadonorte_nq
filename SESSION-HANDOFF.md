@@ -7,7 +7,62 @@
 
 ## Última Sessão
 
-- **Data**: 2025-12-16 (tarde)
+- **Data**: 2025-12-17
+- **Resumo**: Migração Forecast API, fix uploads, favicon, dark mode logo
+
+### O que foi feito:
+1. **Migração Forecast API (Next.js → Laravel)**
+   - Criado `ForecastService.php` - integra Open-Meteo Marine + Weather APIs
+   - Criado `ForecastController.php` - passa dados para a view
+   - Atualizado `routes/web.php` para usar ForecastController
+   - Reescrito `previsoes.blade.php` com dados reais:
+     - 8 cards de condições atuais (wave height, swell, period, direction, wind, gusts, air temp, water temp)
+     - Tabela de previsão 7 dias
+     - Código de cores para vento (verde=offshore, vermelho=onshore)
+     - Recomendação de fato baseada na temperatura da água
+
+2. **Fix Bug Upload de Imagens (Filament)**
+   - **Problema**: Imagens não apareciam no frontend após upload no admin
+   - **Causa**: FileUpload usava disk `local` (privado) em vez de `public`
+   - **Solução**: Adicionado `->disk('public')` e `->visibility('public')` em todos os FileUploads:
+     - `NoticiaForm.php`
+     - `EventoForm.php`
+     - `SurferForm.php`
+     - `SurfboardForm.php`
+     - `PaginaForm.php`
+     - `HomepageResource.php`
+
+3. **Favicon e App Icons**
+   - Adicionados: `favicon.ico`, `favicon.svg`, `favicon-16x16.png`, `favicon-32x32.png`
+   - Adicionados: `apple-touch-icon.png`, `android-chrome-192x192.png`, `android-chrome-512x512.png`
+   - Criado `site.webmanifest` para PWA
+   - Atualizado `app.blade.php` com links para favicon
+
+4. **Dark Mode Logo no Header**
+   - Header agora muda para logo branco quando dark mode está ativo
+   - Usa `MutationObserver` para detetar mudança da classe `dark` no `<html>`
+   - Estado `isDark` no Alpine.js controla visibilidade dos logos
+
+5. **Ficheiros criados:**
+   - `app/Services/ForecastService.php` - **NOVO**
+   - `app/Http/Controllers/ForecastController.php` - **NOVO**
+   - `public/favicon.svg`, `favicon.ico`, `favicon-*.png` - **NOVOS**
+   - `public/android-chrome-*.png`, `apple-touch-icon.png` - **NOVOS**
+   - `public/site.webmanifest` - **NOVO**
+
+6. **Ficheiros modificados:**
+   - `routes/web.php` - usa ForecastController
+   - `resources/views/pages/previsoes.blade.php` - dados reais + air temp
+   - `resources/views/components/layout/header.blade.php` - dark mode logo
+   - `resources/views/components/layouts/app.blade.php` - favicon links
+   - 6 ficheiros Filament Form - disk('public')
+
+7. **Commit**: `450a503` - feat: forecast API migration, image upload fix, and dark mode logo
+
+---
+
+## Sessão Anterior (2025-12-16 tarde)
+
 - **Resumo**: Correção do search 404 e tema persistente dark/light
 
 ### O que foi feito:
@@ -263,7 +318,7 @@ backend/app/Filament/Resources/
 |------|--------|-------|
 | Páginas Legais (`/privacidade`, `/termos`, `/cookies`) | ✅ Implementado | Sessão 16/12 |
 | Formulário de Contacto backend | ⚠️ Não implementado | `action="#"` sem handler POST |
-| `app/Services/ForecastService.php` | ⚠️ Não criado | Documentado no CLAUDE.md mas não existe (baixa prioridade) |
+| `app/Services/ForecastService.php` | ✅ Implementado | Sessão 17/12 - Open-Meteo APIs |
 
 ---
 
