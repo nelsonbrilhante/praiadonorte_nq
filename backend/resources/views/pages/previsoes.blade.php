@@ -1,5 +1,15 @@
 @php
-    $locale = app('laravellocalization')->getCurrentLocale();
+    use App\Services\ForecastService;
+    $locale = $locale ?? app('laravellocalization')->getCurrentLocale();
+    $current = $forecast['current'] ?? null;
+    $daily = $forecast['daily'] ?? [];
+    $lastUpdated = $forecast['lastUpdated'] ?? null;
+
+    // Helper data
+    $windType = $current ? ForecastService::getWindType($current['windDirection'], $locale) : null;
+    $waveCondition = $current ? ForecastService::getWaveCondition($current['waveHeight'], $locale) : null;
+    $windStrength = $current ? ForecastService::getWindStrength($current['windSpeed'], $locale) : null;
+    $wetsuitRec = $current ? ForecastService::getWetsuitRecommendation($current['waterTemperature'], $locale) : null;
 @endphp
 
 <x-layouts.app>
@@ -25,119 +35,232 @@
                     <p class="mt-2 text-xl opacity-90">{{ __('messages.forecast.subtitle') }}</p>
                 </div>
             </div>
+            @if($lastUpdated)
+                <p class="mt-4 text-sm opacity-75">
+                    {{ $locale === 'pt' ? 'Atualizado:' : 'Updated:' }}
+                    {{ \Carbon\Carbon::parse($lastUpdated)->locale($locale)->diffForHumans() }}
+                </p>
+            @endif
         </div>
     </section>
 
-    {{-- Current Conditions Placeholder --}}
+    {{-- Current Conditions --}}
     <section class="py-12">
         <div class="container mx-auto px-4">
             <h2 class="mb-6 text-2xl font-bold">{{ __('messages.forecast.marine.title') }}</h2>
 
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {{-- Wave Height --}}
-                <x-ui.card class="sm:col-span-2 border-ocean/30 bg-gradient-to-br from-ocean/5 to-ocean/10">
-                    <x-ui.card-header>
-                        <x-ui.card-title class="text-base font-semibold">
-                            {{ __('messages.forecast.marine.waveHeight') }}
-                        </x-ui.card-title>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="text-4xl font-bold text-ocean">-- m</div>
-                        <p class="mt-1 text-sm text-muted-foreground">
-                            {{ $locale === 'pt' ? 'A carregar...' : 'Loading...' }}
+            @if($current)
+                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {{-- Wave Height --}}
+                    <x-ui.card class="sm:col-span-2 border-ocean/30 bg-gradient-to-br from-ocean/5 to-ocean/10">
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-base font-semibold">
+                                {{ __('messages.forecast.marine.waveHeight') }}
+                            </x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content>
+                            <div class="text-4xl font-bold text-ocean">{{ number_format($current['waveHeight'], 1) }} m</div>
+                            <p class="mt-1 text-sm text-muted-foreground">
+                                {{ $waveCondition }}
+                            </p>
+                        </x-ui.card-content>
+                    </x-ui.card>
+
+                    {{-- Swell Height --}}
+                    <x-ui.card class="sm:col-span-2 border-ocean/30 bg-gradient-to-br from-ocean/5 to-ocean/10">
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-base font-semibold">
+                                {{ __('messages.forecast.marine.swellHeight') }}
+                            </x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content>
+                            <div class="text-4xl font-bold text-ocean">{{ number_format($current['swellHeight'], 1) }} m</div>
+                            <p class="mt-1 text-sm text-muted-foreground">
+                                {{ ForecastService::degreesToCardinal($current['swellDirection']) }} @ {{ number_format($current['swellPeriod'], 0) }}s
+                            </p>
+                        </x-ui.card-content>
+                    </x-ui.card>
+
+                    {{-- Wave Period --}}
+                    <x-ui.card>
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-sm font-medium">
+                                {{ __('messages.forecast.marine.wavePeriod') }}
+                            </x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content>
+                            <div class="text-2xl font-bold">{{ number_format($current['wavePeriod'], 0) }} s</div>
+                        </x-ui.card-content>
+                    </x-ui.card>
+
+                    {{-- Wave Direction --}}
+                    <x-ui.card>
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-sm font-medium">
+                                {{ __('messages.forecast.marine.waveDirection') }}
+                            </x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content>
+                            <div class="flex items-center gap-2">
+                                <div class="text-2xl font-bold">{{ ForecastService::degreesToCardinal($current['waveDirection']) }}</div>
+                                <span class="text-sm text-muted-foreground">({{ number_format($current['waveDirection'], 0) }}°)</span>
+                            </div>
+                        </x-ui.card-content>
+                    </x-ui.card>
+
+                    {{-- Wind Speed --}}
+                    <x-ui.card class="{{ $windType['quality'] === 'good' ? 'border-green-500/30 bg-green-50 dark:bg-green-950/20' : ($windType['quality'] === 'poor' ? 'border-red-500/30 bg-red-50 dark:bg-red-950/20' : '') }}">
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-sm font-medium">
+                                {{ __('messages.forecast.marine.windSpeed') }}
+                            </x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content>
+                            <div class="text-2xl font-bold">{{ number_format($current['windSpeed'], 0) }} km/h</div>
+                            <p class="text-xs text-muted-foreground">{{ $windStrength }}</p>
+                        </x-ui.card-content>
+                    </x-ui.card>
+
+                    {{-- Wind Direction --}}
+                    <x-ui.card class="{{ $windType['quality'] === 'good' ? 'border-green-500/30 bg-green-50 dark:bg-green-950/20' : ($windType['quality'] === 'poor' ? 'border-red-500/30 bg-red-50 dark:bg-red-950/20' : '') }}">
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-sm font-medium">
+                                {{ __('messages.forecast.marine.windDirection') }}
+                            </x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content>
+                            <div class="flex items-center gap-2">
+                                <div class="text-2xl font-bold">{{ ForecastService::degreesToCardinal($current['windDirection']) }}</div>
+                                <span class="text-xs px-2 py-0.5 rounded-full {{ $windType['quality'] === 'good' ? 'bg-green-500 text-white' : ($windType['quality'] === 'poor' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-black') }}">
+                                    {{ $windType['label'] }}
+                                </span>
+                            </div>
+                        </x-ui.card-content>
+                    </x-ui.card>
+
+                    {{-- Wind Gusts --}}
+                    <x-ui.card>
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-sm font-medium">
+                                {{ __('messages.forecast.marine.windGusts') }}
+                            </x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content>
+                            <div class="text-2xl font-bold">{{ number_format($current['windGusts'], 0) }} km/h</div>
+                        </x-ui.card-content>
+                    </x-ui.card>
+
+                    {{-- Air Temperature --}}
+                    <x-ui.card>
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-sm font-medium">
+                                {{ $locale === 'pt' ? 'Temperatura do Ar' : 'Air Temperature' }}
+                            </x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content>
+                            <div class="text-2xl font-bold">{{ number_format($current['airTemperature'], 1) }}°C</div>
+                        </x-ui.card-content>
+                    </x-ui.card>
+
+                    {{-- Water Temperature --}}
+                    <x-ui.card class="sm:col-span-2">
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-sm font-medium">
+                                {{ __('messages.forecast.marine.waterTemperature') }}
+                            </x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content>
+                            <div class="flex items-center gap-4">
+                                <div class="text-2xl font-bold">{{ number_format($current['waterTemperature'], 1) }}°C</div>
+                                <span class="rounded-full bg-ocean/10 px-3 py-1 text-sm text-ocean">{{ $wetsuitRec }}</span>
+                            </div>
+                        </x-ui.card-content>
+                    </x-ui.card>
+                </div>
+            @else
+                {{-- Error state --}}
+                <x-ui.card class="border-yellow-500/30 bg-yellow-50 dark:bg-yellow-950/20">
+                    <x-ui.card-content class="py-8 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                            <path d="M12 9v4"/>
+                            <path d="M12 17h.01"/>
+                        </svg>
+                        <p class="mt-4 text-lg font-medium">
+                            {{ $locale === 'pt' ? 'Dados indisponíveis' : 'Data unavailable' }}
+                        </p>
+                        <p class="mt-2 text-sm text-muted-foreground">
+                            {{ $locale === 'pt' ? 'Não foi possível obter os dados de previsão. Por favor, tente novamente mais tarde.' : 'Could not fetch forecast data. Please try again later.' }}
                         </p>
                     </x-ui.card-content>
                 </x-ui.card>
-
-                {{-- Swell Height --}}
-                <x-ui.card class="sm:col-span-2 border-ocean/30 bg-gradient-to-br from-ocean/5 to-ocean/10">
-                    <x-ui.card-header>
-                        <x-ui.card-title class="text-base font-semibold">
-                            {{ __('messages.forecast.marine.swellHeight') }}
-                        </x-ui.card-title>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="text-4xl font-bold text-ocean">-- m</div>
-                        <p class="mt-1 text-sm text-muted-foreground">
-                            {{ $locale === 'pt' ? 'A carregar...' : 'Loading...' }}
-                        </p>
-                    </x-ui.card-content>
-                </x-ui.card>
-
-                {{-- Wave Period --}}
-                <x-ui.card>
-                    <x-ui.card-header>
-                        <x-ui.card-title class="text-sm font-medium">
-                            {{ __('messages.forecast.marine.wavePeriod') }}
-                        </x-ui.card-title>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="text-2xl font-bold">-- s</div>
-                    </x-ui.card-content>
-                </x-ui.card>
-
-                {{-- Wave Direction --}}
-                <x-ui.card>
-                    <x-ui.card-header>
-                        <x-ui.card-title class="text-sm font-medium">
-                            {{ __('messages.forecast.marine.waveDirection') }}
-                        </x-ui.card-title>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="text-2xl font-bold">--</div>
-                    </x-ui.card-content>
-                </x-ui.card>
-
-                {{-- Wind Speed --}}
-                <x-ui.card>
-                    <x-ui.card-header>
-                        <x-ui.card-title class="text-sm font-medium">
-                            {{ __('messages.forecast.marine.windSpeed') }}
-                        </x-ui.card-title>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="text-2xl font-bold">-- km/h</div>
-                    </x-ui.card-content>
-                </x-ui.card>
-
-                {{-- Wind Direction --}}
-                <x-ui.card>
-                    <x-ui.card-header>
-                        <x-ui.card-title class="text-sm font-medium">
-                            {{ __('messages.forecast.marine.windDirection') }}
-                        </x-ui.card-title>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="text-2xl font-bold">--</div>
-                    </x-ui.card-content>
-                </x-ui.card>
-
-                {{-- Wind Gusts --}}
-                <x-ui.card class="sm:col-span-1 lg:col-span-2">
-                    <x-ui.card-header>
-                        <x-ui.card-title class="text-sm font-medium">
-                            {{ __('messages.forecast.marine.windGusts') }}
-                        </x-ui.card-title>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="text-2xl font-bold">-- km/h</div>
-                    </x-ui.card-content>
-                </x-ui.card>
-
-                {{-- Water Temperature --}}
-                <x-ui.card class="sm:col-span-1 lg:col-span-2">
-                    <x-ui.card-header>
-                        <x-ui.card-title class="text-sm font-medium">
-                            {{ __('messages.forecast.marine.waterTemperature') }}
-                        </x-ui.card-title>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="text-2xl font-bold">--°C</div>
-                    </x-ui.card-content>
-                </x-ui.card>
-            </div>
+            @endif
         </div>
     </section>
+
+    {{-- 7-Day Forecast --}}
+    @if(count($daily) > 0)
+    <section class="border-t bg-muted/30 py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="mb-6 text-2xl font-bold">
+                {{ $locale === 'pt' ? 'Previsão 7 Dias' : '7-Day Forecast' }}
+            </h2>
+            <x-ui.card>
+                <x-ui.card-content class="overflow-x-auto p-0">
+                    <table class="w-full min-w-[600px]">
+                        <thead>
+                            <tr class="border-b bg-muted/50">
+                                <th class="px-4 py-3 text-left text-sm font-medium">{{ $locale === 'pt' ? 'Data' : 'Date' }}</th>
+                                <th class="px-4 py-3 text-center text-sm font-medium">{{ $locale === 'pt' ? 'Onda Máx.' : 'Max Wave' }}</th>
+                                <th class="px-4 py-3 text-center text-sm font-medium">{{ $locale === 'pt' ? 'Período' : 'Period' }}</th>
+                                <th class="px-4 py-3 text-center text-sm font-medium">{{ $locale === 'pt' ? 'Direção' : 'Direction' }}</th>
+                                <th class="px-4 py-3 text-center text-sm font-medium">{{ $locale === 'pt' ? 'Condição' : 'Condition' }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($daily as $day)
+                                @php
+                                    $date = \Carbon\Carbon::parse($day['date']);
+                                    $isToday = $date->isToday();
+                                    $dayCondition = ForecastService::getWaveCondition($day['maxWaveHeight'], $locale);
+                                @endphp
+                                <tr class="border-b last:border-0 {{ $isToday ? 'bg-ocean/5' : '' }}">
+                                    <td class="px-4 py-3">
+                                        <div class="font-medium {{ $isToday ? 'text-ocean' : '' }}">
+                                            {{ $date->locale($locale)->isoFormat('ddd, D MMM') }}
+                                        </div>
+                                        @if($isToday)
+                                            <span class="text-xs text-ocean">{{ $locale === 'pt' ? 'Hoje' : 'Today' }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="font-bold {{ $day['maxWaveHeight'] >= 6 ? 'text-red-500' : ($day['maxWaveHeight'] >= 3 ? 'text-orange-500' : 'text-ocean') }}">
+                                            {{ number_format($day['maxWaveHeight'], 1) }} m
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">{{ number_format($day['maxWavePeriod'], 0) }}s</td>
+                                    <td class="px-4 py-3 text-center">
+                                        {{ ForecastService::degreesToCardinal($day['dominantDirection']) }}
+                                        <span class="text-xs text-muted-foreground">({{ number_format($day['dominantDirection'], 0) }}°)</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
+                                            {{ $day['maxWaveHeight'] >= 6 ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
+                                               ($day['maxWaveHeight'] >= 3 ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400' :
+                                               ($day['maxWaveHeight'] >= 1.5 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                                               'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400')) }}">
+                                            {{ $dayCondition }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </x-ui.card-content>
+            </x-ui.card>
+        </div>
+    </section>
+    @endif
 
     {{-- MONICAN Section --}}
     <section class="py-12">

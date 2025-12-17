@@ -36,6 +36,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset('images/logos/nq-horizontal.svg'))
             ->darkModeBrandLogo(asset('images/logos/nq-horizontal-white.svg'))
             ->brandLogoHeight('2.5rem')
+            ->favicon(asset('favicon.svg'))
             ->colors([
                 'primary' => '#1e3a5f', // Navy Blue - Nazaré Qualifica
             ])

@@ -70,7 +70,9 @@ class SurferForm
                         FileUpload::make('photo')
                             ->label('Foto do Surfista')
                             ->image()
+                            ->disk('public')
                             ->directory('surfers')
+                            ->visibility('public')
                             ->columnSpanFull(),
                     ]),
 

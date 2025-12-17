@@ -46,7 +46,9 @@ class SurfboardForm
                         FileUpload::make('image')
                             ->label('Foto da Prancha')
                             ->image()
+                            ->disk('public')
                             ->directory('surfboards')
+                            ->visibility('public')
                             ->columnSpanFull(),
                     ]),
 
