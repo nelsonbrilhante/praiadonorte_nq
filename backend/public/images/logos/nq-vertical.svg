@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 156.71 250">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        fill: #606161;
+      }
+
+      .cls-4 {
+        fill: #06a1cc;
+      }
+
+      .cls-5 {
+        fill: #6d6e71;
+      }
+
+      .cls-6 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-7 {
+        fill: #ed1c24;
+      }
+
+      .cls-2 {
+        font-family: Montserrat-Bold, Montserrat;
+        font-size: 27.17px;
+        font-variation-settings: 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-8 {
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        font-family: Montserrat-Regular, Montserrat;
+        font-size: 12.08px;
+        font-variation-settings: 'wght' 400;
+      }
+
+      .cls-9 {
+        fill: #808285;
+      }
+
+      .cls-10 {
+        letter-spacing: 0em;
+      }
+
+      .cls-11 {
+        fill: #27748a;
+      }
+
+      .cls-12 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-13 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-14 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-15 {
+        letter-spacing: 0em;
+      }
+
+      .cls-16 {
+        letter-spacing: 0em;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="87.9" y1="23.92" x2="132.25" y2="23.92" gradientUnits="userSpaceOnUse">
+      <stop offset=".47" stop-color="#2484c6"/>
+      <stop offset=".48" stop-color="#2484c6" stop-opacity=".98"/>
+      <stop offset=".74" stop-color="#2484c6" stop-opacity=".46"/>
+      <stop offset=".92" stop-color="#2484c6" stop-opacity=".13"/>
+      <stop offset="1" stop-color="#2484c6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="MASTER">
+    <g id="ig-vertical-elements">
+      <text class="cls-3" transform="translate(19.97 244.53)"><tspan x="0" y="0">Emp</tspan><tspan class="cls-13" x="29.08" y="0">r</tspan><tspan x="33.76" y="0">esa Muni</tspan><tspan class="cls-15" x="88.3" y="0">c</tspan><tspan class="cls-8" x="95" y="0">i</tspan><tspan class="cls-16" x="98.25" y="0">p</tspan><tspan x="106.4" y="0">al</tspan></text>
+      <text class="cls-2" transform="translate(0 224.15)"><tspan x="0" y="0">Q</tspan><tspan class="cls-12" x="22.93" y="0">U</tspan><tspan x="43.93" y="0">ALIFI</tspan><tspan class="cls-14" x="116.34" y="0">C</tspan><tspan class="cls-10" x="135.63" y="0">A</tspan></text>
+      <text class="cls-2" transform="translate(18.35 196.98)"><tspan x="0" y="0">NAZARÉ</tspan></text>
+      <g>
+        <polygon id="carsurf-tail" class="cls-4" points="132.25 123.92 120.31 132.23 131.96 149.21 132.25 123.92"/>
+        <polygon id="carsurf" class="cls-4" points="31.87 0 132.25 0 132.25 116.61 117 126.85 98.28 99.04 98.28 33.96 54.72 33.96 31.87 0"/>
+        <polygon id="servicos" class="cls-1" points="23.57 .16 57.53 50.64 57.53 129.06 84.7 129.06 84.7 163.02 23.57 163.02 23.57 .16"/>
+        <polygon id="praiadonorte" class="cls-7" points="91.49 101.11 91.49 163.02 133.15 163.02 91.49 101.11"/>
+        <path class="cls-11" d="M60.73,33.96h27.17L121.86,0s-33.96,33.96-61.13,33.96Z"/>
+        <polygon class="cls-6" points="87.9 33.96 121.86 0 132.25 0 132.25 47.85 103.6 33.96 87.9 33.96"/>
+        <g id="services">
+          <rect class="cls-5" x="23.57" y="144.34" width="16.98" height="16.98"/>
+          <rect class="cls-5" x="40.55" y="127.36" width="16.98" height="16.98"/>
+          <rect class="cls-9" x="40.55" y="110.38" width="16.98" height="16.98"/>
+          <rect class="cls-9" x="23.57" y="127.36" width="16.98" height="16.98"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

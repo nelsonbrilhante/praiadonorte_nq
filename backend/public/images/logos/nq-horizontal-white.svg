@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395.61 165.67">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: Montserrat-Bold, Montserrat;
+        font-size: 49.16px;
+        font-variation-settings: 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        letter-spacing: 0em;
+      }
+
+      .cls-4 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-5 {
+        letter-spacing: -.01em;
+      }
+    </style>
+  </defs>
+  <g id="MASTER">
+    <g id="ig-horizontal-dark-name">
+      <g>
+        <g id="lettering">
+          <text class="cls-1" transform="translate(112.08 143.4)"><tspan x="0" y="0">Q</tspan><tspan class="cls-4" x="41.49" y="0">U</tspan><tspan x="79.49" y="0">ALIFI</tspan><tspan class="cls-5" x="210.49" y="0">C</tspan><tspan class="cls-3" x="245.39" y="0">A</tspan></text>
+          <text class="cls-1" transform="translate(112.08 99.98)"><tspan x="0" y="0">NAZARÉ</tspan></text>
+        </g>
+        <g id="logo">
+          <polygon id="carsurf" class="cls-2" points="7.53 0 98.53 0 98.53 105.71 84.71 115 67.74 89.79 67.74 30.79 28.24 30.79 7.53 0"/>
+          <polygon id="servicos" class="cls-2" points="0 .15 30.79 45.91 30.79 117 55.42 117 55.42 147.79 0 147.79 0 .15"/>
+          <polygon id="praiadonorte" class="cls-2" points="61.58 91.67 61.58 147.79 99.35 147.79 61.58 91.67"/>
+          <path class="cls-2" d="M33.69,30.79h24.63L89.11,0s-30.79,30.79-55.42,30.79Z"/>
+          <polygon class="cls-2" points="58.32 30.79 89.11 0 98.53 0 98.53 43.38 72.56 30.79 58.32 30.79"/>
+          <g id="squares">
+            <rect class="cls-2" y="130.86" width="15.4" height="15.4"/>
+            <rect class="cls-2" x="15.4" y="115.46" width="15.4" height="15.4"/>
+            <rect class="cls-2" x="15.4" y="100.07" width="15.4" height="15.4"/>
+            <rect class="cls-2" y="115.46" width="15.4" height="15.4"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156.71 250">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: Montserrat-Bold, Montserrat;
+        font-size: 27.17px;
+        font-variation-settings: 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        font-family: Montserrat-Regular, Montserrat;
+        font-size: 12.08px;
+        font-variation-settings: 'wght' 400;
+      }
+
+      .cls-5 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-6 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-7 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-8 {
+        letter-spacing: 0em;
+      }
+
+      .cls-9 {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <g id="MASTER">
+    <g id="lg-vertical-white">
+      <g>
+        <text class="cls-3" transform="translate(19.97 244.53)"><tspan x="0" y="0">Emp</tspan><tspan class="cls-6" x="29.08" y="0">r</tspan><tspan x="33.76" y="0">esa Muni</tspan><tspan class="cls-8" x="88.3" y="0">c</tspan><tspan class="cls-4" x="95" y="0">i</tspan><tspan class="cls-9" x="98.25" y="0">p</tspan><tspan x="106.4" y="0">al</tspan></text>
+        <text class="cls-1" transform="translate(0 224.15)"><tspan x="0" y="0">Q</tspan><tspan class="cls-5" x="22.93" y="0">U</tspan><tspan x="43.93" y="0">ALIFI</tspan><tspan class="cls-7" x="116.34" y="0">C</tspan><tspan x="135.63" y="0">A</tspan></text>
+        <text class="cls-1" transform="translate(18.35 196.98)"><tspan x="0" y="0">NAZARÉ</tspan></text>
+        <g>
+          <polygon id="carsurf" class="cls-2" points="31.87 0 132.25 0 132.25 116.61 117 126.85 98.28 99.04 98.28 33.96 54.72 33.96 31.87 0"/>
+          <polygon id="servicos" class="cls-2" points="23.57 .16 57.53 50.64 57.53 129.06 84.7 129.06 84.7 163.02 23.57 163.02 23.57 .16"/>
+          <polygon id="praiadonorte" class="cls-2" points="91.49 101.11 91.49 163.02 133.15 163.02 91.49 101.11"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

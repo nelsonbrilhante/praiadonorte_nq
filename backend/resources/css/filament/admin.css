@@ -1,3 +1,6 @@
+@import 'tailwindcss' source(none);
+@import '../../../vendor/filament/filament/resources/css/index.css';
+
 /**
  * Custom Filament Admin Styles
  * Reduces vertical spacing in navigation for a more compact layout
@@ -39,4 +42,458 @@
 .fi-sidebar-group-items {
     gap: 0 !important;
     margin-top: 0.125rem !important;
+}
+
+/* ===========================================
+   SPLIT-SCREEN LOGIN PAGE - Nazaré Qualifica
+   Design Profissional 2025
+   =========================================== */
+
+/* Typography - Google Fonts */
+.fi-simple-layout,
+.fi-simple-layout * {
+    font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+.fi-simple-header-heading,
+.fi-simple-main h1,
+.fi-simple-main h2,
+.branding-title {
+    font-family: 'Montserrat', system-ui, sans-serif !important;
+}
+
+/* Branding Panel - Posicionado no lado esquerdo */
+#login-branding-panel {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 50% !important;
+    height: 100dvh !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    /* Background image is set inline via Blade render hook */
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10 !important;
+}
+
+.branding-content {
+    text-align: center !important;
+    color: white !important;
+    padding: 2rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+}
+
+.branding-logo {
+    height: 120px !important;
+    width: auto !important;
+    margin-bottom: 2rem !important;
+    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3)) !important;
+}
+
+.branding-title {
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.branding-tagline {
+    font-family: 'Montserrat', system-ui, sans-serif !important;
+    font-size: 1.1rem !important;
+    opacity: 0.9 !important;
+    margin-bottom: 2rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+}
+
+.branding-subtitle {
+    font-family: 'Montserrat', system-ui, sans-serif !important;
+    font-size: 0.95rem !important;
+    opacity: 0.7 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding-top: 1.5rem !important;
+    margin-top: 1rem !important;
+    letter-spacing: 0.02em !important;
+}
+
+/* Layout Split-Screen */
+.fi-simple-layout {
+    min-height: 100dvh !important;
+    background: #ffffff !important;
+}
+
+/* Remover o ::before pois agora usamos o branding panel */
+.fi-simple-layout::before {
+    display: none !important;
+}
+
+/* Container do formulário (lado direito) */
+.fi-simple-layout > div {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 2rem !important;
+    background: #ffffff !important;
+    margin-left: 50% !important;
+    width: 50% !important;
+    min-height: 100dvh !important;
+}
+
+/* Card do formulário */
+.fi-simple-main {
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    max-width: 400px !important;
+    width: 100% !important;
+    padding: 2rem !important;
+}
+
+/* Título */
+.fi-simple-header-heading,
+.fi-simple-main h1 {
+    color: #1e3a5f !important;
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Subtítulo */
+.fi-simple-header-subheading,
+.fi-simple-main p {
+    color: #64748b !important;
+    font-size: 0.95rem !important;
+}
+
+/* ===== FORM FIELD IMPROVEMENTS ===== */
+
+/* Form spacing */
+.fi-simple-main form {
+    margin-top: 1.5rem !important;
+}
+
+/* Header spacing */
+.fi-simple-header {
+    margin-bottom: 1rem !important;
+}
+
+/* Field wrapper spacing */
+.fi-simple-main .fi-fo-field-wrp {
+    margin-bottom: 1.25rem !important;
+}
+
+/* Labels dos campos */
+.fi-simple-main label {
+    color: #374151 !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    margin-bottom: 0.5rem !important;
+    display: block !important;
+}
+
+/* Wrapper dos inputs - altura compacta */
+.fi-simple-main .fi-input-wrp {
+    background: #ffffff !important;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 0.5rem !important;
+    transition: all 0.2s ease !important;
+    padding: 0.625rem 0.875rem !important;
+    min-height: unset !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Inputs - proper sizing */
+.fi-simple-main input[type="text"],
+.fi-simple-main input[type="email"],
+.fi-simple-main input[type="password"] {
+    background: transparent !important;
+    color: #1f2937 !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    width: 100% !important;
+    min-height: 24px !important;
+    outline: none !important;
+}
+
+.fi-simple-main input::placeholder {
+    color: #9ca3af !important;
+    font-size: 1rem !important;
+}
+
+/* Focus state - more prominent */
+.fi-simple-main .fi-input-wrp:focus-within {
+    border-color: #1e3a5f !important;
+    border-width: 2px !important;
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1) !important;
+    padding: calc(0.625rem - 0.5px) calc(0.875rem - 0.5px) !important;
+}
+
+/* Checkbox field improvements */
+.fi-simple-main .fi-fo-field-wrp:has(input[type="checkbox"]) {
+    margin-top: 0.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.fi-simple-main input[type="checkbox"] {
+    background: #ffffff !important;
+    border: 1.5px solid #d1d5db !important;
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 0.25rem !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+}
+
+.fi-simple-main input[type="checkbox"]:checked {
+    background: #1e3a5f !important;
+    border-color: #1e3a5f !important;
+}
+
+.fi-simple-main .fi-checkbox-label,
+.fi-simple-main span {
+    color: #4b5563 !important;
+    font-size: 0.875rem !important;
+    cursor: pointer !important;
+}
+
+/* ===== SUBMIT BUTTON - Navy Blue sólido ===== */
+.fi-simple-main button[type="submit"],
+.fi-simple-main .fi-btn,
+.fi-simple-main .fi-btn-primary {
+    background: #1e3a5f !important;
+    background-color: #1e3a5f !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(30, 58, 95, 0.3) !important;
+    transition: all 0.2s ease !important;
+    color: #ffffff !important;
+    border-radius: 0.5rem !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    width: 100% !important;
+    min-height: unset !important;
+    height: auto !important;
+    margin-top: 0.5rem !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.fi-simple-main button[type="submit"]:hover,
+.fi-simple-main .fi-btn:hover,
+.fi-simple-main .fi-btn-primary:hover {
+    background: #152d4a !important;
+    background-color: #152d4a !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(30, 58, 95, 0.4) !important;
+}
+
+.fi-simple-main button[type="submit"]:active,
+.fi-simple-main .fi-btn:active {
+    transform: translateY(0) !important;
+}
+
+/* Garantir texto branco no span interno do botão */
+.fi-simple-main button[type="submit"] span,
+.fi-simple-main button[type="submit"] *,
+.fi-simple-main .fi-btn span,
+.fi-simple-main .fi-btn-primary span,
+.fi-simple-main .fi-btn *,
+.fi-simple-main .fi-btn-primary * {
+    color: #ffffff !important;
+}
+
+/* Password reveal button - proper sizing */
+.fi-simple-main .fi-input-wrp button[type="button"],
+.fi-simple-main .fi-input-wrp button:not([type="submit"]) {
+    color: #6b7280 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.25rem !important;
+    width: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+.fi-simple-main .fi-input-wrp button[type="button"]:hover,
+.fi-simple-main .fi-input-wrp button:not([type="submit"]):hover {
+    color: #1e3a5f !important;
+    background: rgba(30, 58, 95, 0.05) !important;
+    transform: none !important;
+    border-radius: 0.25rem !important;
+}
+
+/* Asterisco obrigatório */
+.fi-simple-main sup {
+    color: #ef4444 !important;
+    font-weight: 600 !important;
+}
+
+/* Mensagens de erro */
+.fi-simple-main .fi-fo-field-wrp-error-message,
+.fi-simple-main .text-danger,
+.fi-simple-main [class*="error"] {
+    color: #ef4444 !important;
+    font-size: 0.875rem !important;
+    margin-top: 0.5rem !important;
+}
+
+/* Input wrapper with error state */
+.fi-simple-main .fi-fo-field-wrp-error .fi-input-wrp {
+    border-color: #ef4444 !important;
+}
+
+/* Links */
+.fi-simple-main a {
+    color: #1e3a5f !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.fi-simple-main a:hover {
+    color: #152d4a !important;
+    text-decoration: underline !important;
+}
+
+/* ===== DARK MODE - Página de Login SEMPRE em Light Mode ===== */
+/* A página de login deve manter fundo branco independentemente do tema do sistema */
+
+.dark .fi-simple-layout {
+    background: #ffffff !important;
+}
+
+.dark .fi-simple-layout > div {
+    background: #ffffff !important;
+}
+
+.dark .fi-simple-main {
+    background: #ffffff !important;
+}
+
+.dark .fi-simple-header-heading,
+.dark .fi-simple-main h1 {
+    color: #1e3a5f !important;
+}
+
+.dark .fi-simple-header-subheading,
+.dark .fi-simple-main p {
+    color: #64748b !important;
+}
+
+.dark .fi-simple-main label {
+    color: #374151 !important;
+}
+
+.dark .fi-simple-main .fi-input-wrp {
+    background: #ffffff !important;
+    border-color: #d1d5db !important;
+}
+
+.dark .fi-simple-main input[type="text"],
+.dark .fi-simple-main input[type="email"],
+.dark .fi-simple-main input[type="password"] {
+    color: #1f2937 !important;
+}
+
+.dark .fi-simple-main input::placeholder {
+    color: #9ca3af !important;
+}
+
+.dark .fi-simple-main .fi-input-wrp:focus-within {
+    border-color: #1e3a5f !important;
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1) !important;
+}
+
+.dark .fi-simple-main input[type="checkbox"] {
+    background: #ffffff !important;
+    border-color: #d1d5db !important;
+}
+
+.dark .fi-simple-main input[type="checkbox"]:checked {
+    background: #1e3a5f !important;
+    border-color: #1e3a5f !important;
+}
+
+.dark .fi-simple-main .fi-checkbox-label,
+.dark .fi-simple-main span {
+    color: #4b5563 !important;
+}
+
+/* Dark mode submit button - manter Navy Blue */
+.dark .fi-simple-main button[type="submit"],
+.dark .fi-simple-main .fi-btn,
+.dark .fi-simple-main .fi-btn-primary {
+    background: #1e3a5f !important;
+    background-color: #1e3a5f !important;
+    box-shadow: 0 4px 14px rgba(30, 58, 95, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.dark .fi-simple-main button[type="submit"] span,
+.dark .fi-simple-main button[type="submit"] *,
+.dark .fi-simple-main .fi-btn span,
+.dark .fi-simple-main .fi-btn * {
+    color: #ffffff !important;
+}
+
+.dark .fi-simple-main button[type="submit"]:hover,
+.dark .fi-simple-main .fi-btn:hover,
+.dark .fi-simple-main .fi-btn-primary:hover {
+    background: #152d4a !important;
+    background-color: #152d4a !important;
+}
+
+/* Dark mode password reveal button */
+.dark .fi-simple-main .fi-input-wrp button[type="button"],
+.dark .fi-simple-main .fi-input-wrp button:not([type="submit"]) {
+    color: #6b7280 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+.dark .fi-simple-main .fi-input-wrp button[type="button"]:hover,
+.dark .fi-simple-main .fi-input-wrp button:not([type="submit"]):hover {
+    color: #1e3a5f !important;
+    background: rgba(30, 58, 95, 0.05) !important;
+}
+
+.dark .fi-simple-main a {
+    color: #1e3a5f !important;
+}
+
+.dark .fi-simple-main a:hover {
+    color: #152d4a !important;
+}
+
+.dark .fi-simple-main .fi-fo-field-wrp-error .fi-input-wrp {
+    border-color: #ef4444 !important;
+}
+
+/* ===== RESPONSIVO - Mobile ===== */
+@media (max-width: 768px) {
+    #login-branding-panel {
+        display: none !important;
+    }
+
+    .fi-simple-layout > div {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-height: 100dvh !important;
+    }
 }
