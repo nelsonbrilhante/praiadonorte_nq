@@ -88,6 +88,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/contraordenacoes') }}" class="hover:text-institutional transition-colors">
+                            {{ __('messages.nq.contraordenacoes.title') }}
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/forte') }}" class="hover:text-institutional transition-colors">
                             {{ __('messages.nq.services.forte.title') }}
                         </a>

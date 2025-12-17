@@ -101,7 +101,7 @@
                 <x-ui.button href="{{ route('nq.sobre') }}" class="bg-white text-institutional hover:bg-white/90">
                     {{ __('messages.pages.about') }}
                 </x-ui.button>
-                <x-ui.button href="{{ route('nq.servicos') }}" variant="outline" class="border-white text-white hover:bg-white/10">
+                <x-ui.button href="{{ route('nq.servicos') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
                     {{ __('messages.nq.services.title') }}
                 </x-ui.button>
             </div>

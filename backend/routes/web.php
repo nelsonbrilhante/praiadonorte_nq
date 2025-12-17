@@ -119,6 +119,10 @@ Route::group([
                 ->firstOrFail();
             return view('pages.nazare-qualifica.ale', compact('page'));
         })->name('ale');
+
+        Route::get('/contraordenacoes', function () {
+            return view('pages.nazare-qualifica.contraordenacoes');
+        })->name('contraordenacoes');
     });
 
     // Static pages

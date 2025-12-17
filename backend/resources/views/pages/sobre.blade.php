@@ -167,7 +167,7 @@
                 <x-ui.button href="{{ route('surfers.index') }}" class="bg-white text-ocean hover:bg-white/90">
                     {{ __('messages.about.cta.surferWall') }}
                 </x-ui.button>
-                <x-ui.button href="{{ route('forecast') }}" variant="outline" class="border-white text-white hover:bg-white/10">
+                <x-ui.button href="{{ route('forecast') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
                     {{ __('messages.about.cta.forecast') }}
                 </x-ui.button>
             </div>

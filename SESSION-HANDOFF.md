@@ -7,7 +7,69 @@
 
 ## Última Sessão
 
-- **Data**: 2025-12-17
+- **Data**: 2025-12-17 (tarde)
+- **Resumo**: Fix botões invisíveis, nova página Contraordenações NQ, botões no header Sobre NQ
+
+### O que foi feito:
+
+1. **Fix Botões Invisíveis (outline variant)**
+   - **Problema**: Botões com `variant="outline"` e `text-white` tinham texto invisível
+   - **Causa**: Variante outline aplica `bg-background` (branco), combinado com `text-white` = invisível
+   - **Solução**: Adicionado `bg-transparent` aos botões afetados
+   - **Ficheiros corrigidos** (6):
+     - `pages/sobre.blade.php`
+     - `pages/carsurf/index.blade.php`
+     - `pages/nazare-qualifica/ale.blade.php`
+     - `pages/nazare-qualifica/estacionamento.blade.php`
+     - `pages/nazare-qualifica/forte.blade.php`
+     - `pages/nazare-qualifica/equipa.blade.php`
+
+2. **Nova Página: Contraordenações (NQ)**
+   - **URL**: `/pt/nazare-qualifica/contraordenacoes`
+   - **Rota**: `nq.contraordenacoes` em `routes/web.php`
+   - **Conteúdo**: 6 documentos PDF para download:
+     - Requerimento
+     - Formulário de Apresentação de Defesa
+     - Reclamação / Pedido de Esclarecimento
+     - Tabela de Taxas I
+     - Tabela de Taxas II
+     - Despacho de Subdelegação de Competências
+   - **PDFs**: Descarregados de nazarequalifica.pt e guardados em `public/documents/nq/`
+
+3. **Botões no Header da Página Sobre NQ**
+   - Adicionados 3 botões de navegação rápida (estilo Carsurf):
+     - Corpos Sociais (botão principal)
+     - Contraordenações (outline)
+     - Serviços (outline)
+
+4. **Link no Footer**
+   - Adicionado "Contraordenações" na secção Nazaré Qualifica do footer
+
+5. **Traduções PT/EN**
+   - Adicionadas traduções completas para a página de contraordenações
+   - Breadcrumb adicionado em ambos os idiomas
+
+### Ficheiros criados:
+- `pages/nazare-qualifica/contraordenacoes.blade.php` - **NOVO**
+- `public/documents/nq/requerimento.pdf` - **NOVO**
+- `public/documents/nq/formulario-apresentacao-defesa.pdf` - **NOVO**
+- `public/documents/nq/formulario-reclamacao.pdf` - **NOVO**
+- `public/documents/nq/tabela-taxas-1.pdf` - **NOVO**
+- `public/documents/nq/tabela-taxas-2.pdf` - **NOVO**
+- `public/documents/nq/despacho-subdelegacao.pdf` - **NOVO**
+
+### Ficheiros modificados:
+- `routes/web.php` - rota contraordenacoes
+- `pages/nazare-qualifica/sobre.blade.php` - botões no header
+- `components/layout/footer.blade.php` - link contraordenacoes
+- `lang/pt/messages.php` - traduções PT
+- `lang/en/messages.php` - traduções EN
+- 6 ficheiros com fix `bg-transparent` nos botões
+
+---
+
+## Sessão Anterior (2025-12-17 manhã)
+
 - **Resumo**: Migração Forecast API, fix uploads, favicon, dark mode logo
 
 ### O que foi feito:
@@ -200,6 +262,7 @@
 | Sobre | `pages/nazare-qualifica/sobre.blade.php` | ✅ |
 | Equipa | `pages/nazare-qualifica/equipa.blade.php` | ✅ |
 | Serviços | `pages/nazare-qualifica/servicos.blade.php` | ✅ |
+| Contraordenações | `pages/nazare-qualifica/contraordenacoes.blade.php` | ✅ |
 | Carsurf | `pages/nazare-qualifica/carsurf.blade.php` | ✅ |
 | Estacionamento | `pages/nazare-qualifica/estacionamento.blade.php` | ✅ |
 | Forte | `pages/nazare-qualifica/forte.blade.php` | ✅ |

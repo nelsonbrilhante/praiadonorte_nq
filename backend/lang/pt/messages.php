@@ -387,11 +387,43 @@ return [
         'contact' => [
             'title' => 'Contactos',
             'subtitle' => 'Entre em contacto com a Nazaré Qualifica',
-            'address' => 'Rua da Praia do Norte',
+            'address' => 'Morada',
             'postalCode' => '2450-504 Nazaré',
-            'phone' => '+351 262 550 010',
+            'phone' => 'Telefone',
             'email' => 'geral@nazarequalifica.pt',
             'hours' => 'Segunda a Sexta: 9h00 - 17h30',
+        ],
+        'contraordenacoes' => [
+            'title' => 'Contraordenações',
+            'subtitle' => 'Documentos e formulários para processos de contraordenação',
+            'intro' => [
+                'title' => 'Processos de Contraordenação',
+                'text' => 'Nesta secção encontra todos os documentos necessários para processos de contraordenação relacionados com estacionamento e outras infrações municipais. Descarregue os formulários, preencha e submeta conforme as instruções.',
+            ],
+            'documentsTitle' => 'Documentos Disponíveis',
+            'documents' => [
+                'requerimento' => 'Requerimento',
+                'requerimentoDesc' => 'Formulário geral para pedidos e requerimentos à Nazaré Qualifica.',
+                'defesa' => 'Formulário de Apresentação de Defesa',
+                'defesaDesc' => 'Utilize este formulário para apresentar a sua defesa em processos de contraordenação.',
+                'reclamacao' => 'Reclamação / Pedido de Esclarecimento',
+                'reclamacaoDesc' => 'Formulário para reclamações ou pedidos de esclarecimento sobre contraordenações.',
+                'taxas1' => 'Tabela de Taxas I',
+                'taxas1Desc' => 'Tabela de taxas aplicáveis a contraordenações de estacionamento.',
+                'taxas2' => 'Tabela de Taxas II',
+                'taxas2Desc' => 'Tabela de taxas aplicáveis a outras contraordenações municipais.',
+                'despacho' => 'Despacho de Subdelegação de Competências',
+                'despachoDesc' => 'Documento oficial de delegação de competências para processos de contraordenação.',
+            ],
+            'download' => 'Descarregar PDF',
+            'contact' => [
+                'title' => 'Precisa de Ajuda?',
+                'text' => 'Se tiver dúvidas sobre os processos de contraordenação ou necessitar de assistência adicional, contacte-nos.',
+            ],
+            'cta' => [
+                'title' => 'Dúvidas?',
+                'subtitle' => 'A nossa equipa está disponível para o ajudar com qualquer questão relacionada com contraordenações.',
+            ],
         ],
     ],
     'breadcrumbs' => [
@@ -410,6 +442,7 @@ return [
         'estacionamento' => 'Estacionamento',
         'forte' => 'Forte de S. Miguel Arcanjo',
         'ale' => 'ALE',
+        'contraordenacoes' => 'Contraordenações',
     ],
     'common' => [
         'readMore' => 'Ler mais',
