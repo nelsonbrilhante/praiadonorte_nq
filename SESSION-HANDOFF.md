@@ -7,7 +7,63 @@
 
 ## Última Sessão
 
-- **Data**: 2025-12-17 (tarde)
+- **Data**: 2025-12-18
+- **Resumo**: Hero Slider - conversão do Hero Section para slider profissional com múltiplos slides
+- **Branch**: `feature/hero-slider`
+
+### O que foi feito:
+
+1. **Hero Slider - Nova Funcionalidade**
+   - Convertido Hero Section único para slider com até 5 slides
+   - Auto-rotação configurável (5-30 segundos, default 8s)
+   - Pausa automática quando qualquer slide tem toggle LIVE ativo
+   - Transições fade entre slides (1s duration)
+   - Cada slide mantém todas as funcionalidades originais:
+     - Vídeo YouTube com fallback image
+     - Título/Subtítulo com i18n (PT/EN)
+     - CTA button com URL configurável
+     - Toggle LIVE com badge animado
+     - Toggle áudio (quando LIVE)
+     - Logo alternativo em vez de título
+
+2. **Indicadores de Slide (dots)**
+   - Forma pill para slide ativo (mais largo)
+   - Forma circular para slides inativos
+   - Barra de progresso SVG à volta do indicador ativo
+   - Animação suave de preenchimento (sentido horário)
+   - Clique para navegar entre slides
+
+3. **Admin Panel (Filament)**
+   - Repeater com relacionamento `heroSlides`
+   - Drag & drop para reordenar slides
+   - Modal de confirmação ao eliminar (eliminação imediata, sem necessidade de guardar)
+   - Secções colapsáveis por slide
+   - Layout full-width para melhor UX
+   - Campos globais: intervalo e auto-rotação
+
+4. **Bug Fixes**
+   - Corrigido namespace Action (Filament 4)
+   - Corrigido delete não persistir na BD (implementado `->after()` callback)
+   - Corrigido indicador de progresso (mudado de rect para path SVG)
+
+### Ficheiros criados:
+- `database/migrations/2025_12_18_104415_create_hero_slides_table.php` - **NOVO**
+- `database/migrations/2025_12_18_104457_add_slider_settings_to_paginas_table.php` - **NOVO**
+- `database/migrations/2025_12_18_104641_migrate_hero_data_to_slides.php` - **NOVO**
+- `app/Models/HeroSlide.php` - **NOVO**
+- `resources/views/components/praia-norte/hero-slider.blade.php` - **NOVO**
+
+### Ficheiros modificados:
+- `app/Models/Pagina.php` - relationship heroSlides, hasAnyLiveSlide(), slider fields
+- `app/Filament/Resources/Geral/HomepageResource.php` - Repeater com slides, delete action
+- `app/Filament/Resources/Geral/Pages/EditHomepage.php` - afterSave cleanup orphans
+- `app/Http/Controllers/HomeController.php` - eager loading heroSlides
+- `resources/views/pages/home.blade.php` - usa hero-slider component
+
+---
+
+## Sessão Anterior (2025-12-17 tarde)
+
 - **Resumo**: Fix botões invisíveis, nova página Contraordenações NQ, botões no header Sobre NQ
 
 ### O que foi feito:
@@ -219,7 +275,7 @@
 | Item | Valor |
 |------|-------|
 | **Fase** | Migração Blade COMPLETA - Pronto para Quality Assurance |
-| **Branch** | `main` |
+| **Branch** | `feature/hero-slider` (a aguardar merge para main) |
 | **Backend** | Laravel 12.41.1 + Filament 4.2.4 |
 | **Frontend** | Blade + Livewire (migração concluída) |
 | **i18n** | Laravel localization configurado |
@@ -276,6 +332,7 @@
 | Header | `components/layout/header.blade.php` | ✅ |
 | Footer | `components/layout/footer.blade.php` | ✅ |
 | Hero Section | `components/praia-norte/hero-section.blade.php` | ✅ |
+| Hero Slider | `components/praia-norte/hero-slider.blade.php` | ✅ |
 | Button | `components/ui/button.blade.php` | ✅ |
 | Card (+ header, title, description, content, footer) | `components/ui/card*.blade.php` | ✅ |
 | Badge | `components/ui/badge.blade.php` | ✅ |

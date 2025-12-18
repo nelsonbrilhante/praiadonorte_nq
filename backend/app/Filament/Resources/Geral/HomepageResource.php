@@ -4,8 +4,11 @@ namespace App\Filament\Resources\Geral;
 
 use App\Filament\Resources\Geral\Pages\EditHomepage;
 use App\Filament\Resources\Geral\Pages\ListHomepages;
+use App\Models\HeroSlide;
 use App\Models\Pagina;
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -50,116 +53,144 @@ class HomepageResource extends Resource
     {
         return $schema
             ->components([
-                Section::make('Hero da Homepage')
-                    ->description('Vídeo de fundo e textos principais')
-                    ->icon('heroicon-o-play-circle')
+                Section::make('Hero Slider')
+                    ->description('Até 5 slides rotativos para o hero da homepage')
+                    ->icon('heroicon-o-squares-2x2')
+                    ->columnSpanFull()
                     ->schema([
-                        TextInput::make('video_url')
-                            ->label('YouTube URL')
-                            ->url()
-                            ->placeholder('https://www.youtube.com/watch?v=LDi6PQ4b6W8')
-                            ->helperText('URL do vídeo YouTube para fundo do Hero')
-                            ->columnSpanFull()
-                            ->afterStateHydrated(fn ($state, $set, $record) =>
-                                $set('video_url', $record?->video_url ?? $state)),
+                        // Global slider settings
+                        Grid::make(2)->schema([
+                            TextInput::make('slider_interval')
+                                ->label('Intervalo (segundos)')
+                                ->numeric()
+                                ->default(8)
+                                ->minValue(5)
+                                ->maxValue(30)
+                                ->helperText('Tempo entre slides (5-30s)'),
+                            Toggle::make('slider_autoplay')
+                                ->label('Auto-rotação')
+                                ->default(true)
+                                ->helperText('Pausa automaticamente quando há slide LIVE'),
+                        ]),
 
-                        Toggle::make('hero_use_logo')
-                            ->label('Usar Logótipo')
-                            ->helperText('Se ativo, mostra imagem em vez de texto no título')
-                            ->default(false)
-                            ->live()
-                            ->columnSpanFull(),
+                        // Slides repeater
+                        Repeater::make('heroSlides')
+                            ->relationship()
+                            ->label('Slides')
+                            ->schema([
+                                Grid::make(2)->schema([
+                                    TextInput::make('title.pt')
+                                        ->label('Título (PT)')
+                                        ->required(),
+                                    TextInput::make('title.en')
+                                        ->label('Title (EN)'),
+                                ]),
+                                Grid::make(2)->schema([
+                                    TextInput::make('subtitle.pt')
+                                        ->label('Subtítulo (PT)'),
+                                    TextInput::make('subtitle.en')
+                                        ->label('Subtitle (EN)'),
+                                ]),
+                                Grid::make(2)->schema([
+                                    TextInput::make('cta_text.pt')
+                                        ->label('Botão (PT)'),
+                                    TextInput::make('cta_text.en')
+                                        ->label('Button (EN)'),
+                                ]),
+                                Grid::make(2)->schema([
+                                    TextInput::make('cta_url.pt')
+                                        ->label('URL Botão (PT)'),
+                                    TextInput::make('cta_url.en')
+                                        ->label('Button URL (EN)'),
+                                ]),
 
-                        FileUpload::make('hero_logo')
-                            ->label('Logótipo do Hero')
-                            ->image()
-                            ->disk('public')
-                            ->directory('hero')
-                            ->visibility('public')
-                            ->imagePreviewHeight('80')
-                            ->helperText('Recomendado: PNG transparente, branco, ~400px largura')
-                            ->columnSpanFull()
-                            ->visible(fn (callable $get) => $get('hero_use_logo')),
+                                Section::make('Media')
+                                    ->schema([
+                                        TextInput::make('video_url')
+                                            ->label('YouTube URL')
+                                            ->url()
+                                            ->placeholder('https://youtube.com/watch?v=...')
+                                            ->columnSpanFull(),
+                                        FileUpload::make('fallback_image')
+                                            ->label('Imagem de Fallback')
+                                            ->image()
+                                            ->disk('public')
+                                            ->directory('hero-slides')
+                                            ->visibility('public')
+                                            ->helperText('Mostrada quando não há vídeo'),
+                                    ])->columns(2)->collapsed(),
 
-                        TextInput::make('hero_logo_height')
-                            ->label('Tamanho do Logótipo')
-                            ->type('range')
-                            ->extraInputAttributes([
-                                'min' => 80,
-                                'max' => 300,
-                                'step' => 10,
-                                'class' => 'w-full accent-primary',
-                                'oninput' => 'document.getElementById("logo-size-display").textContent = this.value + "px"',
+                                Section::make('Logo Alternativo')
+                                    ->schema([
+                                        Toggle::make('use_logo_as_title')
+                                            ->label('Usar logótipo em vez de título')
+                                            ->live(),
+                                        FileUpload::make('hero_logo')
+                                            ->label('Logótipo')
+                                            ->image()
+                                            ->disk('public')
+                                            ->directory('hero-slides')
+                                            ->visibility('public')
+                                            ->visible(fn ($get) => $get('use_logo_as_title')),
+                                        TextInput::make('logo_height')
+                                            ->label('Altura do logótipo (px)')
+                                            ->numeric()
+                                            ->default(120)
+                                            ->minValue(80)
+                                            ->maxValue(300)
+                                            ->visible(fn ($get) => $get('use_logo_as_title')),
+                                    ])->collapsed(),
+
+                                Section::make('Live Stream')
+                                    ->schema([
+                                        Grid::make(2)->schema([
+                                            Toggle::make('is_live')
+                                                ->label('Em Direto')
+                                                ->helperText('Badge LIVE + pausa rotação'),
+                                            Toggle::make('audio_enabled')
+                                                ->label('Áudio Disponível'),
+                                        ]),
+                                    ])->collapsed(),
+
+                                Toggle::make('active')
+                                    ->label('Slide Ativo')
+                                    ->default(true),
                             ])
-                            ->default(120)
-                            ->suffix(fn ($state) => new \Illuminate\Support\HtmlString('<span id="logo-size-display" class="font-bold text-primary-600 min-w-[60px] text-right">' . ($state ?? 120) . 'px</span>'))
-                            ->helperText('Arraste para ajustar (80px - 300px)')
-                            ->columnSpanFull()
-                            ->visible(fn (callable $get) => $get('hero_use_logo')),
+                            ->itemLabel(fn (array $state): ?string =>
+                                $state['title']['pt'] ?? 'Novo Slide')
+                            ->collapsible()
+                            ->collapsed()
+                            ->reorderable()
+                            ->reorderableWithDragAndDrop()
+                            ->orderColumn('order')
+                            ->addActionLabel('Adicionar Slide')
+                            ->deleteAction(
+                                fn (Action $action) => $action
+                                    ->requiresConfirmation()
+                                    ->modalHeading('Eliminar Slide')
+                                    ->modalDescription('Tem a certeza que deseja eliminar este slide? Esta ação não pode ser revertida.')
+                                    ->modalSubmitActionLabel('Sim, eliminar')
+                                    ->modalCancelActionLabel('Cancelar')
+                                    ->after(function (array $arguments, Repeater $component) {
+                                        $items = $component->getState();
+                                        $itemKey = $arguments['item'];
 
-                        Grid::make(2)->schema([
-                            TextInput::make('content.pt.hero.title')
-                                ->label('Título (PT)')
-                                ->required(fn (callable $get) => !$get('hero_use_logo'))
-                                ->afterStateHydrated(fn ($state, $set, $record) =>
-                                    $set('content.pt.hero.title', $record?->content['pt']['hero']['title'] ?? $state)),
-                            TextInput::make('content.en.hero.title')
-                                ->label('Title (EN)')
-                                ->afterStateHydrated(fn ($state, $set, $record) =>
-                                    $set('content.en.hero.title', $record?->content['en']['hero']['title'] ?? $state)),
-                        ])->visible(fn (callable $get) => !$get('hero_use_logo')),
-
-                        Grid::make(2)->schema([
-                            TextInput::make('content.pt.hero.subtitle')
-                                ->label('Subtítulo (PT)')
-                                ->afterStateHydrated(fn ($state, $set, $record) =>
-                                    $set('content.pt.hero.subtitle', $record?->content['pt']['hero']['subtitle'] ?? $state)),
-                            TextInput::make('content.en.hero.subtitle')
-                                ->label('Subtitle (EN)')
-                                ->afterStateHydrated(fn ($state, $set, $record) =>
-                                    $set('content.en.hero.subtitle', $record?->content['en']['hero']['subtitle'] ?? $state)),
-                        ]),
-
-                        Grid::make(2)->schema([
-                            TextInput::make('content.pt.hero.cta_text')
-                                ->label('Texto Botão (PT)')
-                                ->afterStateHydrated(fn ($state, $set, $record) =>
-                                    $set('content.pt.hero.cta_text', $record?->content['pt']['hero']['cta_text'] ?? $state)),
-                            TextInput::make('content.en.hero.cta_text')
-                                ->label('Button Text (EN)')
-                                ->afterStateHydrated(fn ($state, $set, $record) =>
-                                    $set('content.en.hero.cta_text', $record?->content['en']['hero']['cta_text'] ?? $state)),
-                        ]),
-
-                        Grid::make(2)->schema([
-                            TextInput::make('content.pt.hero.cta_url')
-                                ->label('URL Botão (PT)')
-                                ->afterStateHydrated(fn ($state, $set, $record) =>
-                                    $set('content.pt.hero.cta_url', $record?->content['pt']['hero']['cta_url'] ?? $state)),
-                            TextInput::make('content.en.hero.cta_url')
-                                ->label('Button URL (EN)')
-                                ->afterStateHydrated(fn ($state, $set, $record) =>
-                                    $set('content.en.hero.cta_url', $record?->content['en']['hero']['cta_url'] ?? $state)),
-                        ]),
-                    ]),
-
-                Section::make('Live Stream')
-                    ->description('Configurações para transmissão ao vivo')
-                    ->icon('heroicon-o-video-camera')
-                    ->schema([
-                        Grid::make(2)->schema([
-                            Toggle::make('is_live')
-                                ->label('Em Direto')
-                                ->helperText('Ativa o badge LIVE vermelho no hero')
-                                ->default(false),
-                            Toggle::make('audio_enabled')
-                                ->label('Áudio Disponível')
-                                ->helperText('Mostra botão para ativar áudio (só quando em direto)')
-                                ->default(false),
-                        ]),
+                                        // Get the slide ID from the deleted item
+                                        if (isset($items[$itemKey]['id'])) {
+                                            $slideId = $items[$itemKey]['id'];
+                                            HeroSlide::where('id', $slideId)->delete();
+                                        }
+                                    })
+                            )
+                            ->maxItems(5)
+                            ->minItems(1)
+                            ->defaultItems(1)
+                            ->columnSpanFull(),
                     ]),
 
                 Section::make('SEO')
+                    ->columnSpanFull()
+                    ->collapsed()
                     ->schema([
                         Grid::make(2)->schema([
                             TextInput::make('seo_title.pt')
@@ -179,8 +210,7 @@ class HomepageResource extends Resource
                                 ->rows(2)
                                 ->maxLength(160),
                         ]),
-                    ])
-                    ->collapsed(),
+                    ]),
             ]);
     }
 
