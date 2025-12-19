@@ -121,3 +121,4 @@ temp/
 
 .pids/
 .playwright-mcp/
+backend/server.php
