@@ -74,7 +74,9 @@ class NoticiaForm
                         FileUpload::make('cover_image')
                             ->label('Imagem de Capa')
                             ->image()
+                            ->disk('public')
                             ->directory('noticias')
+                            ->visibility('public')
                             ->columnSpanFull(),
                         Grid::make(3)
                             ->schema([

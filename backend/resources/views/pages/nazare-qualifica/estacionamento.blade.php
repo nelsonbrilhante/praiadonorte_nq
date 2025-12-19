@@ -112,7 +112,7 @@
                     </svg>
                     {{ $content['contact']['phone'] ?? __('messages.nq.contact.phone') }}
                 </x-ui.button>
-                <x-ui.button href="{{ route('nq.servicos') }}" variant="outline" class="border-white text-white hover:bg-white/10">
+                <x-ui.button href="{{ route('nq.servicos') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
                     {{ __('messages.nq.services.title') }}
                 </x-ui.button>
             </div>

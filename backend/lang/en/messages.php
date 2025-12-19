@@ -387,11 +387,43 @@ return [
         'contact' => [
             'title' => 'Contact',
             'subtitle' => 'Get in touch with Nazaré Qualifica',
-            'address' => 'Rua da Praia do Norte',
+            'address' => 'Address',
             'postalCode' => '2450-504 Nazaré',
-            'phone' => '+351 262 550 010',
+            'phone' => 'Phone',
             'email' => 'geral@nazarequalifica.pt',
             'hours' => 'Monday to Friday: 9am - 5:30pm',
+        ],
+        'contraordenacoes' => [
+            'title' => 'Traffic Violations',
+            'subtitle' => 'Documents and forms for traffic violation procedures',
+            'intro' => [
+                'title' => 'Traffic Violation Procedures',
+                'text' => 'In this section you will find all the necessary documents for traffic violation procedures related to parking and other municipal infractions. Download the forms, fill them out and submit according to the instructions.',
+            ],
+            'documentsTitle' => 'Available Documents',
+            'documents' => [
+                'requerimento' => 'Request Form',
+                'requerimentoDesc' => 'General form for requests and applications to Nazaré Qualifica.',
+                'defesa' => 'Defense Submission Form',
+                'defesaDesc' => 'Use this form to submit your defense in traffic violation proceedings.',
+                'reclamacao' => 'Complaint / Clarification Request',
+                'reclamacaoDesc' => 'Form for complaints or clarification requests regarding traffic violations.',
+                'taxas1' => 'Fee Schedule I',
+                'taxas1Desc' => 'Fee schedule applicable to parking violations.',
+                'taxas2' => 'Fee Schedule II',
+                'taxas2Desc' => 'Fee schedule applicable to other municipal violations.',
+                'despacho' => 'Competency Delegation Order',
+                'despachoDesc' => 'Official document delegating authority for traffic violation proceedings.',
+            ],
+            'download' => 'Download PDF',
+            'contact' => [
+                'title' => 'Need Help?',
+                'text' => 'If you have questions about traffic violation procedures or need additional assistance, contact us.',
+            ],
+            'cta' => [
+                'title' => 'Questions?',
+                'subtitle' => 'Our team is available to help you with any questions related to traffic violations.',
+            ],
         ],
     ],
     'breadcrumbs' => [
@@ -410,6 +442,7 @@ return [
         'estacionamento' => 'Parking',
         'forte' => 'Fort of São Miguel Arcanjo',
         'ale' => 'ALE',
+        'contraordenacoes' => 'Traffic Violations',
     ],
     'common' => [
         'readMore' => 'Read more',

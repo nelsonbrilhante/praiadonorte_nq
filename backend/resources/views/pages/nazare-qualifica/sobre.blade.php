@@ -15,7 +15,18 @@
     <section class="gradient-institutional py-16 text-white">
         <div class="container mx-auto px-4">
             <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ $page->title[$locale] ?? $page->title['pt'] }}</h1>
-            <p class="text-xl opacity-90">{{ __('messages.nq.about.subtitle') }}</p>
+            <p class="mb-8 text-xl opacity-90">{{ __('messages.nq.about.subtitle') }}</p>
+            <div class="flex flex-wrap gap-4">
+                <x-ui.button href="{{ route('nq.equipa') }}" class="bg-white text-institutional hover:bg-white/90">
+                    {{ __('messages.nq.team.title') }}
+                </x-ui.button>
+                <x-ui.button href="{{ route('nq.contraordenacoes') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
+                    {{ __('messages.nq.contraordenacoes.title') }}
+                </x-ui.button>
+                <x-ui.button href="{{ route('nq.servicos') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
+                    {{ __('messages.nq.services.title') }}
+                </x-ui.button>
+            </div>
         </div>
     </section>
 

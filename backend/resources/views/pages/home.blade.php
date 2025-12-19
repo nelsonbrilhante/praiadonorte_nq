@@ -7,31 +7,14 @@
             }
             return $field ?? '';
         };
-
-        // Extract hero data from homepage if available
-        $heroData = null;
-        if ($homepage && isset($homepage->content[$locale]['hero'])) {
-            $heroData = $homepage->content[$locale]['hero'];
-        }
     @endphp
 
-    {{-- Hero Section --}}
-    @if($heroData)
-        <x-praia-norte.hero-section
-            :title="$heroData['title'] ?? null"
-            :subtitle="$heroData['subtitle'] ?? null"
-            :ctaText="$heroData['cta_text'] ?? null"
-            :ctaUrl="$heroData['cta_url'] ?? null"
-            :youtubeUrl="$homepage->video_url ?? null"
-            :isLive="$homepage->is_live ?? false"
-            :audioEnabled="$homepage->audio_enabled ?? false"
-            :heroLogo="$homepage->hero_logo ?? null"
-            :useLogoAsTitle="$homepage->hero_use_logo ?? false"
-            :heroLogoHeight="$homepage->hero_logo_height ?? 120"
-        />
-    @else
-        <x-praia-norte.hero-section />
-    @endif
+    {{-- Hero Slider --}}
+    <x-praia-norte.hero-slider
+        :slides="$homepage?->heroSlides ?? collect()"
+        :interval="$homepage?->slider_interval ?? 8"
+        :autoplay="$homepage?->slider_autoplay ?? true"
+    />
 
     {{-- News Section --}}
     <section class="py-16 bg-muted/30">

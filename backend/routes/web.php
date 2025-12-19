@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\ForecastController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,9 +51,7 @@ Route::group([
     })->name('surfers.show');
 
     // Forecast
-    Route::get('/previsoes', function () {
-        return view('pages.previsoes');
-    })->name('forecast');
+    Route::get('/previsoes', [ForecastController::class, 'index'])->name('forecast');
 
     // Carsurf
     Route::prefix('carsurf')->name('carsurf.')->group(function () {
@@ -120,6 +119,10 @@ Route::group([
                 ->firstOrFail();
             return view('pages.nazare-qualifica.ale', compact('page'));
         })->name('ale');
+
+        Route::get('/contraordenacoes', function () {
+            return view('pages.nazare-qualifica.contraordenacoes');
+        })->name('contraordenacoes');
     });
 
     // Static pages

@@ -32,8 +32,11 @@ class HomeController extends Controller
             ->limit(4)
             ->get();
 
-        // Fetch homepage data (for hero section)
-        $homepage = Pagina::where('entity', 'praia-norte')
+        // Fetch homepage data with hero slides
+        $homepage = Pagina::with(['heroSlides' => function ($query) {
+                $query->where('active', true)->orderBy('order');
+            }])
+            ->where('entity', 'praia-norte')
             ->where('slug', 'homepage')
             ->where('published', true)
             ->first();

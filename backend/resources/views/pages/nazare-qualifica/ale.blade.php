@@ -145,7 +145,7 @@
                     </svg>
                     {{ $content['contact']['phone'] ?? __('messages.nq.contact.phone') }}
                 </x-ui.button>
-                <x-ui.button href="mailto:{{ $content['contact']['email'] ?? __('messages.nq.contact.email') }}" variant="outline" class="border-white text-white hover:bg-white/10">
+                <x-ui.button href="mailto:{{ $content['contact']['email'] ?? __('messages.nq.contact.email') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
                     <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                         <polyline points="22,6 12,13 2,6"/>

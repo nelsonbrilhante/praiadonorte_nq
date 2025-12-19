@@ -157,7 +157,9 @@ class PaginaForm
                             FileUpload::make('video_url')
                                 ->label('Vídeo MP4 (upload)')
                                 ->acceptedFileTypes(['video/mp4'])
+                                ->disk('public')
                                 ->directory('carsurf/videos')
+                                ->visibility('public')
                                 ->maxSize(102400) // 100MB max
                                 ->helperText('Upload de ficheiro MP4 (máx 100MB)'),
                             TextInput::make('content.pt.hero.youtube_url')

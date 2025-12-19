@@ -4,26 +4,35 @@
 @endphp
 
 <header
-    x-data="{ scrolled: false, mobileMenuOpen: false, isHomepage: {{ $isHomepage ? 'true' : 'false' }} }"
-    x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 50 })"
+    x-data="{
+        scrolled: false,
+        mobileMenuOpen: false,
+        isHomepage: {{ $isHomepage ? 'true' : 'false' }},
+        isDark: document.documentElement.classList.contains('dark')
+    }"
+    x-init="
+        window.addEventListener('scroll', () => { scrolled = window.scrollY > 50 });
+        const observer = new MutationObserver(() => { isDark = document.documentElement.classList.contains('dark') });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    "
     :class="(isHomepage && !scrolled) ? 'bg-transparent border-transparent' : 'bg-background/95 backdrop-blur border-b shadow-sm'"
     class="fixed top-0 z-50 w-full transition-all duration-300"
 >
     <div class="container mx-auto flex h-16 items-center justify-between px-4">
         {{-- Logo --}}
         <a href="{{ LaravelLocalization::localizeURL('/') }}" class="flex items-center">
-            {{-- White logo for transparent header (homepage, not scrolled) --}}
+            {{-- White logo for transparent header (homepage, not scrolled) OR dark mode --}}
             <img
                 src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}"
                 alt="Nazaré Qualifica"
-                :class="(isHomepage && !scrolled) ? 'block' : 'hidden'"
+                :class="((isHomepage && !scrolled) || isDark) ? 'block' : 'hidden'"
                 class="h-10 w-auto transition-opacity duration-300"
             />
-            {{-- Original logo for solid header --}}
+            {{-- Original logo for solid header in light mode --}}
             <img
                 src="{{ asset('images/logos/imagem-grafica-nq-original-name.svg') }}"
                 alt="Nazaré Qualifica"
-                :class="(isHomepage && !scrolled) ? 'hidden' : 'block'"
+                :class="((isHomepage && !scrolled) || isDark) ? 'hidden' : 'block'"
                 class="h-10 w-auto transition-opacity duration-300"
             />
         </a>

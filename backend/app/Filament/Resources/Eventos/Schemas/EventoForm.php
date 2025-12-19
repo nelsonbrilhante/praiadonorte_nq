@@ -77,7 +77,9 @@ class EventoForm
                         FileUpload::make('image')
                             ->label('Imagem do Evento')
                             ->image()
+                            ->disk('public')
                             ->directory('eventos')
+                            ->visibility('public')
                             ->columnSpanFull(),
                         Grid::make(2)
                             ->schema([

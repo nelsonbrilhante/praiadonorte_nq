@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 109.58 163.02">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #606161;
+      }
+
+      .cls-2 {
+        fill: #06a1cc;
+      }
+
+      .cls-3 {
+        fill: #6d6e71;
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-5 {
+        fill: #ed1c24;
+      }
+
+      .cls-6 {
+        fill: #808285;
+      }
+
+      .cls-7 {
+        fill: #27748a;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="64.33" y1="23.92" x2="108.68" y2="23.92" gradientUnits="userSpaceOnUse">
+      <stop offset=".47" stop-color="#2484c6"/>
+      <stop offset=".48" stop-color="#2484c6" stop-opacity=".98"/>
+      <stop offset=".74" stop-color="#2484c6" stop-opacity=".46"/>
+      <stop offset=".92" stop-color="#2484c6" stop-opacity=".13"/>
+      <stop offset="1" stop-color="#2484c6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="MASTER">
+    <g id="logo-white">
+      <g>
+        <polygon id="carsurf" class="cls-2" points="8.3 0 108.68 0 108.68 116.61 93.43 126.85 74.72 99.04 74.72 33.96 31.15 33.96 8.3 0"/>
+        <polygon id="servicos" class="cls-1" points="0 .16 33.96 50.64 33.96 129.06 61.13 129.06 61.13 163.02 0 163.02 0 .16"/>
+        <polygon id="praiadonorte" class="cls-5" points="67.92 101.11 67.92 163.02 109.58 163.02 67.92 101.11"/>
+        <path class="cls-7" d="M37.16,33.96h27.17L98.29,0s-33.96,33.96-61.13,33.96Z"/>
+        <polygon class="cls-4" points="64.33 33.96 98.29 0 108.68 0 108.68 47.85 80.03 33.96 64.33 33.96"/>
+        <g id="services">
+          <rect class="cls-3" y="144.34" width="16.98" height="16.98"/>
+          <rect class="cls-3" x="16.98" y="127.36" width="16.98" height="16.98"/>
+          <rect class="cls-6" x="16.98" y="110.38" width="16.98" height="16.98"/>
+          <rect class="cls-6" y="127.36" width="16.98" height="16.98"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
