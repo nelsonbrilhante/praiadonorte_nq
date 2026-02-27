@@ -3,7 +3,7 @@
 
     // Try to get About page from database
     $pagina = \App\Models\Pagina::where('entity', 'praia-norte')
-        ->where('slug', 'about')
+        ->where('slug', 'sobre')
         ->first();
 
     $getLocalized = function($field, $locale) {
@@ -15,20 +15,8 @@
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="gradient-ocean py-16 text-white">
-        <div class="container mx-auto px-4">
-            <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ __('messages.about.title') }}</h1>
-            <p class="text-xl opacity-90">{{ __('messages.about.subtitle') }}</p>
-        </div>
-    </section>
+    {{-- Hero --}}
+    <x-praia-norte.page-hero title="{{ __('messages.about.title') }}" subtitle="{{ __('messages.about.subtitle') }}" entity="praia-norte" image="{{ $pagina?->hero_image ? asset('storage/' . $pagina->hero_image) : '' }}" />
 
     {{-- Introduction Section --}}
     <section class="py-12">
@@ -64,7 +52,7 @@
     </section>
 
     {{-- Giant Waves Section --}}
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <div class="mx-auto max-w-3xl text-center">
                 <h2 class="mb-6 text-3xl font-bold">{{ __('messages.about.waves.title') }}</h2>
@@ -109,7 +97,7 @@
     </section>
 
     {{-- Location Section --}}
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <h2 class="mb-8 text-center text-3xl font-bold">{{ __('messages.about.location.title') }}</h2>
             <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
@@ -159,7 +147,7 @@
     </section>
 
     {{-- CTA Section --}}
-    <section class="bg-ocean py-16 text-white">
+    <section class="gradient-ocean-deep py-16 text-white">
         <div class="container mx-auto px-4 text-center">
             <h2 class="mb-4 text-3xl font-bold">{{ __('messages.about.cta.title') }}</h2>
             <p class="mb-8 text-lg opacity-90">{{ __('messages.about.cta.subtitle') }}</p>

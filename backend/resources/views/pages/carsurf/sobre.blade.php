@@ -1,22 +1,16 @@
 @php
     $locale = app('laravellocalization')->getCurrentLocale();
+    $pagina = \App\Models\Pagina::where('entity', 'carsurf')->where('slug', 'sobre')->first();
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="gradient-performance py-16 text-white">
-        <div class="container mx-auto px-4">
-            <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ __('messages.carsurf.about.pageTitle') }}</h1>
-            <p class="text-xl opacity-90">{{ __('messages.carsurf.about.pageSubtitle') }}</p>
-        </div>
-    </section>
+    {{-- Hero --}}
+    <x-praia-norte.page-hero
+        title="{{ __('messages.carsurf.about.pageTitle') }}"
+        subtitle="{{ __('messages.carsurf.about.pageSubtitle') }}"
+        entity="carsurf"
+        image="{{ $pagina?->hero_image ? asset('storage/' . $pagina->hero_image) : '' }}"
+    />
 
     {{-- Content --}}
     <section class="py-12">
@@ -41,7 +35,7 @@
     </section>
 
     {{-- Team Section --}}
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <h2 class="mb-8 text-center text-3xl font-bold">{{ __('messages.carsurf.team.title') }}</h2>
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">

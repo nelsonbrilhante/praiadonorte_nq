@@ -20,31 +20,18 @@
 @endphp
 
 <x-layouts.app>
-
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="gradient-ocean py-16 text-white">
-        <div class="container mx-auto px-4">
-            <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ __('messages.surfers.title') }}</h1>
-            <p class="text-xl opacity-90">{{ __('messages.surfers.subtitle') }}</p>
-        </div>
-    </section>
+    {{-- Hero --}}
+    <x-praia-norte.page-hero title="{{ __('messages.surfers.title') }}" subtitle="{{ __('messages.surfers.subtitle') }}" entity="praia-norte" />
 
     {{-- Featured Surfers --}}
     @if($featuredSurfers->count() > 0)
         <section class="py-12">
             <div class="container mx-auto px-4">
                 <h2 class="mb-8 text-2xl font-bold">{{ __('messages.surfers.featuredSurfers') }}</h2>
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 reveal-stagger" x-data x-intersect.once="$el.classList.add('is-visible')">
                     @foreach($featuredSurfers as $surfer)
                         <a href="{{ LaravelLocalization::localizeURL('/surfer-wall/' . $surfer->slug) }}">
-                            <x-ui.card class="group h-full cursor-pointer overflow-hidden transition-all hover:shadow-lg border-2 border-ocean" :noPadding="true">
+                            <x-ui.card class="group h-full cursor-pointer overflow-hidden transition-colors border-2 border-ocean" :noPadding="true">
                                 {{-- Photo --}}
                                 <div class="relative aspect-[3/4]">
                                     @if($surfer->photo)
@@ -97,17 +84,17 @@
     @endif
 
     {{-- All Surfers --}}
-    <section class="py-12 {{ $featuredSurfers->count() > 0 ? 'bg-muted/30' : '' }}">
+    <section class="py-12 {{ $featuredSurfers->count() > 0 ? 'bg-muted/10' : '' }}">
         <div class="container mx-auto px-4">
             @if($featuredSurfers->count() > 0 && $regularSurfers->count() > 0)
                 <h2 class="mb-8 text-2xl font-bold">{{ __('messages.surfers.allSurfers') }}</h2>
             @endif
 
             @if($surfers->count() > 0)
-                <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 reveal-stagger" x-data x-intersect.once="$el.classList.add('is-visible')">
                     @foreach($featuredSurfers->count() > 0 ? $regularSurfers : $surfers as $surfer)
                         <a href="{{ LaravelLocalization::localizeURL('/surfer-wall/' . $surfer->slug) }}">
-                            <x-ui.card class="group h-full cursor-pointer overflow-hidden transition-all hover:shadow-lg" :noPadding="true">
+                            <x-ui.card class="group h-full cursor-pointer overflow-hidden transition-colors" :noPadding="true">
                                 {{-- Photo --}}
                                 <div class="relative aspect-square">
                                     @if($surfer->photo)

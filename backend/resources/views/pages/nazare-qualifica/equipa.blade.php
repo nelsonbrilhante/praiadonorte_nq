@@ -4,20 +4,8 @@
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="gradient-institutional py-16 text-white">
-        <div class="container mx-auto px-4">
-            <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ $page->title[$locale] ?? $page->title['pt'] }}</h1>
-            <p class="text-xl opacity-90">{{ __('messages.nq.team.subtitle') }}</p>
-        </div>
-    </section>
+    {{-- Hero --}}
+    <x-praia-norte.page-hero title="{{ $page->title[$locale] ?? $page->title['pt'] }}" subtitle="{{ __('messages.nq.team.subtitle') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : '' }}" />
 
     {{-- Conselho de Gerência --}}
     @if(!empty($content['conselho']))
@@ -45,7 +33,7 @@
     @endif
 
     {{-- Assembleia Geral & Fiscal Único --}}
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
                 {{-- Assembleia Geral --}}

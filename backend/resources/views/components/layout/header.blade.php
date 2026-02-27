@@ -1,309 +1,470 @@
 @php
     $locale = LaravelLocalization::getCurrentLocale();
     $isHomepage = request()->routeIs('home');
+
+    // Determine which entity section is active for pill underline color
+    $currentPath = request()->path();
+    $activeEntity = 'none';
+    if (preg_match('#^(pt|en)/nazare-qualifica#', $currentPath)) {
+        $activeEntity = 'nq';
+    } elseif (preg_match('#^(pt|en)/carsurf#', $currentPath)) {
+        $activeEntity = 'carsurf';
+    } elseif (preg_match('#^(pt|en)/(sobre|surfer-wall|previsoes)#', $currentPath)) {
+        $activeEntity = 'pn';
+    }
+
+    // Detect active top-level pages (Noticias, Eventos)
+    $isNoticias = preg_match('#^(pt|en)/noticias#', $currentPath);
+    $isEventos = preg_match('#^(pt|en)/eventos#', $currentPath);
 @endphp
 
-<header
+{{-- Wrapper: shares Alpine state between header and overlay (siblings) --}}
+<div
     x-data="{
         scrolled: false,
-        mobileMenuOpen: false,
+        fullMenuOpen: false,
+        openDropdown: null,
         isHomepage: {{ $isHomepage ? 'true' : 'false' }},
-        isDark: document.documentElement.classList.contains('dark')
+        isDark: document.documentElement.classList.contains('dark'),
+        lastScrollY: 0,
+        headerVisible: true
     }"
     x-init="
-        window.addEventListener('scroll', () => { scrolled = window.scrollY > 50 });
+        window.addEventListener('scroll', () => {
+            const currentY = window.scrollY;
+            if (currentY > 80 && currentY > lastScrollY && !fullMenuOpen) {
+                headerVisible = false;
+            } else {
+                headerVisible = true;
+            }
+            scrolled = currentY > 50;
+            lastScrollY = currentY;
+        });
         const observer = new MutationObserver(() => { isDark = document.documentElement.classList.contains('dark') });
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     "
-    :class="(isHomepage && !scrolled) ? 'bg-transparent border-transparent' : 'bg-background/95 backdrop-blur border-b shadow-sm'"
-    class="fixed top-0 z-50 w-full transition-all duration-300"
+    x-effect="document.body.style.overflow = fullMenuOpen ? 'hidden' : ''"
 >
-    <div class="container mx-auto flex h-16 items-center justify-between px-4">
-        {{-- Logo --}}
-        <a href="{{ LaravelLocalization::localizeURL('/') }}" class="flex items-center">
-            {{-- White logo for transparent header (homepage, not scrolled) OR dark mode --}}
-            <img
-                src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}"
-                alt="Nazaré Qualifica"
-                :class="((isHomepage && !scrolled) || isDark) ? 'block' : 'hidden'"
-                class="h-10 w-auto transition-opacity duration-300"
-            />
-            {{-- Original logo for solid header in light mode --}}
-            <img
-                src="{{ asset('images/logos/imagem-grafica-nq-original-name.svg') }}"
-                alt="Nazaré Qualifica"
-                :class="((isHomepage && !scrolled) || isDark) ? 'hidden' : 'block'"
-                class="h-10 w-auto transition-opacity duration-300"
-            />
-        </a>
+    <header
+        :class="{
+            '-translate-y-full': !headerVisible && !fullMenuOpen,
+            'bg-transparent': isHomepage && !scrolled && !fullMenuOpen,
+            'bg-background/95 backdrop-blur-lg border-b border-border shadow-sm': scrolled || !isHomepage || fullMenuOpen
+        }"
+        class="fixed top-0 z-50 w-full transition-transform duration-300"
+    >
+        <div class="container mx-auto flex h-16 items-center justify-between px-4">
 
-        {{-- Navigation (Desktop) --}}
-        <nav class="hidden md:flex items-center gap-1">
-            <a href="{{ LaravelLocalization::localizeURL('/') }}"
-               :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10 {{ request()->is($locale) ? 'bg-white/10' : '' }}' : 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale) ? 'bg-accent' : '' }}'"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
-                {{ __('messages.navigation.home') }}
-            </a>
-
-            {{-- About Dropdown --}}
-            <div class="relative group">
+            {{-- Left Zone: Grid Icon + Logo --}}
+            <div class="flex items-center gap-3">
+                {{-- Grid Icon (opens full-screen menu) --}}
                 <button
-                    :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10' : 'hover:bg-accent hover:text-accent-foreground'"
-                    class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2 gap-1">
-                    {{ __('messages.navigation.about') }}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:rotate-180">
-                        <path d="m6 9 6 6 6-6"/>
+                    type="button"
+                    @click="fullMenuOpen = !fullMenuOpen"
+                    :class="(isHomepage && !scrolled && !fullMenuOpen) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
+                    class="inline-flex items-center justify-center rounded-full h-9 w-9 transition-colors"
+                    aria-label="Menu"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
                     </svg>
                 </button>
-                <div class="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                    <div class="w-[400px] rounded-md border bg-popover p-4 shadow-lg">
-                        <div class="grid gap-3 md:grid-cols-2">
-                            <a href="{{ LaravelLocalization::localizeURL('/sobre') }}"
-                               class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground">
-                                <div class="text-sm font-medium leading-none text-ocean">
-                                    {{ __('messages.entities.praiaDoNorte') }}
-                                </div>
-                                <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                    Ondas gigantes e surf de elite
-                                </p>
+
+                {{-- Logo --}}
+                <a href="{{ LaravelLocalization::localizeURL('/') }}" class="flex items-center">
+                    <img
+                        src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}"
+                        alt="Nazaré Qualifica"
+                        :class="((isHomepage && !scrolled && !fullMenuOpen) || isDark) ? 'block' : 'hidden'"
+                        class="h-10 w-auto transition-opacity duration-300"
+                    />
+                    <img
+                        src="{{ asset('images/logos/imagem-grafica-nq-original-name.svg') }}"
+                        alt="Nazaré Qualifica"
+                        :class="((isHomepage && !scrolled && !fullMenuOpen) || isDark) ? 'hidden' : 'block'"
+                        class="h-10 w-auto transition-opacity duration-300"
+                    />
+                </a>
+            </div>
+
+            {{-- Center Zone: Nav Pill (Desktop only) --}}
+            <nav class="hidden lg:flex items-center">
+                <div
+                    :class="(isHomepage && !scrolled) ? 'bg-white/15 backdrop-blur-sm' : 'bg-foreground/5 dark:bg-white/10'"
+                    class="flex items-center gap-0.5 rounded-full px-1.5 py-1 transition-colors duration-300"
+                >
+                    {{-- Nazaré Qualifica Dropdown --}}
+                    <div class="relative" @mouseenter="openDropdown = 'nq'" @mouseleave="openDropdown = null">
+                        <button
+                            :class="(isHomepage && !scrolled)
+                                ? 'text-white/80 hover:text-white hover:bg-white/10'
+                                : 'text-foreground/70 hover:text-foreground hover:bg-foreground/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10'"
+                            class="relative inline-flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-full transition-colors"
+                        >
+                            {{ __('messages.entities.nazareQualifica') }}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200" :class="openDropdown === 'nq' ? 'rotate-180' : ''"><path d="m6 9 6 6 6-6"/></svg>
+                            @if($activeEntity === 'nq')
+                                <span class="absolute bottom-0 left-3 right-3 h-0.5 bg-institutional rounded-full"></span>
+                            @endif
+                        </button>
+                        <div x-show="openDropdown === 'nq'" x-cloak
+                             x-transition:enter="transition ease-[cubic-bezier(0.4,0,0.2,1)] duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 -translate-y-2"
+                             class="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50">
+                            <div class="w-56 rounded-lg bg-white dark:bg-popover p-2 shadow-xl border border-border dropdown-stagger"
+                                 :class="openDropdown === 'nq' ? 'is-open' : ''">
+                                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/sobre') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.navigation.about') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/equipa') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.breadcrumbs.equipa') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/servicos') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.breadcrumbs.servicos') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/contraordenacoes') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.breadcrumbs.contraordenacoes') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/estacionamento') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.breadcrumbs.estacionamento') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/forte') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.breadcrumbs.forte') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/ale') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.breadcrumbs.ale') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Praia do Norte Dropdown --}}
+                    <div class="relative" @mouseenter="openDropdown = 'pn'" @mouseleave="openDropdown = null">
+                        <button
+                            :class="(isHomepage && !scrolled)
+                                ? 'text-white/80 hover:text-white hover:bg-white/10'
+                                : 'text-foreground/70 hover:text-foreground hover:bg-foreground/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10'"
+                            class="relative inline-flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-full transition-colors"
+                        >
+                            {{ __('messages.entities.praiaDoNorte') }}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200" :class="openDropdown === 'pn' ? 'rotate-180' : ''"><path d="m6 9 6 6 6-6"/></svg>
+                            @if($activeEntity === 'pn')
+                                <span class="absolute bottom-0 left-3 right-3 h-0.5 bg-ocean rounded-full"></span>
+                            @endif
+                        </button>
+                        <div x-show="openDropdown === 'pn'" x-cloak
+                             x-transition:enter="transition ease-[cubic-bezier(0.4,0,0.2,1)] duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 -translate-y-2"
+                             class="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50">
+                            <div class="w-56 rounded-lg bg-white dark:bg-popover p-2 shadow-xl border border-border dropdown-stagger"
+                                 :class="openDropdown === 'pn' ? 'is-open' : ''">
+                                <a href="{{ LaravelLocalization::localizeURL('/sobre') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.navigation.about') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.navigation.surferWall') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.navigation.forecast') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Carsurf Dropdown --}}
+                    <div class="relative" @mouseenter="openDropdown = 'carsurf'" @mouseleave="openDropdown = null">
+                        <button
+                            :class="(isHomepage && !scrolled)
+                                ? 'text-white/80 hover:text-white hover:bg-white/10'
+                                : 'text-foreground/70 hover:text-foreground hover:bg-foreground/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10'"
+                            class="relative inline-flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-full transition-colors"
+                        >
+                            {{ __('messages.entities.carsurf') }}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200" :class="openDropdown === 'carsurf' ? 'rotate-180' : ''"><path d="m6 9 6 6 6-6"/></svg>
+                            @if($activeEntity === 'carsurf')
+                                <span class="absolute bottom-0 left-3 right-3 h-0.5 bg-performance rounded-full"></span>
+                            @endif
+                        </button>
+                        <div x-show="openDropdown === 'carsurf'" x-cloak
+                             x-transition:enter="transition ease-[cubic-bezier(0.4,0,0.2,1)] duration-200"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 -translate-y-2"
+                             class="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50">
+                            <div class="w-56 rounded-lg bg-white dark:bg-popover p-2 shadow-xl border border-border dropdown-stagger"
+                                 :class="openDropdown === 'carsurf' ? 'is-open' : ''">
+                                <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.navigation.about') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/carsurf/programas') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.pages.programs') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Eventos (direct link) --}}
+                    <a
+                        href="{{ LaravelLocalization::localizeURL('/eventos') }}"
+                        :class="(isHomepage && !scrolled)
+                            ? 'text-white/80 hover:text-white hover:bg-white/10'
+                            : 'text-foreground/70 hover:text-foreground hover:bg-foreground/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10'"
+                        class="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-full transition-colors"
+                    >
+                        {{ __('messages.navigation.events') }}
+                        @if($isEventos)
+                            <span class="absolute bottom-0 left-3 right-3 h-0.5 bg-ocean rounded-full"></span>
+                        @endif
+                    </a>
+
+                    {{-- Notícias (direct link) --}}
+                    <a
+                        href="{{ LaravelLocalization::localizeURL('/noticias') }}"
+                        :class="(isHomepage && !scrolled)
+                            ? 'text-white/80 hover:text-white hover:bg-white/10'
+                            : 'text-foreground/70 hover:text-foreground hover:bg-foreground/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10'"
+                        class="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-full transition-colors"
+                    >
+                        {{ __('messages.navigation.news') }}
+                        @if($isNoticias)
+                            <span class="absolute bottom-0 left-3 right-3 h-0.5 bg-ocean rounded-full"></span>
+                        @endif
+                    </a>
+                </div>
+            </nav>
+
+            {{-- Right Zone: Icons --}}
+            <div class="flex items-center gap-1.5">
+                {{-- Dark Mode Toggle --}}
+                <button
+                    type="button"
+                    x-data="{ isDark: document.documentElement.classList.contains('dark') }"
+                    @click="
+                        isDark = !isDark;
+                        document.documentElement.classList.toggle('dark', isDark);
+                        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    "
+                    :class="(isHomepage && !scrolled && !fullMenuOpen) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
+                    class="hidden md:inline-flex items-center justify-center rounded-full h-9 w-9 transition-colors"
+                    :title="isDark ? '{{ __('messages.theme.switchToLight') ?? 'Mudar para modo claro' }}' : '{{ __('messages.theme.switchToDark') ?? 'Mudar para modo escuro' }}'"
+                >
+                    <svg x-show="isDark" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+                    </svg>
+                    <svg x-show="!isDark" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                    </svg>
+                </button>
+
+                {{-- Language Switcher --}}
+                <div class="hidden md:block">
+                    <livewire:language-switcher />
+                </div>
+
+                {{-- Auth Button --}}
+                @auth
+                    <a href="{{ url('/admin') }}"
+                       :class="(isHomepage && !scrolled && !fullMenuOpen) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
+                       class="inline-flex items-center justify-center rounded-full h-9 w-9 transition-colors"
+                       title="Dashboard">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+                        </svg>
+                    </a>
+                @else
+                    <a href="{{ url('/admin/login') }}"
+                       :class="(isHomepage && !scrolled && !fullMenuOpen) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
+                       class="inline-flex items-center justify-center rounded-full h-9 w-9 transition-colors"
+                       title="Login">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </a>
+                @endauth
+
+                {{-- Search --}}
+                <button
+                    type="button"
+                    @click="$dispatch('open-search')"
+                    :class="(isHomepage && !scrolled && !fullMenuOpen) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
+                    class="inline-flex items-center justify-center rounded-full h-9 w-9 transition-colors"
+                    aria-label="{{ __('messages.search.placeholder') }}"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    {{-- ============================================
+       FULL-SCREEN OVERLAY MENU
+       Sibling of <header>, not child — fixed positioning works correctly
+       ============================================ --}}
+    <div
+        x-show="fullMenuOpen"
+        x-cloak
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        @keydown.escape.window="fullMenuOpen = false"
+        class="fixed inset-0 z-[60] bg-[#0b1022] overflow-y-auto"
+    >
+        {{-- Top Bar --}}
+        <div class="container mx-auto flex h-16 items-center justify-between px-4">
+            <a href="{{ LaravelLocalization::localizeURL('/') }}" @click="fullMenuOpen = false" class="flex items-center">
+                <img
+                    src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}"
+                    alt="Nazaré Qualifica"
+                    class="h-10 w-auto"
+                />
+            </a>
+            <button
+                type="button"
+                @click="fullMenuOpen = false"
+                class="inline-flex items-center justify-center rounded-full h-9 w-9 text-white hover:bg-white/10 transition-colors"
+                aria-label="Close menu"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        {{-- Menu Content --}}
+        <div class="container mx-auto px-4 py-8 md:py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+                {{-- Left: Navigation --}}
+                <div class="space-y-8">
+                    {{-- Nazaré Qualifica --}}
+                    <div class="border-l-2 border-institutional pl-6">
+                        <h3 class="text-2xl font-bold text-white md:text-3xl mb-4">
+                            {{ __('messages.entities.nazareQualifica') }}
+                        </h3>
+                        <div class="space-y-3">
+                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/sobre') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.navigation.about') }}
                             </a>
-                            <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}"
-                               class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground">
-                                <div class="text-sm font-medium leading-none text-performance">
-                                    {{ __('messages.entities.carsurf') }}
-                                </div>
-                                <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                    Centro de alto rendimento
-                                </p>
+                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/equipa') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.breadcrumbs.equipa') }}
                             </a>
-                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/sobre') }}"
-                               class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground">
-                                <div class="text-sm font-medium leading-none text-institutional">
-                                    {{ __('messages.entities.nazareQualifica') }}
-                                </div>
-                                <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                    {{ __('messages.nq.about.subtitle') }}
-                                </p>
+                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/servicos') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.breadcrumbs.servicos') }}
                             </a>
-                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/servicos') }}"
-                               class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground">
-                                <div class="text-sm font-medium leading-none text-institutional">
-                                    {{ __('messages.nq.services.title') }}
-                                </div>
-                                <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                    {{ __('messages.nq.services.subtitle') }}
-                                </p>
+                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/contraordenacoes') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.breadcrumbs.contraordenacoes') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/estacionamento') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.breadcrumbs.estacionamento') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/forte') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.breadcrumbs.forte') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/ale') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.breadcrumbs.ale') }}
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Praia do Norte --}}
+                    <div class="border-l-2 border-ocean pl-6">
+                        <h3 class="text-2xl font-bold text-white md:text-3xl mb-4">
+                            {{ __('messages.entities.praiaDoNorte') }}
+                        </h3>
+                        <div class="space-y-3">
+                            <a href="{{ LaravelLocalization::localizeURL('/sobre') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.navigation.about') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.navigation.surferWall') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.navigation.forecast') }}
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Carsurf --}}
+                    <div class="border-l-2 border-performance pl-6">
+                        <h3 class="text-2xl font-bold text-white md:text-3xl mb-4">
+                            {{ __('messages.entities.carsurf') }}
+                        </h3>
+                        <div class="space-y-3">
+                            <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.navigation.about') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/carsurf/programas') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.pages.programs') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Right: Quick Links / Highlights --}}
+                <div class="space-y-8">
+                    <div>
+                        <h4 class="text-sm font-semibold text-white/40 uppercase tracking-wider mb-4">{{ __('messages.navigation.home') }}</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="{{ LaravelLocalization::localizeURL('/noticias') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-ocean mb-3">
+                                    <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+                                </svg>
+                                <span class="text-sm font-medium text-white">{{ __('messages.navigation.news') }}</span>
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/eventos') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-ocean mb-3">
+                                    <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>
+                                </svg>
+                                <span class="text-sm font-medium text-white">{{ __('messages.navigation.events') }}</span>
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-ocean mb-3">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                                <span class="text-sm font-medium text-white">{{ __('messages.navigation.surferWall') }}</span>
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-ocean mb-3">
+                                    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                                </svg>
+                                <span class="text-sm font-medium text-white">{{ __('messages.navigation.forecast') }}</span>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <a href="{{ LaravelLocalization::localizeURL('/noticias') }}"
-               :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10 {{ request()->is($locale.'/noticias*') ? 'bg-white/10' : '' }}' : 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale.'/noticias*') ? 'bg-accent' : '' }}'"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
-                {{ __('messages.navigation.news') }}
-            </a>
-
-            <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}"
-               :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10 {{ request()->is($locale.'/surfer-wall*') ? 'bg-white/10' : '' }}' : 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale.'/surfer-wall*') ? 'bg-accent' : '' }}'"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
-                {{ __('messages.navigation.surferWall') }}
-            </a>
-
-            <a href="{{ LaravelLocalization::localizeURL('/eventos') }}"
-               :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10 {{ request()->is($locale.'/eventos*') ? 'bg-white/10' : '' }}' : 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale.'/eventos*') ? 'bg-accent' : '' }}'"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
-                {{ __('messages.navigation.events') }}
-            </a>
-
-            <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}"
-               :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10 {{ request()->is($locale.'/previsoes*') ? 'bg-white/10' : '' }}' : 'hover:bg-accent hover:text-accent-foreground {{ request()->is($locale.'/previsoes*') ? 'bg-accent' : '' }}'"
-               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 px-4 py-2">
-                {{ __('messages.navigation.forecast') }}
-            </a>
-        </nav>
-
-        {{-- Right Side --}}
-        <div class="flex items-center gap-2">
-            {{-- Search Button (Desktop) --}}
-            <button
-                type="button"
-                @click="$dispatch('open-search')"
-                :class="(isHomepage && !scrolled) ? 'border-white/30 bg-white/10 text-white hover:bg-white/20' : 'border bg-muted/50 text-muted-foreground hover:bg-muted'"
-                class="hidden lg:inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.3-4.3"/>
-                </svg>
-                <span>{{ __('messages.search.placeholder') }}</span>
-                <kbd
-                    :class="(isHomepage && !scrolled) ? 'border-white/30 bg-white/10' : 'border bg-background'"
-                    class="pointer-events-none hidden h-5 select-none items-center gap-1 rounded px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-                    <span class="text-xs">⌘</span>K
-                </kbd>
-            </button>
-
-            {{-- Search Button (Mobile/Tablet) --}}
-            <button
-                type="button"
-                @click="$dispatch('open-search')"
-                :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
-                class="lg:hidden inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.3-4.3"/>
-                </svg>
-            </button>
-
-            {{-- Dark Mode Toggle (persisted to localStorage) --}}
-            <button
-                type="button"
-                x-data="{ isDark: document.documentElement.classList.contains('dark') }"
-                @click="
-                    isDark = !isDark;
-                    document.documentElement.classList.toggle('dark', isDark);
-                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-                "
-                :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
-                class="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10 transition-colors"
-                :title="isDark ? '{{ __('messages.theme.switchToLight') ?? 'Mudar para modo claro' }}' : '{{ __('messages.theme.switchToDark') ?? 'Mudar para modo escuro' }}'">
-                {{-- Sun icon (shown in dark mode - click to go light) --}}
-                <svg x-show="isDark" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="4"/>
-                    <path d="M12 2v2"/>
-                    <path d="M12 20v2"/>
-                    <path d="m4.93 4.93 1.41 1.41"/>
-                    <path d="m17.66 17.66 1.41 1.41"/>
-                    <path d="M2 12h2"/>
-                    <path d="M20 12h2"/>
-                    <path d="m6.34 17.66-1.41 1.41"/>
-                    <path d="m19.07 4.93-1.41 1.41"/>
-                </svg>
-                {{-- Moon icon (shown in light mode - click to go dark) --}}
-                <svg x-show="!isDark" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-                </svg>
-            </button>
-
-            {{-- Language Switcher --}}
-            <livewire:language-switcher />
-
-            {{-- Auth Button (Login/Dashboard) --}}
-            @auth
-                <a href="{{ url('/admin') }}"
-                   :class="(isHomepage && !scrolled) ? 'border-white/30 bg-white/10 text-white hover:bg-white/20' : 'border bg-transparent hover:bg-accent'"
-                   class="hidden sm:inline-flex items-center justify-center rounded-md text-xs font-semibold h-8 w-8 border transition-all duration-200"
-                   title="Dashboard">
-                    {{-- Grid/Dashboard icon --}}
+            {{-- Bottom: Language + Search --}}
+            <div class="mt-12 flex items-center gap-4 border-t border-white/10 pt-6">
+                <livewire:language-switcher />
+                <button
+                    type="button"
+                    @click="fullMenuOpen = false; $nextTick(() => $dispatch('open-search'))"
+                    class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/15 transition-colors"
+                >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="7" height="9" x="3" y="3" rx="1"/>
-                        <rect width="7" height="5" x="14" y="3" rx="1"/>
-                        <rect width="7" height="9" x="14" y="12" rx="1"/>
-                        <rect width="7" height="5" x="3" y="16" rx="1"/>
+                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
                     </svg>
-                </a>
-            @else
-                <a href="{{ url('/admin/login') }}"
-                   :class="(isHomepage && !scrolled) ? 'border-white/30 bg-white/10 text-white hover:bg-white/20' : 'border bg-transparent hover:bg-accent'"
-                   class="hidden sm:inline-flex items-center justify-center rounded-md text-xs font-semibold h-8 w-8 border transition-all duration-200"
-                   title="Login">
-                    {{-- User icon --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                </a>
-            @endauth
-
-            {{-- Mobile Menu Button --}}
-            <button
-                type="button"
-                @click="mobileMenuOpen = !mobileMenuOpen"
-                :class="(isHomepage && !scrolled) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
-                class="md:hidden inline-flex items-center justify-center rounded-md text-sm font-medium h-10 w-10">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="4" x2="20" y1="12" y2="12"/>
-                    <line x1="4" x2="20" y1="6" y2="6"/>
-                    <line x1="4" x2="20" y1="18" y2="18"/>
-                </svg>
-            </button>
+                    {{ __('messages.search.placeholder') }}
+                </button>
+            </div>
         </div>
     </div>
-
-    {{-- Mobile Menu --}}
-    <div
-        x-show="mobileMenuOpen"
-        x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 -translate-y-1"
-        x-transition:enter-end="opacity-100 translate-y-0"
-        x-transition:leave="transition ease-in duration-150"
-        x-transition:leave-start="opacity-100 translate-y-0"
-        x-transition:leave-end="opacity-0 -translate-y-1"
-        class="md:hidden border-t bg-background"
-    >
-        <nav class="container mx-auto px-4 py-4 space-y-2">
-            <a href="{{ LaravelLocalization::localizeURL('/') }}" class="block py-2 text-sm hover:text-ocean">
-                {{ __('messages.navigation.home') }}
-            </a>
-
-            {{-- Praia do Norte --}}
-            <div class="py-2">
-                <span class="text-xs font-semibold text-ocean uppercase tracking-wide">{{ __('messages.entities.praiaDoNorte') }}</span>
-                <div class="mt-1 space-y-1 pl-2">
-                    <a href="{{ LaravelLocalization::localizeURL('/sobre') }}" class="block py-1 text-sm hover:text-ocean">
-                        {{ __('messages.navigation.about') }}
-                    </a>
-                    <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}" class="block py-1 text-sm hover:text-ocean">
-                        {{ __('messages.navigation.surferWall') }}
-                    </a>
-                    <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}" class="block py-1 text-sm hover:text-ocean">
-                        {{ __('messages.navigation.forecast') }}
-                    </a>
-                </div>
-            </div>
-
-            {{-- Carsurf --}}
-            <div class="py-2">
-                <span class="text-xs font-semibold text-performance uppercase tracking-wide">{{ __('messages.entities.carsurf') }}</span>
-                <div class="mt-1 space-y-1 pl-2">
-                    <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}" class="block py-1 text-sm hover:text-performance">
-                        {{ __('messages.carsurf.hero.about') }}
-                    </a>
-                    <a href="{{ LaravelLocalization::localizeURL('/carsurf/programas') }}" class="block py-1 text-sm hover:text-performance">
-                        {{ __('messages.pages.programs') }}
-                    </a>
-                </div>
-            </div>
-
-            {{-- Nazaré Qualifica --}}
-            <div class="py-2">
-                <span class="text-xs font-semibold text-institutional uppercase tracking-wide">{{ __('messages.entities.nazareQualifica') }}</span>
-                <div class="mt-1 space-y-1 pl-2">
-                    <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/sobre') }}" class="block py-1 text-sm hover:text-institutional">
-                        {{ __('messages.navigation.about') }}
-                    </a>
-                    <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/servicos') }}" class="block py-1 text-sm hover:text-institutional">
-                        {{ __('messages.nq.services.title') }}
-                    </a>
-                    <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/equipa') }}" class="block py-1 text-sm hover:text-institutional">
-                        {{ __('messages.nq.team.title') }}
-                    </a>
-                </div>
-            </div>
-
-            {{-- Content --}}
-            <div class="border-t pt-2 mt-2 space-y-2">
-                <a href="{{ LaravelLocalization::localizeURL('/noticias') }}" class="block py-2 text-sm hover:text-ocean">
-                    {{ __('messages.navigation.news') }}
-                </a>
-                <a href="{{ LaravelLocalization::localizeURL('/eventos') }}" class="block py-2 text-sm hover:text-ocean">
-                    {{ __('messages.navigation.events') }}
-                </a>
-                <a href="{{ LaravelLocalization::localizeURL('/contacto') }}" class="block py-2 text-sm text-ocean font-medium">
-                    {{ __('messages.navigation.contact') }}
-                </a>
-            </div>
-        </nav>
-    </div>
-</header>
+</div>

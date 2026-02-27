@@ -1,11 +1,4 @@
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
     {{-- Header --}}
     <section class="gradient-ocean py-16 text-white">
         <div class="container mx-auto px-4">

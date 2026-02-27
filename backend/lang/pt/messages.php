@@ -72,6 +72,17 @@ return [
         'backToList' => 'Voltar aos eventos',
         'startDate' => 'Início',
         'endDate' => 'Fim',
+        'relatedEvents' => 'Eventos Relacionados',
+        'schedule' => 'Programa',
+        'partners' => 'Parceiros',
+        'gallery' => 'Galeria',
+        'replay' => 'Replay',
+        'ticketsAvailable' => 'Bilhetes disponíveis',
+        'registrationsOpen' => 'Inscrições abertas',
+        'upcomingEvent' => 'Evento próximo',
+        'pastEvent' => 'Evento passado',
+        'category' => 'Categoria',
+        'featuredEvents' => 'Eventos em Destaque',
     ],
     'surfers' => [
         'title' => 'Surfer Wall',
@@ -186,8 +197,24 @@ return [
         ],
         'about' => [
             'title' => 'Sobre o Carsurf',
+            'pageTitle' => 'Sobre o Carsurf',
+            'pageSubtitle' => 'Centro de Alto Rendimento para Surfistas',
             'text' => 'O Carsurf é um centro de alto rendimento dedicado ao desenvolvimento de atletas de surf, localizado na Nazaré. Com instalações de última geração e uma equipa técnica de excelência, oferecemos as condições ideais para atletas que procuram elevar o seu desempenho.',
             'highlight' => 'O único centro de alto rendimento de surf em Portugal com acesso direto às maiores ondas do mundo.',
+            'mission' => [
+                'title' => 'A Nossa Missão',
+                'text' => 'O Carsurf é um centro de alto rendimento dedicado ao desenvolvimento de atletas de surf, localizado na Nazaré. Com instalações de última geração e uma equipa técnica de excelência, oferecemos as condições ideais para atletas que procuram elevar o seu desempenho.',
+            ],
+            'history' => [
+                'title' => 'A Nossa História',
+                'text' => 'Fundado como parte da estratégia municipal de valorização desportiva da Nazaré, o Carsurf é hoje uma referência nacional no treino de surf de alto rendimento. Situado junto à Praia do Norte, oferece acesso direto às maiores ondas do mundo.',
+            ],
+            'values' => [
+                'title' => 'Os Nossos Valores',
+                'item1' => 'Excelência desportiva e formação contínua',
+                'item2' => 'Segurança e bem-estar dos atletas',
+                'item3' => 'Desenvolvimento sustentável do surf na Nazaré',
+            ],
         ],
         'facilities' => [
             'title' => 'Instalações',
@@ -252,6 +279,10 @@ return [
         'team' => [
             'title' => 'Equipa',
             'subtitle' => 'Conheça os responsáveis pelo Carsurf',
+            'member1' => ['name' => 'Pedro Pisco', 'role' => 'Gestor Geral'],
+            'member2' => ['name' => 'Tiago Barbosa', 'role' => 'Diretor Técnico'],
+            'member3' => ['name' => 'Pedro Costa', 'role' => 'Preparador Físico'],
+            'member4' => ['name' => 'Maria Oliveira', 'role' => 'Fisioterapeuta'],
         ],
         'contact' => [
             'title' => 'Contacto',

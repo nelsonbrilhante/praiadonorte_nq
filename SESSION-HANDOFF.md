@@ -7,9 +7,40 @@
 
 ## Última Sessão
 
-- **Data**: 2025-12-18
+- **Data**: 2025-12-19
+- **Resumo**: Merge do Hero Slider para main + verificação dark mode
+- **Branch**: `main`
+
+### O que foi feito:
+
+1. **Verificação Dark Mode**
+   - Confirmado que o frontend detecta automaticamente a preferência do sistema (prefers-color-scheme)
+   - Comportamento idêntico ao Filament (backend)
+   - No primeiro acesso, usa preferência do SO/browser
+   - Implementação via `window.matchMedia('(prefers-color-scheme: dark)')`
+
+2. **Merge do Hero Slider para main**
+   - Criado PR #1 no GitHub: `feat(hero): Hero Slider + cleanup logos`
+   - PR merged com sucesso via CLI (`gh pr merge`)
+   - Branch `feature/hero-slider` eliminada após merge
+
+3. **Commit adicional antes do merge**
+   - `chore: cleanup NQ logos and add veo-assets`
+   - Removidos logos NQ antigos/duplicados
+   - Adicionados veo-assets (frames para animação do logo)
+   - Adicionado `server.php` ao `.gitignore`
+
+### Ficheiros modificados:
+- `.gitignore` - adicionado `backend/server.php`
+- Logos NQ reorganizados em `logos/nazarequalifica/`
+- Novos assets em `logos/nazarequalifica/veo-assets/`
+
+---
+
+## Sessão Anterior (2025-12-18)
+
 - **Resumo**: Hero Slider - conversão do Hero Section para slider profissional com múltiplos slides
-- **Branch**: `feature/hero-slider`
+- **Branch**: `feature/hero-slider` (merged)
 
 ### O que foi feito:
 
@@ -274,10 +305,11 @@
 
 | Item | Valor |
 |------|-------|
-| **Fase** | Migração Blade COMPLETA - Pronto para Quality Assurance |
-| **Branch** | `feature/hero-slider` (a aguardar merge para main) |
+| **Fase** | Quality Assurance (Phase 4) |
+| **Branch** | `main` |
 | **Backend** | Laravel 12.41.1 + Filament 4.2.4 |
 | **Frontend** | Blade + Livewire (migração concluída) |
+| **Hero Slider** | ✅ Merged (PR #1) |
 | **i18n** | Laravel localization configurado |
 | **Admin Theme** | Navy Blue (#1e3a5f) |
 

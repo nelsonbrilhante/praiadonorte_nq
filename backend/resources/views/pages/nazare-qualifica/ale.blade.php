@@ -4,29 +4,8 @@
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="bg-gradient-to-r from-green-600 to-green-700 py-16 text-white">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center gap-4 mb-4">
-                <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-white/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 4v16"/>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-4xl font-bold md:text-5xl">{{ $page->title[$locale] ?? $page->title['pt'] }}</h1>
-                    <p class="text-xl opacity-90">{{ __('messages.nq.services.ale.shortDescription') }}</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{-- Hero --}}
+    <x-praia-norte.page-hero title="{{ $page->title[$locale] ?? $page->title['pt'] }}" subtitle="{{ __('messages.nq.services.ale.shortDescription') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : '' }}" />
 
     {{-- Description --}}
     <section class="py-12">
@@ -59,13 +38,13 @@
 
     {{-- Key Numbers --}}
     @if(!empty($content['stats']))
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <div class="mx-auto max-w-3xl text-center">
                 <h2 class="mb-6 text-2xl font-bold">Números Chave</h2>
                 <div class="grid grid-cols-2 gap-6 md:grid-cols-{{ count($content['stats']) }}">
                     @foreach($content['stats'] as $stat)
-                        <div class="rounded-lg bg-white p-4 shadow-sm">
+                        <div class="rounded-lg bg-white p-4 border">
                             <div class="text-3xl font-bold text-green-600">{{ $stat['value'] ?? '' }}</div>
                             <div class="text-sm text-muted-foreground">{{ $stat['label'] ?? '' }}</div>
                         </div>
@@ -75,20 +54,20 @@
         </div>
     </section>
     @else
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <div class="mx-auto max-w-3xl text-center">
                 <h2 class="mb-6 text-2xl font-bold">Números Chave</h2>
                 <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
-                    <div class="rounded-lg bg-white p-4 shadow-sm">
+                    <div class="rounded-lg bg-white p-4 border">
                         <div class="text-3xl font-bold text-green-600">30</div>
                         <div class="text-sm text-muted-foreground">{{ __('messages.nq.services.ale.features.area') }}</div>
                     </div>
-                    <div class="rounded-lg bg-white p-4 shadow-sm">
+                    <div class="rounded-lg bg-white p-4 border">
                         <div class="text-3xl font-bold text-green-600">34</div>
                         <div class="text-sm text-muted-foreground">{{ __('messages.nq.services.ale.features.lots') }}</div>
                     </div>
-                    <div class="rounded-lg bg-white p-4 shadow-sm">
+                    <div class="rounded-lg bg-white p-4 border">
                         <div class="flex items-center justify-center text-3xl font-bold text-green-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -97,7 +76,7 @@
                         </div>
                         <div class="text-sm text-muted-foreground">{{ __('messages.nq.services.ale.features.location') }}</div>
                     </div>
-                    <div class="rounded-lg bg-white p-4 shadow-sm">
+                    <div class="rounded-lg bg-white p-4 border">
                         <div class="flex items-center justify-center text-3xl font-bold text-green-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>

@@ -28,20 +28,8 @@
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="gradient-institutional py-16 text-white">
-        <div class="container mx-auto px-4">
-            <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ $page->title[$locale] ?? $page->title['pt'] }}</h1>
-            <p class="text-xl opacity-90">{{ __('messages.nq.services.subtitle') }}</p>
-        </div>
-    </section>
+    {{-- Hero --}}
+    <x-praia-norte.page-hero title="{{ $page->title[$locale] ?? $page->title['pt'] }}" subtitle="{{ __('messages.nq.services.subtitle') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : '' }}" />
 
     {{-- Services Grid --}}
     <section class="py-12">
@@ -54,7 +42,7 @@
                             $visual = $serviceVisuals[$slug] ?? $serviceVisuals['carsurf'];
                         @endphp
                         <a href="{{ route('nq.' . $slug) }}" class="group">
-                            <x-ui.card class="h-full overflow-hidden transition-all hover:shadow-xl hover:border-institutional">
+                            <x-ui.card class="h-full overflow-hidden transition-colors hover:border-institutional">
                                 <x-ui.card-header class="pb-4">
                                     <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-xl {{ $visual['colorBg'] }} transition-all group-hover:scale-110">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 {{ $visual['colorText'] }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -101,7 +89,7 @@
     </section>
 
     {{-- Contact CTA --}}
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="mb-4 text-2xl font-bold">{{ __('messages.nq.services.cta.title') }}</h2>

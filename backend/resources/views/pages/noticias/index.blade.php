@@ -21,23 +21,11 @@
         ];
     @endphp
 
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="gradient-ocean py-16 text-white">
-        <div class="container mx-auto px-4">
-            <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ __('messages.news.title') }}</h1>
-            <p class="text-xl opacity-90">{{ __('messages.news.subtitle') }}</p>
-        </div>
-    </section>
+    {{-- Hero --}}
+    <x-praia-norte.page-hero title="{{ __('messages.news.title') }}" subtitle="{{ __('messages.news.subtitle') }}" entity="praia-norte" />
 
     {{-- Filters --}}
-    <section class="border-b bg-muted/30 py-4">
+    <section class="border-b bg-muted/10 py-4">
         <div class="container mx-auto px-4">
             <div class="flex flex-wrap gap-2">
                 <a
@@ -62,10 +50,10 @@
     <section class="py-12">
         <div class="container mx-auto px-4">
             @if($noticias->count() > 0)
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 reveal-stagger" x-data x-intersect.once="$el.classList.add('is-visible')">
                     @foreach($noticias as $noticia)
                         <a href="{{ LaravelLocalization::localizeURL('/noticias/' . $noticia->slug) }}">
-                            <x-ui.card class="h-full cursor-pointer overflow-hidden transition-shadow hover:shadow-lg" :noPadding="true">
+                            <x-ui.card class="h-full cursor-pointer overflow-hidden transition-colors" :noPadding="true">
                                 <div class="relative h-48">
                                     @if($noticia->cover_image)
                                         <img

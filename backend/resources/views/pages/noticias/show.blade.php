@@ -29,9 +29,6 @@
 
     <article class="py-8">
         <div class="container mx-auto px-4">
-            {{-- Breadcrumbs --}}
-            <x-ui.breadcrumbs class="mb-6" />
-
             {{-- Header --}}
             <header class="mb-8">
                 <div class="flex items-center gap-2 mb-4">
@@ -57,7 +54,7 @@
 
             {{-- Cover Image --}}
             @if($noticia->cover_image)
-                <div class="relative aspect-video mb-8 rounded-lg overflow-hidden">
+                <div class="relative aspect-video mb-8 rounded-lg overflow-hidden reveal-scale" x-data x-intersect.once="$el.classList.add('is-visible')">
                     <img
                         src="{{ asset('storage/' . $noticia->cover_image) }}"
                         alt="{{ $title }}"
@@ -67,7 +64,7 @@
             @endif
 
             {{-- Content --}}
-            <div class="max-w-3xl mx-auto">
+            <div class="max-w-3xl mx-auto reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">
                 <div class="prose prose-lg max-w-none">
                     {!! $content !!}
                 </div>
@@ -96,13 +93,13 @@
 
     {{-- Related News --}}
     @if($related->count() > 0)
-        <section class="py-16 bg-muted/30">
+        <section class="py-16 bg-muted/10">
             <div class="container mx-auto px-4">
                 <h2 class="text-2xl font-bold mb-8">{{ __('messages.news.relatedNews') }}</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal-stagger" x-data x-intersect.once="$el.classList.add('is-visible')">
                     @foreach($related as $item)
                         <a href="{{ LaravelLocalization::localizeURL('/noticias/' . $item->slug) }}">
-                            <x-ui.card class="overflow-hidden h-full hover:shadow-lg transition-shadow cursor-pointer" :noPadding="true">
+                            <x-ui.card class="overflow-hidden h-full transition-colors cursor-pointer" :noPadding="true">
                                 <div class="relative h-48">
                                     @if($item->cover_image)
                                         <img

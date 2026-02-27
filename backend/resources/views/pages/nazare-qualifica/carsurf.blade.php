@@ -4,13 +4,6 @@
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
     {{-- Header --}}
     <section class="gradient-surf py-16 text-white">
         <div class="container mx-auto px-4">
@@ -42,7 +35,7 @@
                             {{ $content['description'] ?? __('messages.nq.services.carsurf.description') }}
                         </p>
                     </div>
-                    <div class="rounded-lg bg-muted/30 p-6">
+                    <div class="rounded-lg bg-muted/10 p-6">
                         <h3 class="mb-4 font-semibold">{{ __('messages.carsurf.facilities.title') }}</h3>
                         <ul class="space-y-3">
                             @foreach($content['features'] ?? __('messages.nq.services.carsurf.features') as $feature)

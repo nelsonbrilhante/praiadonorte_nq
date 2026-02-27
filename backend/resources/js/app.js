@@ -1,4 +1,6 @@
 import './bootstrap';
+import intersect from '@alpinejs/intersect';
 
-// Alpine.js is already included by Livewire
-// No need to import it separately
+document.addEventListener('alpine:init', () => {
+    Alpine.plugin(intersect);
+});

@@ -3,10 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\Pagina;
+use Database\Seeders\Traits\DownloadsImages;
 use Illuminate\Database\Seeder;
 
 class NazareQualificaSeeder extends Seeder
 {
+    use DownloadsImages;
     /**
      * Seed all Nazaré Qualifica pages with CMS-managed content.
      */
@@ -106,6 +108,8 @@ class NazareQualificaSeeder extends Seeder
                     'pt' => 'Conheça a Nazaré Qualifica, empresa municipal que gere o CARSURF, Forte de São Miguel Arcanjo e outras infraestruturas.',
                     'en' => 'Discover Nazaré Qualifica, municipal company managing CARSURF, Fort of São Miguel Arcanjo and other infrastructures.',
                 ],
+                // Portuguese coastal town
+                'hero_image_url' => 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1600&h=900&fit=crop',
             ],
 
             // ===== EQUIPA (Team/Corpos Sociais) =====
@@ -157,6 +161,8 @@ class NazareQualificaSeeder extends Seeder
                     'pt' => 'Conheça os órgãos de gestão da Nazaré Qualifica: Conselho de Gerência, Assembleia Geral e Fiscal Único.',
                     'en' => 'Meet the governance bodies of Nazaré Qualifica: Board of Directors, General Assembly and Sole Auditor.',
                 ],
+                // Business team / office professionals
+                'hero_image_url' => 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&h=900&fit=crop',
             ],
 
             // ===== SERVIÇOS (Services List) =====
@@ -242,6 +248,8 @@ class NazareQualificaSeeder extends Seeder
                     'pt' => 'Descubra os serviços da Nazaré Qualifica: CARSURF, Estacionamento do Sítio, Forte de São Miguel Arcanjo e ALE.',
                     'en' => 'Discover Nazaré Qualifica services: CARSURF, Sítio Parking, Fort of São Miguel Arcanjo and ALE.',
                 ],
+                // City management / municipal building
+                'hero_image_url' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&h=900&fit=crop',
             ],
 
             // ===== CARSURF (Service Detail) =====
@@ -295,6 +303,7 @@ class NazareQualificaSeeder extends Seeder
                     'pt' => 'O CARSURF é o Centro de Alto Rendimento de Surf da Nazaré. Instalações de treino e alojamento para atletas.',
                     'en' => 'CARSURF is the Nazaré High Performance Surf Center. Training and accommodation facilities for athletes.',
                 ],
+                'hero_image_url' => null, // Uses Carsurf entity landing page hero
             ],
 
             // ===== ESTACIONAMENTO (Service Detail) =====
@@ -354,6 +363,8 @@ class NazareQualificaSeeder extends Seeder
                     'pt' => 'Estacionamento junto ao Forte de São Miguel Arcanjo com acesso ao miradouro das ondas gigantes.',
                     'en' => 'Parking next to the Fort of São Miguel Arcanjo with access to the giant waves viewpoint.',
                 ],
+                // Car parking / urban parking
+                'hero_image_url' => 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1600&h=900&fit=crop',
             ],
 
             // ===== FORTE (Service Detail) =====
@@ -415,6 +426,8 @@ class NazareQualificaSeeder extends Seeder
                     'pt' => 'Visite o Forte de São Miguel Arcanjo, o miradouro histórico das ondas gigantes da Nazaré.',
                     'en' => 'Visit the Fort of São Miguel Arcanjo, the historic viewpoint for Nazaré giant waves.',
                 ],
+                // Portuguese fort / lighthouse cliff
+                'hero_image_url' => 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&h=900&fit=crop',
             ],
 
             // ===== ALE (Service Detail) =====
@@ -474,10 +487,24 @@ class NazareQualificaSeeder extends Seeder
                     'pt' => 'ALE de Valado dos Frades - Área industrial com lotes disponíveis para instalação de empresas.',
                     'en' => 'Valado dos Frades ALE - Industrial area with available lots for company installation.',
                 ],
+                // Industrial area / logistics zone
+                'hero_image_url' => 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&h=900&fit=crop',
             ],
         ];
 
         foreach ($paginas as $pagina) {
+            // Extract and download hero image
+            $heroImageUrl = $pagina['hero_image_url'] ?? null;
+            unset($pagina['hero_image_url']);
+
+            $heroImage = null;
+            if ($heroImageUrl) {
+                $filename = "pagina-{$pagina['entity']}-{$pagina['slug']}.jpg";
+                $heroImage = $this->downloadImage($heroImageUrl, 'paginas', $filename);
+            }
+
+            $pagina['hero_image'] = $heroImage;
+
             Pagina::updateOrCreate(
                 ['entity' => $pagina['entity'], 'slug' => $pagina['slug']],
                 $pagina

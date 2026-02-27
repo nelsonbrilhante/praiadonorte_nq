@@ -9,7 +9,7 @@
 <div>
     <a
         href="{{ $targetUrl }}"
-        class="language-toggle inline-flex items-center justify-center rounded-md text-xs font-semibold h-8 w-8 border transition-all duration-200"
+        class="language-toggle inline-flex items-center justify-center rounded-full text-xs font-semibold h-9 w-9 transition-all duration-200"
         aria-label="{{ __('messages.accessibility.languageSelector') }}"
         title="{{ $currentLocale === 'pt' ? 'Switch to English' : 'Mudar para Português' }}"
     >
@@ -19,8 +19,6 @@
     <style>
         /* Default state (solid header) */
         .language-toggle {
-            border-color: hsl(var(--border));
-            background-color: transparent;
             color: hsl(var(--foreground));
         }
         .language-toggle:hover {
@@ -30,10 +28,20 @@
 
         /* Transparent header state (homepage, not scrolled) */
         header[class*="bg-transparent"] .language-toggle {
-            border-color: rgba(255, 255, 255, 0.3);
             color: white;
         }
         header[class*="bg-transparent"] .language-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Full-screen overlay menu (dark background) */
+        .bg-\[#0b1022\] .language-toggle {
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+            border-width: 1px;
+        }
+        .bg-\[#0b1022\] .language-toggle:hover {
             background-color: rgba(255, 255, 255, 0.1);
             color: white;
         }

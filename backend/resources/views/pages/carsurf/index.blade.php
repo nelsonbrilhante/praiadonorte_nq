@@ -8,34 +8,22 @@
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
+    {{-- Hero --}}
+    <x-praia-norte.page-hero
+        title="{{ __('messages.carsurf.hero.title') }}"
+        subtitle="{{ __('messages.carsurf.hero.subtitle') }}"
+        entity="carsurf"
+        image="{{ $pagina?->hero_image ? asset('storage/' . $pagina->hero_image) : '' }}"
+    >
+        <div class="flex flex-wrap gap-4">
+            <x-ui.button href="{{ route('carsurf.programas') }}" class="bg-white text-performance hover:bg-white/90">
+                {{ __('messages.carsurf.hero.programs') }}
+            </x-ui.button>
+            <x-ui.button variant="outline" href="{{ route('carsurf.sobre') }}" class="border-white bg-transparent text-white hover:bg-white/10">
+                {{ __('messages.carsurf.hero.about') }}
+            </x-ui.button>
         </div>
-    </div>
-
-    {{-- Hero Section --}}
-    <section class="gradient-performance py-24 text-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-3xl">
-                <h1 class="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl">
-                    {{ __('messages.carsurf.hero.title') }}
-                </h1>
-                <p class="mb-8 text-xl opacity-90">
-                    {{ __('messages.carsurf.hero.subtitle') }}
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <x-ui.button href="{{ route('carsurf.programas') }}" class="bg-white text-performance hover:bg-white/90">
-                        {{ __('messages.carsurf.hero.programs') }}
-                    </x-ui.button>
-                    <x-ui.button variant="outline" href="{{ route('carsurf.sobre') }}" class="border-white bg-transparent text-white hover:bg-white/10">
-                        {{ __('messages.carsurf.hero.about') }}
-                    </x-ui.button>
-                </div>
-            </div>
-        </div>
-    </section>
+    </x-praia-norte.page-hero>
 
     {{-- About Section --}}
     <section class="py-16">
@@ -73,7 +61,7 @@
     </section>
 
     {{-- Facilities Section --}}
-    <section class="bg-muted/30 py-16">
+    <section class="bg-muted/10 py-16">
         <div class="container mx-auto px-4">
             <h2 class="mb-8 text-center text-3xl font-bold">{{ __('messages.carsurf.facilities.title') }}</h2>
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

@@ -19,14 +19,6 @@
 @endphp
 
 <x-layouts.app>
-
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
     {{-- Header --}}
     <section class="gradient-ocean py-16 text-white">
         <div class="container mx-auto px-4">
@@ -51,7 +43,7 @@
                         <img
                             src="{{ asset('storage/' . $surfer->photo) }}"
                             alt="{{ $surfer->name }}"
-                            class="w-full rounded-lg object-cover aspect-[3/4]"
+                            class="w-full rounded-lg object-cover aspect-[3/4] reveal-scale" x-data x-intersect.once="$el.classList.add('is-visible')"
                         />
                     @else
                         <div class="w-full aspect-[3/4] rounded-lg bg-gradient-to-br from-ocean/20 to-ocean/5"></div>
@@ -87,7 +79,7 @@
                 <div class="lg:col-span-2 space-y-8">
                     {{-- Bio --}}
                     @if($surfer->bio)
-                        <div>
+                        <div class="reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">
                             <h2 class="text-2xl font-bold mb-4">{{ __('messages.surfers.about') }}</h2>
                             <div class="prose max-w-none">
                                 {!! $getLocalized($surfer->bio, $locale) !!}
@@ -97,7 +89,7 @@
 
                     {{-- Achievements --}}
                     @if($surfer->achievements && is_array($surfer->achievements) && count($surfer->achievements) > 0)
-                        <div>
+                        <div class="reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">
                             <h2 class="text-2xl font-bold mb-4">{{ __('messages.surfers.achievements') }}</h2>
                             <div class="flex flex-wrap gap-2">
                                 @foreach($surfer->achievements as $achievement)
@@ -113,7 +105,7 @@
                     @if($surfer->surfboards && $surfer->surfboards->count() > 0)
                         <div>
                             <h2 class="text-2xl font-bold mb-4">{{ __('messages.surfers.surfboards') }}</h2>
-                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 reveal-stagger" x-data x-intersect.once="$el.classList.add('is-visible')">
                                 @foreach($surfer->surfboards as $board)
                                     <x-ui.card>
                                         @if($board->image)
@@ -141,13 +133,13 @@
 
     {{-- Related Surfers --}}
     @if($related->count() > 0)
-        <section class="py-12 bg-muted/30">
+        <section class="py-12 bg-muted/10">
             <div class="container mx-auto px-4">
                 <h2 class="text-2xl font-bold mb-8">{{ __('messages.surfers.otherSurfers') }}</h2>
-                <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                <div class="grid grid-cols-2 gap-4 md:grid-cols-4 reveal-stagger" x-data x-intersect.once="$el.classList.add('is-visible')">
                     @foreach($related as $relatedSurfer)
                         <a href="{{ LaravelLocalization::localizeURL('/surfer-wall/' . $relatedSurfer->slug) }}">
-                            <x-ui.card class="group h-full cursor-pointer overflow-hidden transition-all hover:shadow-lg" :noPadding="true">
+                            <x-ui.card class="group h-full cursor-pointer overflow-hidden transition-colors" :noPadding="true">
                                 <div class="relative aspect-square">
                                     @if($relatedSurfer->photo)
                                         <img

@@ -23,6 +23,7 @@ class Pagina extends Model
         'slider_interval',
         'slider_autoplay',
         'entity',
+        'hero_image',
         'seo_title',
         'seo_description',
         'published',

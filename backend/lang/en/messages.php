@@ -72,6 +72,17 @@ return [
         'backToList' => 'Back to events',
         'startDate' => 'Start',
         'endDate' => 'End',
+        'relatedEvents' => 'Related Events',
+        'schedule' => 'Schedule',
+        'partners' => 'Partners',
+        'gallery' => 'Gallery',
+        'replay' => 'Replay',
+        'ticketsAvailable' => 'Tickets available',
+        'registrationsOpen' => 'Registrations open',
+        'upcomingEvent' => 'Upcoming event',
+        'pastEvent' => 'Past event',
+        'category' => 'Category',
+        'featuredEvents' => 'Featured Events',
     ],
     'surfers' => [
         'title' => 'Surfer Wall',
@@ -186,8 +197,24 @@ return [
         ],
         'about' => [
             'title' => 'About Carsurf',
+            'pageTitle' => 'About Carsurf',
+            'pageSubtitle' => 'High Performance Center for Surfers',
             'text' => 'Carsurf is a high-performance center dedicated to developing surf athletes, located in Nazaré. With state-of-the-art facilities and an excellent technical team, we offer ideal conditions for athletes looking to elevate their performance.',
             'highlight' => 'The only high-performance surf center in Portugal with direct access to the biggest waves in the world.',
+            'mission' => [
+                'title' => 'Our Mission',
+                'text' => 'Carsurf is a high-performance center dedicated to developing surf athletes, located in Nazaré. With state-of-the-art facilities and an excellent technical team, we offer ideal conditions for athletes looking to elevate their performance.',
+            ],
+            'history' => [
+                'title' => 'Our History',
+                'text' => 'Founded as part of the municipal strategy for sports development in Nazaré, Carsurf is now a national reference in high-performance surf training. Located next to Praia do Norte, it offers direct access to the biggest waves in the world.',
+            ],
+            'values' => [
+                'title' => 'Our Values',
+                'item1' => 'Sporting excellence and continuous development',
+                'item2' => 'Athlete safety and well-being',
+                'item3' => 'Sustainable development of surfing in Nazaré',
+            ],
         ],
         'facilities' => [
             'title' => 'Facilities',
@@ -252,6 +279,10 @@ return [
         'team' => [
             'title' => 'Team',
             'subtitle' => 'Meet the people behind Carsurf',
+            'member1' => ['name' => 'Pedro Pisco', 'role' => 'General Manager'],
+            'member2' => ['name' => 'Tiago Barbosa', 'role' => 'Technical Director'],
+            'member3' => ['name' => 'Pedro Costa', 'role' => 'Physical Trainer'],
+            'member4' => ['name' => 'Maria Oliveira', 'role' => 'Physiotherapist'],
         ],
         'contact' => [
             'title' => 'Contact',

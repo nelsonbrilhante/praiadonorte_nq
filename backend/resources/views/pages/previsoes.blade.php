@@ -13,46 +13,32 @@
 @endphp
 
 <x-layouts.app>
-
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
     {{-- Hero --}}
-    <section class="gradient-ocean py-16 text-white">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                    <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                    <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                </svg>
-                <div>
-                    <h1 class="text-4xl font-bold md:text-5xl">{{ __('messages.forecast.title') }}</h1>
-                    <p class="mt-2 text-xl opacity-90">{{ __('messages.forecast.subtitle') }}</p>
-                </div>
-            </div>
+    <x-praia-norte.page-hero title="{{ __('messages.forecast.title') }}" subtitle="{{ __('messages.forecast.subtitle') }}" entity="praia-norte">
+        <div class="flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+                <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+                <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+            </svg>
             @if($lastUpdated)
-                <p class="mt-4 text-sm opacity-75">
+                <p class="text-sm opacity-75">
                     {{ $locale === 'pt' ? 'Atualizado:' : 'Updated:' }}
                     {{ \Carbon\Carbon::parse($lastUpdated)->locale($locale)->diffForHumans() }}
                 </p>
             @endif
         </div>
-    </section>
+    </x-praia-norte.page-hero>
 
     {{-- Current Conditions --}}
     <section class="py-12">
         <div class="container mx-auto px-4">
-            <h2 class="mb-6 text-2xl font-bold">{{ __('messages.forecast.marine.title') }}</h2>
+            <h2 class="mb-6 text-2xl font-bold reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">{{ __('messages.forecast.marine.title') }}</h2>
 
             @if($current)
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {{-- Wave Height --}}
-                    <x-ui.card class="sm:col-span-2 border-ocean/30 bg-gradient-to-br from-ocean/5 to-ocean/10">
+                    <x-ui.card class="sm:col-span-2 border-ocean/30">
                         <x-ui.card-header>
                             <x-ui.card-title class="text-base font-semibold">
                                 {{ __('messages.forecast.marine.waveHeight') }}
@@ -67,7 +53,7 @@
                     </x-ui.card>
 
                     {{-- Swell Height --}}
-                    <x-ui.card class="sm:col-span-2 border-ocean/30 bg-gradient-to-br from-ocean/5 to-ocean/10">
+                    <x-ui.card class="sm:col-span-2 border-ocean/30">
                         <x-ui.card-header>
                             <x-ui.card-title class="text-base font-semibold">
                                 {{ __('messages.forecast.marine.swellHeight') }}
@@ -200,9 +186,9 @@
 
     {{-- 7-Day Forecast --}}
     @if(count($daily) > 0)
-    <section class="border-t bg-muted/30 py-12">
+    <section class="border-t bg-muted/10 py-12">
         <div class="container mx-auto px-4">
-            <h2 class="mb-6 text-2xl font-bold">
+            <h2 class="mb-6 text-2xl font-bold reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">
                 {{ $locale === 'pt' ? 'Previsão 7 Dias' : '7-Day Forecast' }}
             </h2>
             <x-ui.card>
@@ -265,7 +251,7 @@
     {{-- MONICAN Section --}}
     <section class="py-12">
         <div class="container mx-auto px-4">
-            <h2 class="mb-6 text-2xl font-bold">{{ __('messages.forecast.monican.title') }}</h2>
+            <h2 class="mb-6 text-2xl font-bold reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">{{ __('messages.forecast.monican.title') }}</h2>
             <x-ui.card>
                 <x-ui.card-header>
                     <x-ui.card-title>{{ __('messages.forecast.monican.subtitle') }}</x-ui.card-title>
@@ -308,9 +294,9 @@
     </section>
 
     {{-- Webcams Section --}}
-    <section class="border-t bg-muted/30 py-12">
+    <section class="border-t bg-muted/10 py-12">
         <div class="container mx-auto px-4">
-            <h2 class="mb-6 text-2xl font-bold">{{ __('messages.forecast.webcams.title') }}</h2>
+            <h2 class="mb-6 text-2xl font-bold reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">{{ __('messages.forecast.webcams.title') }}</h2>
             <div class="grid gap-6 md:grid-cols-2">
                 {{-- Praia do Norte Webcam --}}
                 <x-ui.card class="overflow-hidden">

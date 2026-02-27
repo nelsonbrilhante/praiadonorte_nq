@@ -50,28 +50,17 @@
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
+    {{-- Hero --}}
+    <x-praia-norte.page-hero title="{{ __('messages.nq.contraordenacoes.title') }}" subtitle="{{ __('messages.nq.contraordenacoes.subtitle') }}" entity="nazare-qualifica">
+        <div class="flex flex-wrap gap-4">
+            <x-ui.button href="{{ route('nq.sobre') }}" class="bg-white text-institutional hover:bg-white/90">
+                {{ __('messages.pages.about') }}
+            </x-ui.button>
+            <x-ui.button href="{{ route('nq.servicos') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
+                {{ __('messages.nq.services.title') }}
+            </x-ui.button>
         </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="gradient-institutional py-16 text-white">
-        <div class="container mx-auto px-4">
-            <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ __('messages.nq.contraordenacoes.title') }}</h1>
-            <p class="mb-8 text-xl opacity-90">{{ __('messages.nq.contraordenacoes.subtitle') }}</p>
-            <div class="flex flex-wrap gap-4">
-                <x-ui.button href="{{ route('nq.sobre') }}" class="bg-white text-institutional hover:bg-white/90">
-                    {{ __('messages.pages.about') }}
-                </x-ui.button>
-                <x-ui.button href="{{ route('nq.servicos') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
-                    {{ __('messages.nq.services.title') }}
-                </x-ui.button>
-            </div>
-        </div>
-    </section>
+    </x-praia-norte.page-hero>
 
     {{-- Introduction --}}
     <section class="py-12">
@@ -86,12 +75,12 @@
     </section>
 
     {{-- Documents Grid --}}
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <h2 class="mb-8 text-center text-3xl font-bold">{{ __('messages.nq.contraordenacoes.documentsTitle') }}</h2>
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach($documents as $doc)
-                    <x-ui.card class="group transition-all hover:shadow-lg hover:border-institutional">
+                    <x-ui.card class="group transition-colors hover:border-institutional">
                         <x-ui.card-content class="pt-6">
                             <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-institutional/10 transition-all group-hover:bg-institutional/20">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-institutional" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

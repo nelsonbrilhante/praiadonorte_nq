@@ -29,6 +29,14 @@
   --color-ocean-dark: #004d99;
   --color-ocean-light: #3399ff;
 
+  /* Novos tokens oceânicos */
+  --color-ocean-abyss: #001d3d;
+  --color-ocean-deep: #003566;
+  --color-ocean-mid: #0077b6;
+  --color-ocean-surface: #00b4d8;
+  --color-sand: #f4e4c1;
+  --color-dark-navy: #0b1022;
+
   --color-institutional: #ffa500;
   --color-institutional-50: #fff8e6;
   --color-institutional-100: #ffeab3;
@@ -162,6 +170,11 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Alpine.js cloak — hide elements until Alpine initializes */
+[x-cloak] {
+  display: none !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -178,6 +191,123 @@
     font-weight: 800;
   }
 }
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+@keyframes counter-in {
+  from { opacity: 0; transform: translateY(1rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   SCROLL REVEAL CLASSES
+   ============================================ */
+
+.reveal-up {
+  opacity: 0;
+  transform: translateY(0.75rem);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.97);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.is-visible {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(0.75rem);
+  transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+  transition-delay: calc(var(--stagger-index, 0) * 0.07s);
+}
+
+.reveal-stagger.is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up,
+  .reveal-fade,
+  .reveal-scale,
+  .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .is-visible {
+    transform: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ============================================
+   DARK BACKGROUNDS (flat — no gradients)
+   ============================================ */
+
+.gradient-ocean-deep {
+  background-color: #0b1022;
+}
+
+.gradient-ocean-mid {
+  background-color: #003566;
+}
+
+.gradient-abyss {
+  background-color: #0b1022;
+}
+
+/* ============================================
+   HOVER GLOW EFFECTS
+   ============================================ */
+
+.hover-glow-ocean {
+  transition: box-shadow 0.3s ease;
+}
+.hover-glow-ocean:hover {
+  box-shadow: 0 8px 30px rgba(0, 102, 204, 0.25);
+}
+
+.hover-glow-performance {
+  transition: box-shadow 0.3s ease;
+}
+.hover-glow-performance:hover {
+  box-shadow: 0 8px 30px rgba(0, 204, 102, 0.25);
+}
+
+.hover-glow-institutional {
+  transition: box-shadow 0.3s ease;
+}
+.hover-glow-institutional:hover {
+  box-shadow: 0 8px 30px rgba(255, 165, 0, 0.25);
+}
+
+/* ============================================
+   ENTITY-SPECIFIC STYLES (existing)
+   ============================================ */
 
 /* Entity-specific badge colors */
 .badge-praia-norte {
@@ -249,4 +379,37 @@
 }
 .border-t-institutional {
   border-top-color: #ffa500;
+}
+
+/* ============================================
+   DROPDOWN ITEM SHUTTER REVEAL
+   ============================================ */
+
+.dropdown-stagger > a {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+}
+.dropdown-stagger.is-open > a {
+  opacity: 1;
+  transform: translateY(0);
+}
+.dropdown-stagger.is-open > a:nth-child(1) { transition-delay: 0.02s; }
+.dropdown-stagger.is-open > a:nth-child(2) { transition-delay: 0.05s; }
+.dropdown-stagger.is-open > a:nth-child(3) { transition-delay: 0.08s; }
+.dropdown-stagger.is-open > a:nth-child(4) { transition-delay: 0.11s; }
+.dropdown-stagger.is-open > a:nth-child(5) { transition-delay: 0.14s; }
+.dropdown-stagger.is-open > a:nth-child(6) { transition-delay: 0.17s; }
+.dropdown-stagger.is-open > a:nth-child(7) { transition-delay: 0.20s; }
+
+/* ============================================
+   SCROLLBAR HIDE (for horizontal carousels)
+   ============================================ */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

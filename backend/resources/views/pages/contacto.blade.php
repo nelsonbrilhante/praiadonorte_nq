@@ -3,27 +3,15 @@
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="gradient-ocean py-16 text-white">
-        <div class="container mx-auto px-4">
-            <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ __('messages.contact.title') }}</h1>
-            <p class="text-xl opacity-90">{{ __('messages.contact.subtitle') }}</p>
-        </div>
-    </section>
+    {{-- Hero --}}
+    <x-praia-norte.page-hero title="{{ __('messages.contact.title') }}" subtitle="{{ __('messages.contact.subtitle') }}" entity="praia-norte" />
 
     {{-- Contact Content --}}
     <section class="py-12">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
                 {{-- Contact Form --}}
-                <div>
+                <div class="reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">
                     <h2 class="mb-6 text-2xl font-bold">{{ __('messages.contact.form.title') }}</h2>
                     <form action="#" method="POST" class="space-y-6">
                         @csrf
@@ -60,7 +48,7 @@
                 </div>
 
                 {{-- Contact Info --}}
-                <div>
+                <div class="reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">
                     <h2 class="mb-6 text-2xl font-bold">{{ __('messages.contact.info.title') }}</h2>
                     <div class="space-y-8">
                         {{-- Praia do Norte --}}

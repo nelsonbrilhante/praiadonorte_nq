@@ -8,6 +8,16 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PID_DIR="$PROJECT_DIR/.pids"
 LOG_DIR="$PROJECT_DIR/.logs"
 
+# Flags
+SEED=false
+FORCE=false
+for arg in "$@"; do
+    case $arg in
+        --seed) SEED=true ;;
+        --force) FORCE=true ;;
+    esac
+done
+
 # Cores para output
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -44,6 +54,21 @@ else
     npm run dev > "$LOG_DIR/vite.log" 2>&1 &
     echo $! > "$PID_DIR/vite.pid"
     echo -e "  Vite iniciado (PID: $!)"
+fi
+
+# Executar seeders se --seed flag passada
+if [ "$SEED" = true ]; then
+    echo ""
+    echo -e "${GREEN}Executando seeders...${NC}"
+    cd "$PROJECT_DIR/backend"
+    if [ "$FORCE" = true ]; then
+        echo -e "${GREEN}Modo --force: migrate:fresh + seed${NC}"
+        php artisan migrate:fresh --seed --force 2>&1
+    else
+        php artisan migrate --force 2>&1
+        php artisan db:seed --force 2>&1
+    fi
+    echo -e "${GREEN}Seeders concluídos.${NC}"
 fi
 
 # Aguardar servidores iniciarem

@@ -4,29 +4,8 @@
 @endphp
 
 <x-layouts.app>
-    {{-- Breadcrumbs --}}
-    <div class="border-b bg-muted/30">
-        <div class="container mx-auto px-4">
-            <x-ui.breadcrumbs />
-        </div>
-    </div>
-
-    {{-- Header --}}
-    <section class="bg-gradient-to-r from-amber-600 to-amber-700 py-16 text-white">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center gap-4 mb-4">
-                <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-white/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6h6v6"/>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-4xl font-bold md:text-5xl">{{ $page->title[$locale] ?? $page->title['pt'] }}</h1>
-                    <p class="text-xl opacity-90">{{ __('messages.nq.services.forte.shortDescription') }}</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{-- Hero --}}
+    <x-praia-norte.page-hero title="{{ $page->title[$locale] ?? $page->title['pt'] }}" subtitle="{{ __('messages.nq.services.forte.shortDescription') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : '' }}" />
 
     {{-- Description --}}
     <section class="py-12">
@@ -59,13 +38,13 @@
 
     {{-- Historical Significance --}}
     @if(!empty($content['stats']))
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <div class="mx-auto max-w-3xl text-center">
                 <h2 class="mb-6 text-2xl font-bold">{{ __('messages.about.history.title') }}</h2>
                 <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
                     @foreach($content['stats'] as $stat)
-                        <div class="rounded-lg bg-white p-4 shadow-sm">
+                        <div class="rounded-lg bg-white p-4 border">
                             <div class="text-3xl font-bold text-amber-600">{{ $stat['value'] ?? '' }}</div>
                             <div class="text-sm text-muted-foreground">{{ $stat['label'] ?? '' }}</div>
                         </div>
@@ -75,24 +54,24 @@
         </div>
     </section>
     @else
-    <section class="bg-muted/30 py-12">
+    <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
             <div class="mx-auto max-w-3xl text-center">
                 <h2 class="mb-6 text-2xl font-bold">{{ __('messages.about.history.title') }}</h2>
                 <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
-                    <div class="rounded-lg bg-white p-4 shadow-sm">
+                    <div class="rounded-lg bg-white p-4 border">
                         <div class="text-3xl font-bold text-amber-600">1577</div>
                         <div class="text-sm text-muted-foreground">{{ __('messages.nq.services.forte.features.year') }}</div>
                     </div>
-                    <div class="rounded-lg bg-white p-4 shadow-sm">
+                    <div class="rounded-lg bg-white p-4 border">
                         <div class="text-3xl font-bold text-amber-600">650k+</div>
                         <div class="text-sm text-muted-foreground">{{ __('messages.nq.services.forte.features.visitors') }}</div>
                     </div>
-                    <div class="rounded-lg bg-white p-4 shadow-sm">
+                    <div class="rounded-lg bg-white p-4 border">
                         <div class="text-3xl font-bold text-amber-600">XVI</div>
                         <div class="text-sm text-muted-foreground">{{ __('messages.nq.services.forte.features.history') }}</div>
                     </div>
-                    <div class="rounded-lg bg-white p-4 shadow-sm">
+                    <div class="rounded-lg bg-white p-4 border">
                         <div class="text-3xl font-bold text-amber-600">#1</div>
                         <div class="text-sm text-muted-foreground">{{ __('messages.nq.services.forte.features.viewpoint') }}</div>
                     </div>

@@ -3,10 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\Pagina;
+use Database\Seeders\Traits\DownloadsImages;
 use Illuminate\Database\Seeder;
 
 class PaginaSeeder extends Seeder
 {
+    use DownloadsImages;
+
     public function run(): void
     {
         $paginas = [
@@ -41,6 +44,7 @@ class PaginaSeeder extends Seeder
                 'published' => true,
                 'seo_title' => ['pt' => 'Praia do Norte - Ondas Gigantes da Nazaré', 'en' => 'Praia do Norte - Nazaré Giant Waves'],
                 'seo_description' => ['pt' => 'Bem-vindo à Praia do Norte, o lar das maiores ondas do mundo na Nazaré, Portugal.', 'en' => 'Welcome to Praia do Norte, home of the world\'s largest waves in Nazaré, Portugal.'],
+                'hero_image_url' => null, // Homepage uses hero-slider, not page-hero
             ],
             // Praia do Norte Sobre
             [
@@ -57,6 +61,8 @@ class PaginaSeeder extends Seeder
                 'published' => true,
                 'seo_title' => ['pt' => 'Sobre a Praia do Norte - Ondas Gigantes Nazaré', 'en' => 'About Praia do Norte - Nazaré Giant Waves'],
                 'seo_description' => ['pt' => 'Conheça a história da Praia do Norte e do Canhão da Nazaré, berço das maiores ondas do mundo.', 'en' => 'Discover the history of Praia do Norte and the Nazaré Canyon, home of the world\'s largest waves.'],
+                // Aerial view of giant wave at Nazaré
+                'hero_image_url' => 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1600&h=900&fit=crop',
             ],
             // Carsurf Landing Page (structured content)
             [
@@ -251,6 +257,8 @@ class PaginaSeeder extends Seeder
                 'published' => true,
                 'seo_title' => ['pt' => 'Carsurf - Centro de Alto Rendimento de Surf da Nazaré', 'en' => 'Carsurf - Nazaré High Performance Surf Center'],
                 'seo_description' => ['pt' => 'O Carsurf é o Centro de Alto Rendimento de Surf da Nazaré. Instalações de treino, alojamento e recuperação para atletas de surf.', 'en' => 'Carsurf is the Nazaré High Performance Surf Center. Training facilities, accommodation, and recovery for surf athletes.'],
+                // Surf training / athlete training in water
+                'hero_image_url' => 'https://images.unsplash.com/photo-1455264745730-cb3b76250ae8?w=1600&h=900&fit=crop',
             ],
             // Carsurf Sobre (legacy page)
             [
@@ -267,6 +275,8 @@ class PaginaSeeder extends Seeder
                 'published' => true,
                 'seo_title' => ['pt' => 'Carsurf - Centro de Alto Rendimento Surf', 'en' => 'Carsurf - High Performance Surf Center'],
                 'seo_description' => ['pt' => 'Conheça o Carsurf, o primeiro Centro de Alto Rendimento de Surf em Portugal.', 'en' => 'Discover Carsurf, the first High Performance Surf Center in Portugal.'],
+                // Surf coaching / team on beach
+                'hero_image_url' => 'https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=1600&h=900&fit=crop',
             ],
             [
                 'title' => [
@@ -282,6 +292,8 @@ class PaginaSeeder extends Seeder
                 'published' => true,
                 'seo_title' => ['pt' => 'Programas de Treino Carsurf', 'en' => 'Carsurf Training Programs'],
                 'seo_description' => ['pt' => 'Descubra os programas de treino do Carsurf para todos os níveis.', 'en' => 'Discover Carsurf training programs for all levels.'],
+                // Kids/beginner surfing lesson
+                'hero_image_url' => 'https://images.unsplash.com/photo-1530870110042-98b2cb110834?w=1600&h=900&fit=crop',
             ],
             // Nazaré Qualifica
             [
@@ -298,6 +310,8 @@ class PaginaSeeder extends Seeder
                 'published' => true,
                 'seo_title' => ['pt' => 'Nazaré Qualifica - Empresa Municipal', 'en' => 'Nazaré Qualifica - Municipal Company'],
                 'seo_description' => ['pt' => 'Conheça a Nazaré Qualifica, empresa municipal de gestão de infraestruturas.', 'en' => 'Discover Nazaré Qualifica, municipal infrastructure management company.'],
+                // Portuguese coastal town / municipal infrastructure
+                'hero_image_url' => 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1600&h=900&fit=crop',
             ],
             [
                 'title' => [
@@ -313,10 +327,136 @@ class PaginaSeeder extends Seeder
                 'published' => true,
                 'seo_title' => ['pt' => 'Serviços Nazaré Qualifica', 'en' => 'Nazaré Qualifica Services'],
                 'seo_description' => ['pt' => 'Descubra os serviços disponibilizados pela Nazaré Qualifica.', 'en' => 'Discover the services provided by Nazaré Qualifica.'],
+                // City management / municipal services
+                'hero_image_url' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&h=900&fit=crop',
+            ],
+            // Nazaré Qualifica Equipa
+            [
+                'title' => [
+                    'pt' => 'Corpos Sociais',
+                    'en' => 'Corporate Bodies',
+                ],
+                'slug' => 'equipa',
+                'content' => [
+                    'pt' => [
+                        'conselho' => [
+                            ['name' => 'Álvaro Festas', 'role' => 'Presidente'],
+                            ['name' => 'Marco Carreira', 'role' => '1º Vogal'],
+                            ['name' => 'Fátima Lourenço', 'role' => '2º Vogal'],
+                        ],
+                        'assembleia' => ['name' => 'Joaquim Paulo', 'role' => 'Presidente'],
+                        'fiscal' => ['company' => 'Mazars', 'representative' => 'Henrique Oliveira'],
+                    ],
+                    'en' => [
+                        'conselho' => [
+                            ['name' => 'Álvaro Festas', 'role' => 'President'],
+                            ['name' => 'Marco Carreira', 'role' => '1st Member'],
+                            ['name' => 'Fátima Lourenço', 'role' => '2nd Member'],
+                        ],
+                        'assembleia' => ['name' => 'Joaquim Paulo', 'role' => 'President'],
+                        'fiscal' => ['company' => 'Mazars', 'representative' => 'Henrique Oliveira'],
+                    ],
+                ],
+                'entity' => 'nazare-qualifica',
+                'published' => true,
+                'seo_title' => ['pt' => 'Corpos Sociais - Nazaré Qualifica', 'en' => 'Corporate Bodies - Nazaré Qualifica'],
+                'seo_description' => ['pt' => 'Conheça os órgãos de gestão da Nazaré Qualifica.', 'en' => 'Meet the management bodies of Nazaré Qualifica.'],
+                // Business team / office professionals
+                'hero_image_url' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&h=900&fit=crop',
+            ],
+            // Nazaré Qualifica Forte
+            [
+                'title' => [
+                    'pt' => 'Forte de S. Miguel Arcanjo',
+                    'en' => 'Fort of São Miguel Arcanjo',
+                ],
+                'slug' => 'forte',
+                'content' => [
+                    'pt' => [
+                        'description' => 'O Forte de São Miguel Arcanjo é um monumento histórico do século XVI que se tornou num dos pontos de observação mais emblemáticos do mundo para as ondas gigantes. Com mais de 650.000 visitantes desde a sua abertura, é hoje um dos principais atrativos turísticos da Nazaré.',
+                        'features' => ['Construído em 1577', '+650.000 visitantes', 'Miradouro privilegiado', 'Monumento histórico'],
+                        'contact' => ['phone' => '+351 262 550 010', 'email' => 'geral@nazarequalifica.pt'],
+                    ],
+                    'en' => [
+                        'description' => 'The Fort of São Miguel Arcanjo is a 16th-century historic monument that has become one of the most iconic viewpoints in the world for giant waves. With over 650,000 visitors since its opening, it is now one of Nazaré\'s main tourist attractions.',
+                        'features' => ['Built in 1577', '+650,000 visitors', 'Privileged viewpoint', 'Historic monument'],
+                        'contact' => ['phone' => '+351 262 550 010', 'email' => 'geral@nazarequalifica.pt'],
+                    ],
+                ],
+                'entity' => 'nazare-qualifica',
+                'published' => true,
+                'seo_title' => ['pt' => 'Forte de S. Miguel Arcanjo - Nazaré', 'en' => 'Fort of São Miguel Arcanjo - Nazaré'],
+                'seo_description' => ['pt' => 'Visite o Forte de S. Miguel Arcanjo, miradouro icónico para as ondas gigantes da Nazaré.', 'en' => 'Visit the Fort of São Miguel Arcanjo, iconic viewpoint for Nazaré\'s giant waves.'],
+                // Portuguese fort / lighthouse on cliff
+                'hero_image_url' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&h=900&fit=crop',
+            ],
+            // Nazaré Qualifica ALE
+            [
+                'title' => [
+                    'pt' => 'ALE - Área de Localização Empresarial',
+                    'en' => 'ALE - Business Location Area',
+                ],
+                'slug' => 'ale',
+                'content' => [
+                    'pt' => [
+                        'description' => 'A Área de Localização Empresarial (ALE) de Valado dos Frades é um parque empresarial de 30 hectares concebido para acolher empresas industriais e de serviços. Com 34 lotes disponíveis e infraestruturas modernas, representa uma oportunidade estratégica para investimento no concelho.',
+                        'features' => ['30 hectares', '34 lotes', 'Valado dos Frades', 'Infraestruturas modernas'],
+                        'contact' => ['phone' => '+351 262 550 010', 'email' => 'geral@nazarequalifica.pt'],
+                    ],
+                    'en' => [
+                        'description' => 'The Business Location Area (ALE) in Valado dos Frades is a 30-hectare business park designed to accommodate industrial and service companies. With 34 available plots and modern infrastructure, it represents a strategic investment opportunity in the municipality.',
+                        'features' => ['30 hectares', '34 plots', 'Valado dos Frades', 'Modern infrastructure'],
+                        'contact' => ['phone' => '+351 262 550 010', 'email' => 'geral@nazarequalifica.pt'],
+                    ],
+                ],
+                'entity' => 'nazare-qualifica',
+                'published' => true,
+                'seo_title' => ['pt' => 'ALE - Área de Localização Empresarial Nazaré', 'en' => 'ALE - Business Location Area Nazaré'],
+                'seo_description' => ['pt' => 'Conheça a ALE de Valado dos Frades, parque empresarial com 34 lotes disponíveis.', 'en' => 'Discover the ALE in Valado dos Frades, a business park with 34 available plots.'],
+                // Industrial / logistics area aerial view
+                'hero_image_url' => 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&h=900&fit=crop',
+            ],
+            // Nazaré Qualifica Estacionamento
+            [
+                'title' => [
+                    'pt' => 'Estacionamento',
+                    'en' => 'Parking',
+                ],
+                'slug' => 'estacionamento',
+                'content' => [
+                    'pt' => [
+                        'description' => 'O parque de estacionamento subterrâneo do Largo Cândido dos Reis é uma infraestrutura moderna no coração da Nazaré. Com 3 pisos de estacionamento, oferece uma solução conveniente e segura para residentes e visitantes, disponível 24 horas por dia.',
+                        'features' => ['3 pisos de estacionamento', 'Aberto 24 horas', 'Centro da Nazaré', 'Vigilância e segurança'],
+                        'contact' => ['phone' => '+351 262 550 010', 'email' => 'geral@nazarequalifica.pt'],
+                    ],
+                    'en' => [
+                        'description' => 'The underground parking garage at Largo Cândido dos Reis is a modern infrastructure in the heart of Nazaré. With 3 floors of parking, it offers a convenient and safe solution for residents and visitors, available 24 hours a day.',
+                        'features' => ['3 parking floors', 'Open 24 hours', 'Nazaré city center', 'Surveillance and security'],
+                        'contact' => ['phone' => '+351 262 550 010', 'email' => 'geral@nazarequalifica.pt'],
+                    ],
+                ],
+                'entity' => 'nazare-qualifica',
+                'published' => true,
+                'seo_title' => ['pt' => 'Estacionamento Nazaré - Largo Cândido dos Reis', 'en' => 'Nazaré Parking - Largo Cândido dos Reis'],
+                'seo_description' => ['pt' => 'Estacionamento subterrâneo no centro da Nazaré, aberto 24 horas.', 'en' => 'Underground parking in Nazaré city center, open 24 hours.'],
+                // Urban parking / car park
+                'hero_image_url' => 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1600&h=900&fit=crop',
             ],
         ];
 
         foreach ($paginas as $pagina) {
+            // Extract and download hero image
+            $heroImageUrl = $pagina['hero_image_url'] ?? null;
+            unset($pagina['hero_image_url']);
+
+            $heroImage = null;
+            if ($heroImageUrl) {
+                $filename = "pagina-{$pagina['entity']}-{$pagina['slug']}.jpg";
+                $heroImage = $this->downloadImage($heroImageUrl, 'paginas', $filename);
+            }
+
+            $pagina['hero_image'] = $heroImage;
+
             Pagina::updateOrCreate(
                 ['entity' => $pagina['entity'], 'slug' => $pagina['slug']],
                 $pagina
