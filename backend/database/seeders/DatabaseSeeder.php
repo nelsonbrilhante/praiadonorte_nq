@@ -15,28 +15,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Guard: skip if already seeded (seeders are NOT idempotent)
-        if (User::where('email', 'admin@nazarequalifica.pt')->exists()) {
-            $this->command?->info('Database already seeded, skipping.');
-            return;
+        // Create admin user (idempotent — safe to run multiple times)
+        User::firstOrCreate(
+            ['email' => 'admin@nazarequalifica.pt'],
+            ['name' => 'Admin', 'password' => bcrypt('password')]
+        );
+
+        // Only seed content if tables are empty (handles partial seeding failure)
+        if (\App\Models\Evento::count() === 0) {
+            $this->command?->info('Seeding content (tables empty)...');
+            $this->call([
+                SurferSeeder::class,
+                SurfboardSeeder::class,
+                NoticiaSeeder::class,
+                EventoSeeder::class,
+                PaginaSeeder::class,
+                DocumentCategorySeeder::class,
+                DocumentSeeder::class,
+                CorporateBodySeeder::class,
+            ]);
+        } else {
+            $this->command?->info('Content already exists, skipping seeders.');
         }
-
-        // Create admin user
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@nazarequalifica.pt',
-        ]);
-
-        // Seed content
-        $this->call([
-            SurferSeeder::class,
-            SurfboardSeeder::class,
-            NoticiaSeeder::class,
-            EventoSeeder::class,
-            PaginaSeeder::class,
-            DocumentCategorySeeder::class,
-            DocumentSeeder::class,
-            CorporateBodySeeder::class,
-        ]);
     }
 }
