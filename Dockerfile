@@ -194,14 +194,26 @@ EXPOSE 80
 # Coolify injects env vars via Docker, but artisan commands need .env file
 COPY <<'ENTRYPOINT' /usr/local/bin/entrypoint.sh
 #!/bin/sh
-env | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_)' | \
-  while IFS='=' read -r key value; do
-    case "$value" in
-      *\ *) echo "$key=\"$value\"" ;;
-      *) echo "$key=$value" ;;
-    esac
-  done > /var/www/html/.env
+set -e
 
+echo "==> Creating .env from Docker environment variables..."
+printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_)' | sort > /var/www/html/.env
+
+echo "==> Running database migrations..."
+php /var/www/html/artisan migrate --force --no-interaction 2>&1 || {
+  echo "WARNING: Migration failed, retrying in 5s..."
+  sleep 5
+  php /var/www/html/artisan migrate --force --no-interaction 2>&1 || echo "ERROR: Migration failed after retry"
+}
+
+echo "==> Creating storage symlink..."
+php /var/www/html/artisan storage:link --force 2>&1 || true
+
+echo "==> Caching configuration..."
+php /var/www/html/artisan config:cache 2>&1 || true
+php /var/www/html/artisan event:cache 2>&1 || true
+
+echo "==> Starting supervisord..."
 exec /usr/bin/supervisord -c /etc/supervisord.conf
 ENTRYPOINT
 RUN chmod +x /usr/local/bin/entrypoint.sh

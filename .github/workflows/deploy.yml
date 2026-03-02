@@ -13,7 +13,6 @@ jobs:
           WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_URL }}
           API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
         run: |
-          curl -X POST "${WEBHOOK_URL}" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: ${API_TOKEN}" \
+          curl --request GET "${WEBHOOK_URL}" \
+            --header "Authorization: Bearer ${API_TOKEN}" \
             --fail --silent --show-error
