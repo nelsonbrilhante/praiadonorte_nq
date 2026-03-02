@@ -21,6 +21,10 @@ RUN npm run build
 # ── Stage 2: Install PHP dependencies ───────────────────────
 FROM composer:2 AS composer-builder
 
+# Install intl extension required by Filament
+RUN apk add --no-cache icu-dev \
+    && docker-php-ext-install intl
+
 WORKDIR /build
 
 COPY backend/composer.json backend/composer.lock* ./
@@ -178,14 +182,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Optimize Laravel for production (|| true because DB may not be available at build time)
-RUN php artisan config:cache || true \
-    && php artisan route:cache || true \
-    && php artisan view:cache || true \
-    && php artisan event:cache || true
-
-# Create storage symlink
-RUN php artisan storage:link || true
+# Pre-cache views (the only cache that works without env vars/DB)
+RUN php artisan view:cache || true
 
 EXPOSE 80
 
