@@ -197,7 +197,7 @@ COPY <<'ENTRYPOINT' /usr/local/bin/entrypoint.sh
 set -e
 
 echo "==> Creating .env from Docker environment variables..."
-printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_)' | sort > /var/www/html/.env
+printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_)' | sort | sed 's/=\(.*\)/="\1"/' > /var/www/html/.env
 
 echo "==> Running database migrations..."
 php /var/www/html/artisan migrate --force --no-interaction 2>&1 || {
