@@ -10,12 +10,26 @@ class NoticiaController extends Controller
     public function index()
     {
         $locale = LaravelLocalization::getCurrentLocale();
+        $currentEntity = request('entity');
 
-        $noticias = Noticia::where('published_at', '<=', now())
+        // Featured news (all entities, published, limit 6)
+        $featuredNoticias = Noticia::where('featured', true)
+            ->where('published_at', '<=', now())
             ->orderBy('published_at', 'desc')
-            ->paginate(12);
+            ->limit(6)
+            ->get();
 
-        return view('pages.noticias.index', compact('noticias', 'locale'));
+        // Filtered list with pagination
+        $query = Noticia::where('published_at', '<=', now())
+            ->orderBy('published_at', 'desc');
+
+        if ($currentEntity) {
+            $query->where('entity', $currentEntity);
+        }
+
+        $noticias = $query->paginate(12);
+
+        return view('pages.noticias.index', compact('featuredNoticias', 'noticias', 'locale'));
     }
 
     public function show(string $slug)

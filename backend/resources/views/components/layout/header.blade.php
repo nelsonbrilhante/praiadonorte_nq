@@ -13,9 +13,10 @@
         $activeEntity = 'pn';
     }
 
-    // Detect active top-level pages (Noticias, Eventos)
+    // Detect active top-level pages (Noticias, Eventos, Loja)
     $isNoticias = preg_match('#^(pt|en)/noticias#', $currentPath);
     $isEventos = preg_match('#^(pt|en)/eventos#', $currentPath);
+    $isLoja = preg_match('#^(pt|en)/(loja|shop)#', $currentPath);
 @endphp
 
 {{-- Wrapper: shares Alpine state between header and overlay (siblings) --}}
@@ -246,6 +247,20 @@
                             <span class="absolute bottom-0 left-3 right-3 h-0.5 bg-ocean rounded-full"></span>
                         @endif
                     </a>
+
+                    {{-- Loja (direct link) --}}
+                    <a
+                        href="{{ LaravelLocalization::localizeURL(LaravelLocalization::getCurrentLocale() === 'pt' ? '/loja' : '/shop') }}"
+                        :class="(isHomepage && !scrolled)
+                            ? 'text-white/80 hover:text-white hover:bg-white/10'
+                            : 'text-foreground/70 hover:text-foreground hover:bg-foreground/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10'"
+                        class="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-full transition-colors"
+                    >
+                        {{ __('messages.navigation.shop') }}
+                        @if($isLoja)
+                            <span class="absolute bottom-0 left-3 right-3 h-0.5 bg-ocean rounded-full"></span>
+                        @endif
+                    </a>
                 </div>
             </nav>
 
@@ -451,6 +466,12 @@
                                     <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
                                 </svg>
                                 <span class="text-sm font-medium text-white">{{ __('messages.navigation.forecast') }}</span>
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL(LaravelLocalization::getCurrentLocale() === 'pt' ? '/loja' : '/shop') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-ocean mb-3">
+                                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                                </svg>
+                                <span class="text-sm font-medium text-white">{{ __('messages.navigation.shop') }}</span>
                             </a>
                         </div>
                     </div>

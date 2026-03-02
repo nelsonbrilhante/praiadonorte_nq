@@ -66,10 +66,16 @@
                                 </div>
                                 <div class="flex items-center gap-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                    </svg>
+                                    <a href="tel:{{ __('messages.contact.info.praiaDoNorte.phone') }}" class="hover:text-ocean">{{ __('messages.contact.info.praiaDoNorte.phone') }}</a>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                         <polyline points="22,6 12,13 2,6"/>
                                     </svg>
-                                    <a href="mailto:geral@praiadonortenazare.pt" class="hover:text-ocean">geral@praiadonortenazare.pt</a>
+                                    <a href="mailto:{{ __('messages.contact.info.praiaDoNorte.email') }}" class="hover:text-ocean">{{ __('messages.contact.info.praiaDoNorte.email') }}</a>
                                 </div>
                             </x-ui.card-content>
                         </x-ui.card>
@@ -89,10 +95,16 @@
                                 </div>
                                 <div class="flex items-center gap-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                    </svg>
+                                    <a href="tel:{{ __('messages.contact.info.carsurf.phone') }}" class="hover:text-performance">{{ __('messages.contact.info.carsurf.phone') }}</a>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                         <polyline points="22,6 12,13 2,6"/>
                                     </svg>
-                                    <a href="mailto:geral@carsurf.pt" class="hover:text-performance">geral@carsurf.pt</a>
+                                    <a href="mailto:{{ __('messages.contact.info.carsurf.email') }}" class="hover:text-performance">{{ __('messages.contact.info.carsurf.email') }}</a>
                                 </div>
                             </x-ui.card-content>
                         </x-ui.card>
@@ -114,14 +126,20 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                                     </svg>
-                                    <a href="tel:+351262000000" class="hover:text-institutional">+351 262 000 000</a>
+                                    <a href="tel:{{ __('messages.contact.info.nazareQualifica.phone') }}" class="hover:text-institutional">{{ __('messages.contact.info.nazareQualifica.phone') }}</a>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                    </svg>
+                                    <a href="tel:+351{{ str_replace(' ', '', __('messages.contact.info.nazareQualifica.mobile')) }}" class="hover:text-institutional">{{ __('messages.contact.info.nazareQualifica.mobile') }}</a>
                                 </div>
                                 <div class="flex items-center gap-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                         <polyline points="22,6 12,13 2,6"/>
                                     </svg>
-                                    <a href="mailto:geral@nazarequalifica.pt" class="hover:text-institutional">geral@nazarequalifica.pt</a>
+                                    <a href="mailto:{{ __('messages.contact.info.nazareQualifica.email') }}" class="hover:text-institutional">{{ __('messages.contact.info.nazareQualifica.email') }}</a>
                                 </div>
                             </x-ui.card-content>
                         </x-ui.card>
@@ -135,13 +153,11 @@
     <section class="border-t">
         <div class="aspect-[21/9] w-full bg-muted">
             <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3093.2067!2d-9.0709!3d39.6012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd18e8b5e8c1c8c1%3A0x5c1c8c1c8c1c8c1c!2sPraia%20do%20Norte!5e0!3m2!1sen!2spt!4v1234567890"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=-9.0820%2C39.6105%2C-9.0760%2C39.6145&layer=mapnik&marker=39.6124%2C-9.0790"
                 width="100%"
                 height="100%"
                 style="border:0;"
-                allowfullscreen=""
                 loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
             ></iframe>
         </div>
     </section>

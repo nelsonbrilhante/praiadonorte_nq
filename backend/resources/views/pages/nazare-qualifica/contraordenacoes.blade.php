@@ -74,8 +74,50 @@
         </div>
     </section>
 
-    {{-- Documents Grid --}}
+    {{-- Online Forms --}}
     <section class="bg-muted/10 py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="mb-8 text-center text-3xl font-bold">{{ __('messages.nq.contraordenacoes.onlineForms') }}</h2>
+            <div class="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+                {{-- Identificação de Condutor --}}
+                <a href="{{ route('nq.identificacao-condutor') }}" class="group block rounded-xl border-2 border-institutional/20 bg-institutional/5 p-6 transition-all hover:border-institutional hover:bg-institutional/10 hover:shadow-lg">
+                    <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-institutional/15 transition-all group-hover:bg-institutional/25">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-institutional" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold group-hover:text-institutional">{{ __('messages.nq.contraordenacoes.identificacaoCondutor.title') }}</h3>
+                    <p class="mb-4 text-sm text-muted-foreground">{{ __('messages.nq.contraordenacoes.identificacaoCondutor.cardDesc') }}</p>
+                    <span class="inline-flex items-center gap-1 text-sm font-semibold text-institutional">
+                        {{ __('messages.common.learnMore') }}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+
+                {{-- Apresentação de Defesa --}}
+                <a href="{{ route('nq.apresentacao-defesa') }}" class="group block rounded-xl border-2 border-institutional/20 bg-institutional/5 p-6 transition-all hover:border-institutional hover:bg-institutional/10 hover:shadow-lg">
+                    <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-institutional/15 transition-all group-hover:bg-institutional/25">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-institutional" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold group-hover:text-institutional">{{ __('messages.nq.contraordenacoes.apresentacaoDefesa.title') }}</h3>
+                    <p class="mb-4 text-sm text-muted-foreground">{{ __('messages.nq.contraordenacoes.apresentacaoDefesa.cardDesc') }}</p>
+                    <span class="inline-flex items-center gap-1 text-sm font-semibold text-institutional">
+                        {{ __('messages.common.learnMore') }}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {{-- Documents Grid --}}
+    <section class="py-12">
         <div class="container mx-auto px-4">
             <h2 class="mb-8 text-center text-3xl font-bold">{{ __('messages.nq.contraordenacoes.documentsTitle') }}</h2>
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

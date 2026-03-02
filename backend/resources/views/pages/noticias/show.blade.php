@@ -12,14 +12,32 @@
         $content = $getLocalized($noticia->content, $locale);
         $excerpt = $getLocalized($noticia->excerpt, $locale);
 
-        // Entity colors and translation keys
-        $entityConfig = [
-            'praia-norte' => ['color' => 'ocean', 'key' => 'praiaDoNorte'],
-            'carsurf' => ['color' => 'performance', 'key' => 'carsurf'],
-            'nazare-qualifica' => ['color' => 'institutional', 'key' => 'nazareQualifica'],
+        $entityColors = [
+            'praia-norte' => 'bg-ocean text-white',
+            'carsurf' => 'bg-performance text-white',
+            'nazare-qualifica' => 'bg-institutional text-white',
         ];
-        $entityColor = $entityConfig[$noticia->entity]['color'] ?? 'ocean';
-        $entityKey = $entityConfig[$noticia->entity]['key'] ?? 'praiaDoNorte';
+
+        $entityLabels = [
+            'praia-norte' => __('messages.entities.praiaDoNorte'),
+            'carsurf' => __('messages.entities.carsurf'),
+            'nazare-qualifica' => __('messages.entities.nazareQualifica'),
+        ];
+
+        $entityTextColors = [
+            'praia-norte' => 'text-ocean',
+            'carsurf' => 'text-performance',
+            'nazare-qualifica' => 'text-institutional',
+        ];
+
+        $entityGradients = [
+            'praia-norte' => 'gradient-ocean-deep',
+            'carsurf' => 'gradient-performance',
+            'nazare-qualifica' => 'gradient-institutional',
+        ];
+
+        $entityColor = $entityColors[$noticia->entity] ?? 'bg-muted';
+        $entityLabel = $entityLabels[$noticia->entity] ?? $noticia->entity;
     @endphp
 
     @push('head')
@@ -27,44 +45,87 @@
         <meta name="description" content="{{ $excerpt }}">
     @endpush
 
-    <article class="py-8">
+    {{-- Full-bleed Hero --}}
+    <section class="relative h-[50vh] min-h-[400px] overflow-hidden">
+        @if($noticia->cover_image)
+            <img src="{{ asset('storage/' . $noticia->cover_image) }}"
+                 class="absolute inset-0 h-full w-full object-cover"
+                 alt="{{ $title }}" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+        @else
+            <div class="absolute inset-0 {{ $entityGradients[$noticia->entity] ?? 'gradient-ocean-deep' }}"></div>
+        @endif
+
+        <div class="container relative mx-auto flex h-full flex-col justify-end px-4 pb-10">
+            {{-- Entity + Featured + Category badges --}}
+            <div class="mb-4 flex flex-wrap items-center gap-2">
+                <span class="rounded-full px-3 py-1 text-xs font-medium {{ $entityColor }}">
+                    {{ $entityLabel }}
+                </span>
+                @if($noticia->featured)
+                    <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                        {{ __('messages.common.featured') }}
+                    </span>
+                @endif
+                @if($noticia->category)
+                    <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                        {{ $noticia->category }}
+                    </span>
+                @endif
+            </div>
+
+            {{-- Title --}}
+            <h1 class="mb-4 text-3xl font-bold text-white md:text-4xl lg:text-5xl">{{ $title }}</h1>
+
+            {{-- Author + Date inline --}}
+            <div class="flex flex-wrap items-center gap-4 text-white/80">
+                @if($noticia->author)
+                    <span class="flex items-center gap-2">
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        {{ $noticia->author }}
+                    </span>
+                @endif
+                <span class="flex items-center gap-2">
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>
+                    </svg>
+                    {{ $noticia->published_at->locale($locale === 'pt' ? 'pt_PT' : 'en_GB')->isoFormat('D [de] MMMM [de] YYYY') }}
+                </span>
+            </div>
+        </div>
+    </section>
+
+    {{-- Info Bar --}}
+    <section class="border-b bg-muted/10 py-4">
         <div class="container mx-auto px-4">
-            {{-- Header --}}
-            <header class="mb-8">
-                <div class="flex items-center gap-2 mb-4">
-                    <x-ui.badge variant="{{ $entityColor }}">
-                        {{ __('messages.entities.' . $entityKey) }}
-                    </x-ui.badge>
-                    @if($noticia->featured)
-                        <x-ui.badge variant="secondary">
-                            {{ __('messages.news.featured') }}
-                        </x-ui.badge>
-                    @endif
+            <div class="flex flex-wrap items-center gap-6 text-sm">
+                <div>
+                    <span class="text-muted-foreground">{{ __('messages.events.date') }}:</span>
+                    <span class="font-medium">{{ $noticia->published_at->locale($locale === 'pt' ? 'pt_PT' : 'en_GB')->isoFormat('D [de] MMMM [de] YYYY') }}</span>
                 </div>
+                @if($noticia->author)
+                    <div>
+                        <span class="text-muted-foreground">{{ __('messages.news.by', ['author' => '']) }}</span>
+                        <span class="font-medium">{{ $noticia->author }}</span>
+                    </div>
+                @endif
+                @if($noticia->category)
+                    <div>
+                        <span class="text-muted-foreground">{{ __('messages.events.category') }}:</span>
+                        <span class="font-medium">{{ $noticia->category }}</span>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </section>
 
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ $title }}</h1>
-
-                <div class="flex flex-wrap items-center gap-4 text-muted-foreground">
-                    @if($noticia->author)
-                        <span>{{ __('messages.news.by', ['author' => $noticia->author]) }}</span>
-                    @endif
-                    <span>{{ __('messages.news.publishedAt', ['date' => $noticia->published_at->format('d/m/Y')]) }}</span>
-                </div>
-            </header>
-
-            {{-- Cover Image --}}
-            @if($noticia->cover_image)
-                <div class="relative aspect-video mb-8 rounded-lg overflow-hidden reveal-scale" x-data x-intersect.once="$el.classList.add('is-visible')">
-                    <img
-                        src="{{ asset('storage/' . $noticia->cover_image) }}"
-                        alt="{{ $title }}"
-                        class="w-full h-full object-cover"
-                    />
-                </div>
-            @endif
-
-            {{-- Content --}}
-            <div class="max-w-3xl mx-auto reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">
+    {{-- Content --}}
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="mx-auto max-w-3xl reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">
                 <div class="prose prose-lg max-w-none">
                     {!! $content !!}
                 </div>
@@ -89,37 +150,38 @@
                 </div>
             </div>
         </div>
-    </article>
+    </section>
 
     {{-- Related News --}}
     @if($related->count() > 0)
-        <section class="py-16 bg-muted/10">
+        <section class="border-t bg-muted/10 py-12">
             <div class="container mx-auto px-4">
-                <h2 class="text-2xl font-bold mb-8">{{ __('messages.news.relatedNews') }}</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal-stagger" x-data x-intersect.once="$el.classList.add('is-visible')">
+                <h2 class="mb-6 text-2xl font-bold">{{ __('messages.news.relatedNews') }}</h2>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     @foreach($related as $item)
-                        <a href="{{ LaravelLocalization::localizeURL('/noticias/' . $item->slug) }}">
-                            <x-ui.card class="overflow-hidden h-full transition-colors cursor-pointer" :noPadding="true">
-                                <div class="relative h-48">
-                                    @if($item->cover_image)
-                                        <img
-                                            src="{{ asset('storage/' . $item->cover_image) }}"
-                                            alt="{{ $getLocalized($item->title, $locale) }}"
-                                            class="w-full h-full object-cover"
-                                        />
-                                    @else
-                                        <div class="h-full w-full bg-gradient-to-br from-ocean/20 to-ocean/5"></div>
-                                    @endif
+                        <a href="{{ LaravelLocalization::localizeURL('/noticias/' . $item->slug) }}"
+                           class="group overflow-hidden rounded-xl border bg-card transition-colors hover:bg-accent/30">
+                            @if($item->cover_image)
+                                <div class="relative aspect-[16/9] overflow-hidden">
+                                    <img src="{{ asset('storage/' . $item->cover_image) }}"
+                                         alt="{{ $getLocalized($item->title, $locale) }}"
+                                         class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                         loading="lazy" />
                                 </div>
-                                <x-ui.card-header>
-                                    <x-ui.card-title class="line-clamp-2">
-                                        {{ $getLocalized($item->title, $locale) }}
-                                    </x-ui.card-title>
-                                    <x-ui.card-description class="line-clamp-2">
-                                        {{ $getLocalized($item->excerpt, $locale) }}
-                                    </x-ui.card-description>
-                                </x-ui.card-header>
-                            </x-ui.card>
+                            @endif
+                            <div class="p-4">
+                                <span class="text-xs font-semibold uppercase tracking-wider {{ $entityTextColors[$item->entity] ?? 'text-ocean' }}">
+                                    {{ $entityLabels[$item->entity] ?? $item->entity }}
+                                </span>
+                                <p class="font-medium group-hover:text-ocean line-clamp-2">{{ $getLocalized($item->title, $locale) }}</p>
+                                <p class="mt-1 text-sm text-muted-foreground">
+                                    {{ $item->published_at->locale($locale === 'pt' ? 'pt_PT' : 'en_GB')->isoFormat('D [de] MMMM [de] YYYY') }}
+                                </p>
+                                @php $itemExcerpt = $getLocalized($item->excerpt, $locale); @endphp
+                                @if($itemExcerpt)
+                                    <p class="mt-1 text-sm text-muted-foreground line-clamp-2">{{ $itemExcerpt }}</p>
+                                @endif
+                            </div>
                         </a>
                     @endforeach
                 </div>

@@ -28,6 +28,9 @@ class DatabaseSeeder extends Seeder
             NoticiaSeeder::class,
             EventoSeeder::class,
             PaginaSeeder::class,
+            DocumentCategorySeeder::class,
+            DocumentSeeder::class,
+            CorporateBodySeeder::class,
         ]);
     }
 }

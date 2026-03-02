@@ -2,6 +2,9 @@
 # Praia do Norte Unified Platform
 # ===================
 
+# Credentials
+.credentials.md
+
 # macOS
 .DS_Store
 .AppleDouble
@@ -122,3 +125,11 @@ temp/
 .pids/
 .playwright-mcp/
 backend/server.php
+
+# ===================
+# Design Screenshots (root level)
+# ===================
+
+/*.png
+/*.jpg
+/*.jpeg

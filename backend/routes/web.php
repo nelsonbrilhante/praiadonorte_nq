@@ -5,6 +5,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\ForecastController;
+use App\Http\Controllers\LojaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,12 @@ Route::group([
     // Forecast
     Route::get('/previsoes', [ForecastController::class, 'index'])->name('forecast');
 
+    // Shop / Loja (/pt/loja, /en/shop)
+    Route::get('/loja', [LojaController::class, 'index'])->name('loja.index');
+    Route::get('/loja/{slug}', [LojaController::class, 'show'])->name('loja.show');
+    Route::get('/shop', [LojaController::class, 'index'])->name('shop.index');
+    Route::get('/shop/{slug}', [LojaController::class, 'show'])->name('shop.show');
+
     // Carsurf
     Route::prefix('carsurf')->name('carsurf.')->group(function () {
         Route::get('/', function () {
@@ -81,7 +88,11 @@ Route::group([
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
                 ->where('slug', 'equipa')
                 ->firstOrFail();
-            return view('pages.nazare-qualifica.equipa', compact('page'));
+            $members = \App\Models\CorporateBody::where('published', true)
+                ->orderBy('section')
+                ->orderBy('order')
+                ->get();
+            return view('pages.nazare-qualifica.equipa', compact('page', 'members'));
         })->name('equipa');
 
         Route::get('/servicos', function () {
@@ -123,6 +134,21 @@ Route::group([
         Route::get('/contraordenacoes', function () {
             return view('pages.nazare-qualifica.contraordenacoes');
         })->name('contraordenacoes');
+
+        Route::get('/contraordenacoes/identificacao-de-condutor', function () {
+            return view('pages.nazare-qualifica.identificacao-condutor');
+        })->name('identificacao-condutor');
+
+        Route::get('/contraordenacoes/apresentacao-de-defesa', function () {
+            return view('pages.nazare-qualifica.apresentacao-defesa');
+        })->name('apresentacao-defesa');
+
+        Route::get('/documentos', function () {
+            $categories = \App\Models\DocumentCategory::with('documents')
+                ->orderBy('order')
+                ->get();
+            return view('pages.nazare-qualifica.documentos', compact('categories'));
+        })->name('documentos');
     });
 
     // Static pages
