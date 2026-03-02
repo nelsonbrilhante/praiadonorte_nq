@@ -40,7 +40,7 @@ COPY --from=composer-builder /build/vendor ./vendor
 RUN npm run build
 
 # ── Stage 3: Production runtime ─────────────────────────────
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 # Install system dependencies + PHP extensions
 RUN apk add --no-cache \
