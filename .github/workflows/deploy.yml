@@ -15,5 +15,6 @@ jobs:
         run: |
           curl --request GET "${WEBHOOK_URL}" \
             --header "Authorization: Bearer ${API_TOKEN}" \
-            --header "User-Agent: GitHub-Actions" \
+            --header "Host: coolify.nelsonbrilhante.com" \
+            --insecure \
             --fail --silent --show-error
