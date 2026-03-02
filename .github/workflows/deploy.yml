@@ -12,5 +12,5 @@ jobs:
         run: |
           curl -X POST "${{ secrets.COOLIFY_WEBHOOK_URL }}" \
             -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+            -H "Authorization: ${{ secrets.COOLIFY_API_TOKEN }}" \
             --fail --silent --show-error
