@@ -9,8 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Coolify Deploy
+        env:
+          WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_URL }}
+          API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
         run: |
-          curl -X POST "${{ secrets.COOLIFY_WEBHOOK_URL }}" \
+          curl -X POST "${WEBHOOK_URL}" \
             -H "Content-Type: application/json" \
-            -H "Authorization: ${{ secrets.COOLIFY_API_TOKEN }}" \
+            -H "Authorization: ${API_TOKEN}" \
             --fail --silent --show-error
