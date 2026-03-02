@@ -1,24 +1,9 @@
 # ============================================================
 # Praia do Norte — Production Dockerfile
-# Multi-stage: Node (assets) → Composer (PHP deps) → Runtime
+# Multi-stage: Composer (PHP deps) → Node (assets) → Runtime
 # ============================================================
 
-# ── Stage 1: Build Vite assets ──────────────────────────────
-FROM node:20-alpine AS node-builder
-
-WORKDIR /build
-
-COPY backend/package.json backend/package-lock.json* ./
-RUN npm ci
-
-COPY backend/vite.config.js ./
-COPY backend/resources ./resources
-# Tailwind v4 scans PHP/Blade files for class detection
-COPY backend/app ./app
-
-RUN npm run build
-
-# ── Stage 2: Install PHP dependencies ───────────────────────
+# ── Stage 1: Install PHP dependencies ───────────────────────
 FROM composer:2 AS composer-builder
 
 # Install intl extension required by Filament
@@ -35,6 +20,24 @@ RUN composer install \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader
+
+# ── Stage 2: Build Vite assets ──────────────────────────────
+FROM node:20-alpine AS node-builder
+
+WORKDIR /build
+
+COPY backend/package.json backend/package-lock.json* ./
+RUN npm ci
+
+COPY backend/vite.config.js ./
+COPY backend/resources ./resources
+# Tailwind v4 scans PHP/Blade files for class detection
+COPY backend/app ./app
+
+# Filament admin CSS imports from vendor — copy from composer stage
+COPY --from=composer-builder /build/vendor ./vendor
+
+RUN npm run build
 
 # ── Stage 3: Production runtime ─────────────────────────────
 FROM php:8.3-fpm-alpine
