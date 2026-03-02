@@ -105,6 +105,11 @@ server {
         try_files $uri =404;
     }
 
+    # Livewire assets — try static first, fallback to PHP route
+    location /livewire/ {
+        try_files $uri /index.php?$query_string;
+    }
+
     # Static files
     location ~* \.(jpg|jpeg|png|gif|ico|svg|webp|woff2|woff|ttf|css|js|pdf)$ {
         expires 7d;
