@@ -61,7 +61,7 @@
                 <button
                     type="button"
                     @click="fullMenuOpen = !fullMenuOpen"
-                    :class="(isHomepage && !scrolled && !fullMenuOpen) ? 'text-white hover:bg-white/10' : 'hover:bg-accent'"
+                    :class="(isHomepage && !scrolled && !fullMenuOpen) ? 'text-white bg-white/20 hover:bg-white/20' : 'bg-accent/50 hover:bg-accent'"
                     class="inline-flex items-center justify-center rounded-full h-9 w-9 transition-colors"
                     aria-label="Menu"
                 >
@@ -131,6 +131,9 @@
                                 </a>
                                 <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/contraordenacoes') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.breadcrumbs.contraordenacoes') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/documentos') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.nq.documentos.nav') }}
                                 </a>
                                 <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/estacionamento') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.breadcrumbs.estacionamento') }}
@@ -370,6 +373,9 @@
                             </a>
                             <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/contraordenacoes') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.breadcrumbs.contraordenacoes') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/documentos') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.nq.documentos.nav') }}
                             </a>
                             <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/estacionamento') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.breadcrumbs.estacionamento') }}
