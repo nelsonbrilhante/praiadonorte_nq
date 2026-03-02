@@ -15,4 +15,5 @@ jobs:
         run: |
           curl --request GET "${WEBHOOK_URL}" \
             --header "Authorization: Bearer ${API_TOKEN}" \
+            --header "User-Agent: GitHub-Actions" \
             --fail --silent --show-error
