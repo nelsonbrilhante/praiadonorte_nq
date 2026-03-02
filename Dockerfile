@@ -106,7 +106,8 @@ server {
     }
 
     # Livewire assets — try static first, fallback to PHP route
-    location /livewire/ {
+    # ^~ prevents regex locations (like the static file handler) from overriding
+    location ^~ /livewire/ {
         try_files $uri /index.php?$query_string;
     }
 
@@ -183,8 +184,7 @@ COPY --from=composer-builder /build/vendor ./vendor
 # Copy compiled Vite assets
 COPY --from=node-builder /build/public/build ./public/build
 
-# Publish Livewire assets as static files (avoids route-based serving issues)
-RUN php artisan livewire:publish --assets 2>/dev/null || true
+# Note: livewire:publish --assets runs in entrypoint (needs .env/APP_KEY)
 
 # Set permissions for storage and cache
 RUN mkdir -p storage/framework/{sessions,views,cache} \
@@ -218,6 +218,9 @@ echo "==> Caching configuration..."
 php /var/www/html/artisan config:cache 2>&1 || true
 php /var/www/html/artisan event:cache 2>&1 || true
 php /var/www/html/artisan view:cache 2>&1 || true
+
+echo "==> Publishing Livewire assets..."
+php /var/www/html/artisan livewire:publish --assets 2>&1 || true
 
 echo "==> Starting supervisord..."
 exec /usr/bin/supervisord -c /etc/supervisord.conf
