@@ -178,15 +178,15 @@ COPY --from=composer-builder /build/vendor ./vendor
 # Copy compiled Vite assets
 COPY --from=node-builder /build/public/build ./public/build
 
+# Publish Livewire assets as static files (avoids route-based serving issues)
+RUN php artisan livewire:publish --assets 2>/dev/null || true
+
 # Set permissions for storage and cache
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p storage/logs \
     && mkdir -p bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
-
-# Pre-cache views (the only cache that works without env vars/DB)
-RUN php artisan view:cache || true
 
 EXPOSE 80
 
@@ -197,7 +197,7 @@ COPY <<'ENTRYPOINT' /usr/local/bin/entrypoint.sh
 set -e
 
 echo "==> Creating .env from Docker environment variables..."
-printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_)' | sort | sed 's/=\(.*\)/="\1"/' > /var/www/html/.env
+printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_|WOOCOMMERCE_)' | sort | sed 's/=\(.*\)/="\1"/' > /var/www/html/.env
 
 echo "==> Running database migrations..."
 php /var/www/html/artisan migrate --force --no-interaction 2>&1 || {
@@ -211,7 +211,9 @@ php /var/www/html/artisan storage:link --force 2>&1 || true
 
 echo "==> Caching configuration..."
 php /var/www/html/artisan config:cache 2>&1 || true
+php /var/www/html/artisan route:cache 2>&1 || true
 php /var/www/html/artisan event:cache 2>&1 || true
+php /var/www/html/artisan view:cache 2>&1 || true
 
 echo "==> Starting supervisord..."
 exec /usr/bin/supervisord -c /etc/supervisord.conf

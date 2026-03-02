@@ -80,14 +80,14 @@ Route::group([
         Route::get('/sobre', function () {
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
                 ->where('slug', 'sobre')
-                ->firstOrFail();
+                ->first() ?? new \App\Models\Pagina(['entity' => 'nazare-qualifica', 'slug' => 'sobre', 'title' => ['pt' => 'Sobre', 'en' => 'About'], 'content' => []]);
             return view('pages.nazare-qualifica.sobre', compact('page'));
         })->name('sobre');
 
         Route::get('/equipa', function () {
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
                 ->where('slug', 'equipa')
-                ->firstOrFail();
+                ->first() ?? new \App\Models\Pagina(['entity' => 'nazare-qualifica', 'slug' => 'equipa', 'title' => ['pt' => 'Equipa', 'en' => 'Team'], 'content' => []]);
             $members = \App\Models\CorporateBody::where('published', true)
                 ->orderBy('section')
                 ->orderBy('order')
@@ -98,7 +98,7 @@ Route::group([
         Route::get('/servicos', function () {
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
                 ->where('slug', 'servicos')
-                ->firstOrFail();
+                ->first() ?? new \App\Models\Pagina(['entity' => 'nazare-qualifica', 'slug' => 'servicos', 'title' => ['pt' => 'Serviços', 'en' => 'Services'], 'content' => []]);
             return view('pages.nazare-qualifica.servicos', compact('page'));
         })->name('servicos');
 
@@ -106,28 +106,28 @@ Route::group([
         Route::get('/carsurf', function () {
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
                 ->where('slug', 'carsurf')
-                ->firstOrFail();
+                ->first() ?? new \App\Models\Pagina(['entity' => 'nazare-qualifica', 'slug' => 'carsurf', 'title' => ['pt' => 'Carsurf', 'en' => 'Carsurf'], 'content' => []]);
             return view('pages.nazare-qualifica.carsurf', compact('page'));
         })->name('carsurf');
 
         Route::get('/estacionamento', function () {
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
                 ->where('slug', 'estacionamento')
-                ->firstOrFail();
+                ->first() ?? new \App\Models\Pagina(['entity' => 'nazare-qualifica', 'slug' => 'estacionamento', 'title' => ['pt' => 'Estacionamento', 'en' => 'Parking'], 'content' => []]);
             return view('pages.nazare-qualifica.estacionamento', compact('page'));
         })->name('estacionamento');
 
         Route::get('/forte', function () {
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
                 ->where('slug', 'forte')
-                ->firstOrFail();
+                ->first() ?? new \App\Models\Pagina(['entity' => 'nazare-qualifica', 'slug' => 'forte', 'title' => ['pt' => 'Forte de S. Miguel Arcanjo', 'en' => 'Fort of São Miguel Arcanjo'], 'content' => []]);
             return view('pages.nazare-qualifica.forte', compact('page'));
         })->name('forte');
 
         Route::get('/ale', function () {
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
                 ->where('slug', 'ale')
-                ->firstOrFail();
+                ->first() ?? new \App\Models\Pagina(['entity' => 'nazare-qualifica', 'slug' => 'ale', 'title' => ['pt' => 'ALE', 'en' => 'ALE'], 'content' => []]);
             return view('pages.nazare-qualifica.ale', compact('page'));
         })->name('ale');
 

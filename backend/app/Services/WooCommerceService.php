@@ -152,20 +152,29 @@ class WooCommerceService
      */
     private function request(string $endpoint, array $params = []): ?\Illuminate\Http\Client\Response
     {
-        $url = "{$this->baseUrl}/wp-json/{$this->apiVersion}/{$endpoint}";
-
-        $response = Http::timeout($this->timeout)
-            ->withBasicAuth($this->consumerKey, $this->consumerSecret)
-            ->get($url, $params);
-
-        if ($response->failed()) {
-            Log::warning("WooCommerce API error [{$response->status()}]: {$endpoint}", [
-                'params' => $params,
-            ]);
+        if (empty($this->baseUrl) || empty($this->consumerKey)) {
             return null;
         }
 
-        return $response;
+        try {
+            $url = "{$this->baseUrl}/wp-json/{$this->apiVersion}/{$endpoint}";
+
+            $response = Http::timeout($this->timeout)
+                ->withBasicAuth($this->consumerKey, $this->consumerSecret)
+                ->get($url, $params);
+
+            if ($response->failed()) {
+                Log::warning("WooCommerce API error [{$response->status()}]: {$endpoint}", [
+                    'params' => $params,
+                ]);
+                return null;
+            }
+
+            return $response;
+        } catch (\Exception $e) {
+            Log::warning("WooCommerce connection error: {$e->getMessage()}");
+            return null;
+        }
     }
 
     /**
