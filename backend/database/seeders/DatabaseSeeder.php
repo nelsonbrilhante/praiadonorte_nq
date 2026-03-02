@@ -15,6 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Guard: skip if already seeded (seeders are NOT idempotent)
+        if (User::where('email', 'admin@nazarequalifica.pt')->exists()) {
+            $this->command?->info('Database already seeded, skipping.');
+            return;
+        }
+
         // Create admin user
         User::factory()->create([
             'name' => 'Admin',

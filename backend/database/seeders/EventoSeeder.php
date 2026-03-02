@@ -12,8 +12,6 @@ class EventoSeeder extends Seeder
 
     public function run(): void
     {
-        Evento::truncate();
-
         // Unsplash direct image URLs for events
         $images = [
             // Tow surfing competition

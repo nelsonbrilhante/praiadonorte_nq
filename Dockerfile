@@ -171,6 +171,28 @@ stdout_logfile=/dev/stdout
 stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
+
+[program:db-seed]
+command=php /var/www/html/artisan db:seed --force --no-interaction
+autostart=true
+autorestart=false
+exitcodes=0,1
+startsecs=0
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+
+[program:content-download]
+command=sh -c "sleep 30 && php /var/www/html/artisan app:download-documents --no-interaction && php /var/www/html/artisan app:download-corporate-bodies --no-interaction"
+autostart=true
+autorestart=false
+exitcodes=0,1
+startsecs=0
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
 SUPERVISOR
 
 WORKDIR /var/www/html
@@ -204,21 +226,16 @@ set -e
 echo "==> Creating .env from Docker environment variables..."
 printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_|WOOCOMMERCE_)' | sort | sed 's/=\(.*\)/="\1"/' > /var/www/html/.env
 
+echo "==> Fixing storage permissions after volume mount..."
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
 echo "==> Running database migrations..."
 php /var/www/html/artisan migrate --force --no-interaction 2>&1 || {
   echo "WARNING: Migration failed, retrying in 5s..."
   sleep 5
   php /var/www/html/artisan migrate --force --no-interaction 2>&1 || echo "ERROR: Migration failed after retry"
 }
-
-echo "==> Checking if database needs seeding..."
-ADMIN_EXISTS=$(php /var/www/html/artisan tinker --execute="echo App\Models\User::where('email','admin@nazarequalifica.pt')->exists()?'yes':'no';" 2>/dev/null | tail -1)
-if [ "$ADMIN_EXISTS" != "yes" ]; then
-    echo "==> Running database seeders (first deploy)..."
-    php /var/www/html/artisan db:seed --force --no-interaction 2>&1 || echo "WARNING: Seeding failed"
-else
-    echo "==> Database already seeded, skipping."
-fi
 
 echo "==> Creating storage symlink..."
 php /var/www/html/artisan storage:link --force 2>&1 || true
