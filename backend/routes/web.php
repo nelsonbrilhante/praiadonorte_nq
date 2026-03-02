@@ -18,7 +18,7 @@ use App\Http\Controllers\LojaController;
 */
 
 // Redirect root to default locale (PT)
-Route::get('/', fn() => redirect()->secure('/pt'));
+Route::get('/', fn() => redirect('/pt'));
 
 // Localized routes
 Route::group([

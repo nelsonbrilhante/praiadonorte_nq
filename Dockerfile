@@ -211,6 +211,15 @@ php /var/www/html/artisan migrate --force --no-interaction 2>&1 || {
   php /var/www/html/artisan migrate --force --no-interaction 2>&1 || echo "ERROR: Migration failed after retry"
 }
 
+echo "==> Checking if database needs seeding..."
+ADMIN_EXISTS=$(php /var/www/html/artisan tinker --execute="echo App\Models\User::where('email','admin@nazarequalifica.pt')->exists()?'yes':'no';" 2>/dev/null | tail -1)
+if [ "$ADMIN_EXISTS" != "yes" ]; then
+    echo "==> Running database seeders (first deploy)..."
+    php /var/www/html/artisan db:seed --force --no-interaction 2>&1 || echo "WARNING: Seeding failed"
+else
+    echo "==> Database already seeded, skipping."
+fi
+
 echo "==> Creating storage symlink..."
 php /var/www/html/artisan storage:link --force 2>&1 || true
 
