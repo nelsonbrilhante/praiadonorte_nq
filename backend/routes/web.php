@@ -18,7 +18,7 @@ use App\Http\Controllers\LojaController;
 */
 
 // Redirect root to default locale (PT)
-Route::get('/', fn() => redirect(LaravelLocalization::localizeURL('/pt')));
+Route::get('/', fn() => redirect(LaravelLocalization::localizeURL('/pt'), 302, [], true));
 
 // Localized routes
 Route::group([
