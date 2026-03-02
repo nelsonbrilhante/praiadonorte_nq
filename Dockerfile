@@ -190,4 +190,20 @@ RUN php artisan view:cache || true
 
 EXPOSE 80
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+# Entrypoint: create .env from Docker env vars before starting services
+# Coolify injects env vars via Docker, but artisan commands need .env file
+COPY <<'ENTRYPOINT' /usr/local/bin/entrypoint.sh
+#!/bin/sh
+env | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_)' | \
+  while IFS='=' read -r key value; do
+    case "$value" in
+      *\ *) echo "$key=\"$value\"" ;;
+      *) echo "$key=$value" ;;
+    esac
+  done > /var/www/html/.env
+
+exec /usr/bin/supervisord -c /etc/supervisord.conf
+ENTRYPOINT
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+CMD ["/usr/local/bin/entrypoint.sh"]
