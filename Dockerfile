@@ -211,7 +211,6 @@ php /var/www/html/artisan storage:link --force 2>&1 || true
 
 echo "==> Caching configuration..."
 php /var/www/html/artisan config:cache 2>&1 || true
-php /var/www/html/artisan route:cache 2>&1 || true
 php /var/www/html/artisan event:cache 2>&1 || true
 php /var/www/html/artisan view:cache 2>&1 || true
 
