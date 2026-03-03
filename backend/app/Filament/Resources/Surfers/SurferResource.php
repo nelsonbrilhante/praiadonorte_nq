@@ -20,7 +20,7 @@ class SurferResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Praia do Norte';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $modelLabel = 'Surfer';
 

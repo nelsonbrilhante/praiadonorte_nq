@@ -18,9 +18,9 @@ class EventoResource extends Resource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-calendar-days';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Conteúdo';
+    protected static string|\UnitEnum|null $navigationGroup = 'Geral';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $modelLabel = 'Evento';
 

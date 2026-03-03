@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
@@ -68,6 +69,56 @@ class AdminPanelProvider extends PanelProvider
                     ')
                     : ''
             )
+            ->renderHook(
+                PanelsRenderHook::SCRIPTS_AFTER,
+                fn () => Blade::render(<<<'JS'
+                    <script>
+                        document.addEventListener('alpine:init', () => {
+                            const waitForStore = setInterval(() => {
+                                if (! Alpine.store('sidebar')) return;
+                                clearInterval(waitForStore);
+
+                                const store = Alpine.store('sidebar');
+                                const original = store.toggleCollapsedGroup.bind(store);
+
+                                store.toggleCollapsedGroup = function (group) {
+                                    const isCurrentlyCollapsed = this.collapsedGroups.includes(group);
+
+                                    if (isCurrentlyCollapsed) {
+                                        // Expanding: collapse all others first
+                                        const allLabels = Array.from(
+                                            document.querySelectorAll('.fi-sidebar-group')
+                                        ).map(el => {
+                                            const lbl = el.querySelector('.fi-sidebar-group-label');
+                                            return lbl ? lbl.textContent.trim() : null;
+                                        }).filter(Boolean);
+
+                                        allLabels.forEach(label => {
+                                            if (label !== group && ! this.collapsedGroups.includes(label)) {
+                                                original(label);
+                                            }
+                                        });
+                                    }
+
+                                    original(group);
+                                };
+                            }, 100);
+                        });
+                    </script>
+                JS)
+            )
+            ->navigationGroups([
+                NavigationGroup::make('Geral')
+                    ->collapsed(),
+                NavigationGroup::make('Praia do Norte')
+                    ->collapsed(),
+                NavigationGroup::make('Carsurf')
+                    ->collapsed(),
+                NavigationGroup::make('Nazaré Qualifica')
+                    ->collapsed(),
+                NavigationGroup::make('Website')
+                    ->collapsed(),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([

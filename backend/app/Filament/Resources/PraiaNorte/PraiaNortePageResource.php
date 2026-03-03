@@ -14,7 +14,7 @@ class PraiaNortePageResource extends BasePageResource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Praia do Norte';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'Páginas';
 
