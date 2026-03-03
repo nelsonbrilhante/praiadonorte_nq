@@ -18,12 +18,12 @@ use App\Http\Controllers\LojaController;
 */
 
 // Redirect root to default locale (PT)
-Route::get('/', fn() => redirect('/pt'));
+Route::get('/', fn() => redirect('/pt'))->middleware('maintenance');
 
 // Localized routes
 Route::group([
     'prefix' => LaravelLocalization::setLocale(),
-    'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+    'middleware' => ['maintenance', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
 ], function () {
 
     // Homepage

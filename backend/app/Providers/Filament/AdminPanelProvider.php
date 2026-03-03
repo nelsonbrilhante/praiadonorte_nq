@@ -23,6 +23,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\SetLocaleMiddleware;
 use App\Filament\Pages\Auth\Login;
+use App\Models\SiteSetting;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -106,6 +107,12 @@ class AdminPanelProvider extends PanelProvider
                         });
                     </script>
                 JS)
+            )
+            ->renderHook(
+                PanelsRenderHook::BODY_START,
+                fn () => SiteSetting::isMaintenanceMode()
+                    ? '<div style="height:24px;"></div><div style="position:fixed;top:0;left:0;width:100%;z-index:60;background:#f59e0b;color:#451a03;padding:4px 0;text-align:center;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">MODO OFFLINE ATIVADO</div>'
+                    : ''
             )
             ->navigationGroups([
                 NavigationGroup::make('Geral')

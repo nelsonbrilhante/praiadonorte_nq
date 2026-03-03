@@ -1,8 +1,7 @@
 services:
   wordpress:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: pdn-woocommerce:latest
+    pull_policy: never
     restart: unless-stopped
     environment:
       WORDPRESS_DB_HOST: db
@@ -13,7 +12,7 @@ services:
         define('WP_ENVIRONMENT_TYPE', '${WP_ENVIRONMENT_TYPE:-production}');
         define('WP_MEMORY_LIMIT', '256M');
         define('FORCE_SSL_ADMIN', true);
-        if (isset($$_SERVER['HTTP_X_FORWARDED_PROTO']) && strpos($$_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) { $$_SERVER['HTTPS'] = 'on'; }
+        if (isset($$_SERVER['HTTP_X_FORWARDED_PROTO']) && $$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') { $$_SERVER['HTTPS'] = 'on'; }
       WP_SITE_URL: ${WP_SITE_URL}
       WP_SITE_TITLE: ${WP_SITE_TITLE:-Praia do Norte - Loja}
       WP_ADMIN_USER: ${WP_ADMIN_USER:-admin}

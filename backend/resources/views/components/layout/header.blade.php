@@ -52,7 +52,7 @@
             'bg-transparent': isHomepage && !scrolled && !fullMenuOpen,
             'bg-background/95 backdrop-blur-lg border-b border-border shadow-sm': scrolled || !isHomepage || fullMenuOpen
         }"
-        class="fixed top-0 z-50 w-full transition-transform duration-300"
+        class="fixed {{ App\Models\SiteSetting::isMaintenanceMode() && auth()->check() ? 'top-6' : 'top-0' }} z-50 w-full transition-transform duration-300"
     >
         <div class="container mx-auto flex h-16 items-center justify-between px-4">
 

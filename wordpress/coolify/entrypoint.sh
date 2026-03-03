@@ -2,36 +2,58 @@
 set -euo pipefail
 
 # ──────────────────────────────────────────────
-# Phase 1: Run original WordPress entrypoint
+# Phase 1: Copy WordPress files from image to volume
 # ──────────────────────────────────────────────
-# The official entrypoint creates wp-config.php from WORDPRESS_DB_* env vars,
-# then execs into the CMD. We call it with a no-op command to get the config
-# setup, then handle Apache ourselves.
-echo "[wp-entrypoint] Phase 1: Running original WordPress entrypoint..."
-docker-entrypoint.sh true
+# The official entrypoint only copies files when $1='apache2-foreground',
+# so we handle it ourselves to run setup before starting Apache.
+if [ ! -f /var/www/html/wp-includes/version.php ]; then
+    echo "[wp-entrypoint] Phase 1: Copying WordPress core files..."
+    tar cf - --one-file-system -C /usr/src/wordpress . | tar xf - -C /var/www/html --no-overwrite-dir
+    chown -R www-data:www-data /var/www/html
+    echo "[wp-entrypoint] WordPress files copied."
+else
+    echo "[wp-entrypoint] Phase 1: WordPress files already present."
+fi
 
 # ──────────────────────────────────────────────
-# Phase 2: Wait for WordPress files
+# Phase 2: Generate wp-config.php
 # ──────────────────────────────────────────────
-echo "[wp-entrypoint] Phase 2: Waiting for WordPress files..."
-MAX_WAIT=120
-ELAPSED=0
-until [ -f /var/www/html/wp-includes/version.php ]; do
-    sleep 2
-    ELAPSED=$((ELAPSED + 2))
-    if [ "$ELAPSED" -ge "$MAX_WAIT" ]; then
-        echo "[wp-entrypoint] ERROR: WordPress files not ready after ${MAX_WAIT}s"
-        exit 1
+if [ ! -f /var/www/html/wp-config.php ]; then
+    echo "[wp-entrypoint] Phase 2: Creating wp-config.php..."
+    wp config create \
+        --dbname="${WORDPRESS_DB_NAME:-wordpress}" \
+        --dbuser="${WORDPRESS_DB_USER:-root}" \
+        --dbpass="${WORDPRESS_DB_PASSWORD}" \
+        --dbhost="${WORDPRESS_DB_HOST:-db}" \
+        --allow-root \
+        --path=/var/www/html \
+        --skip-check \
+        --force
+
+    # Inject WORDPRESS_CONFIG_EXTRA (HTTPS proxy detection, memory limit, etc.)
+    if [ -n "${WORDPRESS_CONFIG_EXTRA:-}" ]; then
+        php -r '
+            $config = file_get_contents("/var/www/html/wp-config.php");
+            $extra = getenv("WORDPRESS_CONFIG_EXTRA");
+            // Fix Coolify escaping backslash before ! (e.g. \!== becomes !==)
+            $extra = str_replace("\\!", "!", $extra);
+            $marker = "require_once ABSPATH . \x27wp-settings.php\x27;";
+            $config = str_replace($marker, $extra . PHP_EOL . $marker, $config);
+            file_put_contents("/var/www/html/wp-config.php", $config);
+        '
+        echo "[wp-entrypoint] Extra PHP config injected."
     fi
-done
-echo "[wp-entrypoint] WordPress files ready (${ELAPSED}s)"
+    echo "[wp-entrypoint] wp-config.php created."
+else
+    echo "[wp-entrypoint] Phase 2: wp-config.php already exists."
+fi
 
 # ──────────────────────────────────────────────
 # Phase 3: Wait for database
 # ──────────────────────────────────────────────
 echo "[wp-entrypoint] Phase 3: Waiting for database..."
 DB_WAIT=0
-until wp db check --allow-root --path=/var/www/html >/dev/null 2>&1; do
+until php -r "new mysqli('${WORDPRESS_DB_HOST:-db}', '${WORDPRESS_DB_USER:-root}', getenv('WORDPRESS_DB_PASSWORD'), '${WORDPRESS_DB_NAME:-wordpress}');" 2>/dev/null; do
     sleep 2
     DB_WAIT=$((DB_WAIT + 2))
     if [ "$DB_WAIT" -ge 60 ]; then
@@ -80,8 +102,11 @@ for plugin in "${PLUGINS[@]}"; do
         wp plugin activate "$plugin" --allow-root --path=/var/www/html 2>/dev/null || true
         echo "[wp-entrypoint]   $plugin: already installed, activated."
     else
-        wp plugin install "$plugin" --activate --allow-root --path=/var/www/html
-        echo "[wp-entrypoint]   $plugin: installed and activated."
+        if wp plugin install "$plugin" --activate --allow-root --path=/var/www/html 2>&1; then
+            echo "[wp-entrypoint]   $plugin: installed and activated."
+        else
+            echo "[wp-entrypoint]   WARNING: $plugin failed to install (will retry on next restart)."
+        fi
     fi
 done
 
@@ -109,4 +134,4 @@ echo "[wp-entrypoint] WooCommerce configured (EUR, Portugal, pretty permalinks).
 # Phase 7: Start Apache
 # ──────────────────────────────────────────────
 echo "[wp-entrypoint] Setup complete. Starting Apache..."
-exec "$@"
+exec apache2-foreground

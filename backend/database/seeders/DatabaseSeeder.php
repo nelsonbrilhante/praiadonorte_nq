@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         // Create/update admin user (idempotent — safe to run multiple times)
         User::updateOrCreate(
             ['email' => 'nelson.brilhante@cm-nazare.pt'],
-            ['name' => 'Nelson Brilhante', 'password' => bcrypt('Nzr€Qu@l!f1c4-2026')]
+            ['name' => 'Nelson Brilhante', 'password' => 'Nzr€Qu@l!f1c4-2026']
         );
 
         // Only seed content if tables are empty (handles partial seeding failure)

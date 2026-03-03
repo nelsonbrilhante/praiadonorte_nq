@@ -66,7 +66,10 @@
     {{-- JSON-LD Structured Data --}}
     @stack('json-ld')
 </head>
-<body class="min-h-screen bg-background font-sans antialiased">
+<body class="min-h-screen bg-background font-sans antialiased {{ App\Models\SiteSetting::isMaintenanceMode() && auth()->check() ? 'pt-6' : '' }}">
+    {{-- Maintenance Banner (visible to authenticated users only) --}}
+    <x-maintenance-banner />
+
     {{-- Header --}}
     <x-layout.header />
 
