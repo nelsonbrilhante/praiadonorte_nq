@@ -15,10 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user (idempotent — safe to run multiple times)
-        User::firstOrCreate(
-            ['email' => 'admin@nazarequalifica.pt'],
-            ['name' => 'Admin', 'password' => bcrypt('password')]
+        // Remove old admin user if exists
+        User::where('email', 'admin@nazarequalifica.pt')->delete();
+
+        // Create/update admin user (idempotent — safe to run multiple times)
+        User::updateOrCreate(
+            ['email' => 'nelson.brilhante@cm-nazare.pt'],
+            ['name' => 'Nelson Brilhante', 'password' => bcrypt('Nzr€Qu@l!f1c4-2026')]
         );
 
         // Only seed content if tables are empty (handles partial seeding failure)

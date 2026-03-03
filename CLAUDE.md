@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Praia do Norte Unified Platform** — Monolithic Laravel website for three Portuguese municipal entities:
 - **Praia do Norte** (primary brand, always prioritized) — Big wave surfing destination
 - **Carsurf** — Surf training center
-- **Nazaré Qualifica** — Municipal infrastructure management
+- **Nazare Qualifica** — Municipal infrastructure management
 
 **Current Phase**: Quality Assurance (Phase 4) — SEO, performance optimization. Next: security hardening (Phase 5). Blade migration from Next.js is complete.
 
@@ -20,7 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-All commands run from `backend/`:
+### Laravel (from `backend/`)
 
 ```bash
 # Full dev environment (server + queue + logs + vite — runs 4 processes via concurrently)
@@ -42,23 +42,56 @@ php artisan test --filter=ExampleTest  # Run single test
 # Build
 npm run build                  # Production asset build
 
-# Convenience scripts (from project root)
-./scripts/start.sh             # Start Laravel + Vite in background
-./scripts/stop.sh              # Stop all servers
-./scripts/restart.sh           # Restart servers
-
 # Content download commands
 php artisan app:download-corporate-bodies  # Download photos/CVs from old site
 php artisan app:download-documents         # Download 102 PDFs across 13 categories
 ```
 
-**Dev URLs**: `localhost:8000/pt` (Portuguese), `localhost:8000/en` (English), `localhost:8000/admin` (Filament CMS, credentials: `admin@nazarequalifica.pt` / `password`)
+### WordPress/WooCommerce (from `wordpress/`)
+
+```bash
+make setup      # Full automated setup: Docker build, WP install, WooCommerce, seed 5 products, update backend/.env
+make start      # Start containers (data preserved)
+make stop       # Stop containers (data preserved)
+make status     # Show container status and WP/plugin info
+make logs       # Tail container logs
+make seed       # Re-seed categories + products (idempotent)
+make teardown   # Destroy everything (containers + volumes)
+make reset      # Teardown + fresh setup
+```
+
+### Convenience scripts (from project root)
+
+```bash
+./scripts/start.sh             # Start Laravel + Vite in background (PIDs in .pids/, logs in .logs/)
+./scripts/stop.sh              # Stop all servers
+./scripts/restart.sh           # Restart servers
+```
+
+**Dev URLs**: `localhost:8000/pt` (Portuguese), `localhost:8000/en` (English), `localhost:8000/admin` (Filament CMS, credentials: `nelson.brilhante@cm-nazare.pt` / `Nzr€Qu@l!f1c4-2026`), `localhost:8080` (WordPress admin: `admin` / `admin123`)
 
 ## Architecture
 
 **Stack**: Laravel 12 + Blade + Livewire 3 + Alpine.js + Tailwind CSS 4 + Filament 4.x + MySQL 8.0 + PHP 8.3
 
-**Why monolithic**: No API surface to secure, no CORS, session-based auth, direct Eloquent queries, single deployment to VPS (vm01.cm-nazare.pt, 4GB RAM, CentOS 7).
+**Why monolithic**: No API surface to secure, no CORS, session-based auth, direct Eloquent queries, single deployment to VPS.
+
+**Project structure**:
+```
+backend/        ← Laravel application (main codebase)
+wordpress/      ← WooCommerce Docker setup (local dev + production reference)
+scripts/        ← start.sh, stop.sh, restart.sh (convenience)
+docs/           ← Technical documentation, phase guides, architecture docs
+Dockerfile      ← Multi-stage production build (Composer → Vite → PHP-FPM + Nginx)
+```
+
+### WooCommerce Integration
+
+Users browse products on the Laravel frontend (`/pt/loja`), click "Buy", get redirected to WooCommerce for cart/checkout/payment (via Easypay plugin).
+
+- **`WooCommerceService`** (`backend/app/Services/WooCommerceService.php`) — REST API client. Methods: `getProducts()`, `getProductBySlug()`, `getCategories()`, `isAvailable()`. Responses cached 5min (configurable). Graceful fallback on connection failure.
+- **`LojaController`** (`backend/app/Http/Controllers/LojaController.php`) — Handles `/pt/loja` and `/en/shop` routes with category filtering and pagination.
+- **Config**: `backend/config/woocommerce.php` reads `WOOCOMMERCE_*` env vars. The `make setup` command in `wordpress/` auto-generates API keys and updates `backend/.env`.
 
 ### Multi-Entity Content
 
@@ -82,9 +115,9 @@ All content models include an `entity` field. **Always use hyphenated slugs**: `
 
 ### Filament Admin Panel
 
-Branded as Nazaré Qualifica (Navy Blue `#1e3a5f`). Admin locale forced to `pt` via `SetLocaleMiddleware`.
+Branded as Nazare Qualifica (Navy Blue `#1e3a5f`). Admin locale forced to `pt` via `SetLocaleMiddleware`.
 
-**Resource organization** — navigation groups: `Geral`, `Conteúdo`, `Praia do Norte`, `Carsurf`, `Nazaré Qualifica`, `Website`.
+**Resource organization** — navigation groups: `Geral`, `Conteudo`, `Praia do Norte`, `Carsurf`, `Nazare Qualifica`, `Website`.
 
 **BasePageResource pattern**: `Filament/Resources/Paginas/BasePageResource` is an abstract class. Entity-specific resources (`NQPageResource`, `CarsurfPageResource`, `PraiaNortePageResource`) extend it and implement `getEntityFilter()` to auto-scope queries by entity.
 
@@ -116,7 +149,7 @@ use Filament\Tables\Actions\EditAction; // Wrong (v3)
 
 ### Routes
 
-See `backend/routes/web.php`. Route names: `home`, `noticias.index`, `noticias.show`, `eventos.*`, `surfers.*`, `forecast`, `carsurf.*`, `nq.*`, `sobre`, `contacto`, `privacidade`, `termos`, `cookies`.
+See `backend/routes/web.php`. Route names: `home`, `noticias.index`, `noticias.show`, `eventos.*`, `surfers.*`, `forecast`, `loja.index`, `loja.show`, `carsurf.*`, `nq.*`, `sobre`, `contacto`, `privacidade`, `termos`, `cookies`.
 
 **Legacy API routes** (`/api/v1/*`) still exist from the Next.js era. The search spotlight (`Cmd+K`) uses `/api/v1/search` via Alpine.js fetch (converted from Livewire to avoid PHP built-in server single-thread issues).
 
@@ -125,7 +158,7 @@ See `backend/routes/web.php`. Route names: `home`, `noticias.index`, `noticias.s
 **CSS**: Tailwind CSS v4 with `@theme inline` tokens in `resources/css/app.css` — no `tailwind.config.js`. Custom color tokens per entity:
 - Praia do Norte: `ocean-*` (primary `#0066cc`, deep `#003566`, abyss `#001d3d`)
 - Carsurf: `performance-*` (primary `#00cc66`)
-- Nazaré Qualifica: `institutional-*` (primary `#ffa500`)
+- Nazare Qualifica: `institutional-*` (primary `#ffa500`)
 
 **Fonts**: Inter (body, weight 400/500) + Montserrat (headings, weight 600/700/800).
 
@@ -148,10 +181,16 @@ Vite with three entry points:
 
 Uses `@tailwindcss/vite` plugin (Tailwind v4 native Vite integration).
 
+### Production Deployment
+
+**Dockerfile** (project root) — Multi-stage build: Composer (PHP deps) → Node (Vite assets) → PHP 8.4-FPM Alpine with Nginx + Supervisor. Runs PHP-FPM, Nginx, queue worker, database seeder, and content downloader. Entrypoint creates `.env` from Docker env vars, runs migrations, caches config, publishes Livewire assets.
+
+**CI/CD**: Push to `main` triggers `.github/workflows/deploy.yml` which calls Coolify webhook (secrets: `COOLIFY_WEBHOOK_URL`, `COOLIFY_API_TOKEN`).
+
 ## Session Protocol
 
 - **Start of session**: Read `SESSION-HANDOFF.md` for context
-- **End of session** (user says "fechar sessão", "end session", etc.): Update `SESSION-HANDOFF.md` with date, summary, files changed, next tasks. Update this file's Project Status if phase changed.
+- **End of session** (user says "fechar sessao", "end session", etc.): Update `SESSION-HANDOFF.md` with date, summary, files changed, next tasks. Update this file's Project Status if phase changed.
 
 ## Git Conventions
 

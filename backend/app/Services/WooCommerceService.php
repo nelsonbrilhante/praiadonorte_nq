@@ -137,11 +137,12 @@ class WooCommerceService
     public function isAvailable(): bool
     {
         try {
-            $response = Http::timeout(5)
-                ->withBasicAuth($this->consumerKey, $this->consumerSecret)
-                ->get("{$this->baseUrl}/wp-json/{$this->apiVersion}/system_status");
+            $url = "{$this->baseUrl}/wp-json/{$this->apiVersion}/system_status";
 
-            return $response->successful();
+            return Http::timeout(5)
+                ->withBasicAuth($this->consumerKey, $this->consumerSecret)
+                ->get($url)
+                ->successful();
         } catch (\Exception $e) {
             return false;
         }
@@ -159,9 +160,10 @@ class WooCommerceService
         try {
             $url = "{$this->baseUrl}/wp-json/{$this->apiVersion}/{$endpoint}";
 
-            $response = Http::timeout($this->timeout)
-                ->withBasicAuth($this->consumerKey, $this->consumerSecret)
-                ->get($url, $params);
+            $request = Http::timeout($this->timeout)
+                ->withBasicAuth($this->consumerKey, $this->consumerSecret);
+
+            $response = $request->get($url, $params);
 
             if ($response->failed()) {
                 Log::warning("WooCommerce API error [{$response->status()}]: {$endpoint}", [

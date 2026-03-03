@@ -1,0 +1,362 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - link "Coolify" [ref=e8] [cursor=pointer]:
+            - /url: /
+          - link "v4.0.0-beta.460" [ref=e9] [cursor=pointer]:
+            - /url: https://github.com/coollabsio/coolify/releases/tag/v4.0.0-beta.460
+        - button / [ref=e11]:
+          - img [ref=e12]
+          - generic [ref=e14]: /
+        - button "Preferences 9+" [ref=e17] [cursor=pointer]:
+          - img "Preferences" [ref=e18]
+          - generic [ref=e20]: 9+
+      - combobox [ref=e23]:
+        - option "Switch team" [disabled]
+        - option "Root Team" [selected]
+      - list [ref=e24]:
+        - listitem [ref=e25]:
+          - list [ref=e26]:
+            - listitem [ref=e27]:
+              - link "Dashboard" [ref=e28] [cursor=pointer]:
+                - /url: /
+                - img [ref=e29]
+                - text: Dashboard
+            - listitem [ref=e31]:
+              - link "Projects" [ref=e32] [cursor=pointer]:
+                - /url: /projects
+                - img [ref=e33]
+                - text: Projects
+            - listitem [ref=e38]:
+              - link "Servers" [ref=e39] [cursor=pointer]:
+                - /url: /servers
+                - img [ref=e40]
+                - text: Servers
+            - listitem [ref=e45]:
+              - link "Sources" [ref=e46] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/sources
+                - img [ref=e47]
+                - text: Sources
+            - listitem [ref=e49]:
+              - link "Destinations" [ref=e50] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/destinations
+                - img [ref=e51]
+                - text: Destinations
+            - listitem [ref=e53]:
+              - link "S3 Storages" [ref=e54] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/storages
+                - img [ref=e55]
+                - text: S3 Storages
+            - listitem [ref=e60]:
+              - link "Shared Variables" [ref=e61] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/shared-variables
+                - img [ref=e62]
+                - text: Shared Variables
+            - listitem [ref=e66]:
+              - link "Notifications" [ref=e67] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/notifications/email
+                - img [ref=e68]
+                - text: Notifications
+            - listitem [ref=e70]:
+              - link "Keys & Tokens" [ref=e71] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/security/private-key
+                - img [ref=e72]
+                - text: Keys & Tokens
+            - listitem [ref=e74]:
+              - link "Tags" [ref=e75] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/tags
+                - img [ref=e76]
+                - text: Tags
+            - listitem [ref=e80]:
+              - link "Terminal" [ref=e81] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/terminal
+                - img [ref=e82]
+                - text: Terminal
+            - listitem [ref=e85]:
+              - link "Profile" [ref=e86] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/profile
+                - img [ref=e87]
+                - text: Profile
+            - listitem [ref=e92]:
+              - link "Teams" [ref=e93] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/team
+                - img [ref=e94]
+                - text: Teams
+            - listitem [ref=e102]:
+              - link "Settings" [ref=e103] [cursor=pointer]:
+                - /url: /settings
+                - img [ref=e104]
+                - text: Settings
+            - listitem [ref=e110]:
+              - generic "New version available" [ref=e111]:
+                - button "Upgrade" [ref=e113] [cursor=pointer]:
+                  - img [ref=e114]
+                  - text: Upgrade
+            - listitem [ref=e117]:
+              - link "Sponsor us" [ref=e118] [cursor=pointer]:
+                - /url: https://coolify.io/sponsorships
+                - img [ref=e119]
+                - text: Sponsor us
+            - listitem [ref=e123]:
+              - generic "Send us feedback or get help!" [ref=e126] [cursor=pointer]:
+                - img [ref=e127]
+                - text: Feedback
+            - listitem [ref=e129]:
+              - button "Logout" [ref=e131]:
+                - img [ref=e132]
+                - text: Logout
+    - main [ref=e134]:
+      - generic [ref=e136]:
+        - heading "Configuration" [level=1] [ref=e137]
+        - navigation [ref=e138]:
+          - navigation [ref=e139]:
+            - list [ref=e140]:
+              - listitem [ref=e141]:
+                - generic [ref=e142]:
+                  - link "Praia do Norte" [ref=e143] [cursor=pointer]:
+                    - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40
+                  - button [ref=e144]:
+                    - img [ref=e145]
+              - listitem [ref=e147]:
+                - generic [ref=e148]:
+                  - link "production" [ref=e149] [cursor=pointer]:
+                    - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w
+                  - button [ref=e150]:
+                    - img [ref=e151]
+              - listitem [ref=e153]:
+                - generic [ref=e154]:
+                  - link "curious-centipede-o4ck0w8woo4s88gg4gkg04gs (localhost)" [ref=e155] [cursor=pointer]:
+                    - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs
+                  - button [ref=e156]:
+                    - img [ref=e157]
+              - generic [ref=e161]: Exited
+          - generic [ref=e162]:
+            - navigation [ref=e163]:
+              - link "Configuration" [ref=e164] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs
+              - link "Deployments" [ref=e165] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/deployment
+              - link "Logs" [ref=e166] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/logs
+                - generic [ref=e167]: Logs
+              - link "Terminal" [ref=e168] [cursor=pointer]:
+                - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/terminal
+              - button "Links" [ref=e170]:
+                - generic [ref=e171]: Links
+                - img [ref=e172]
+            - generic [ref=e174]:
+              - button "Advanced" [ref=e177]:
+                - generic [ref=e178]: Advanced
+                - img [ref=e179]
+              - button "Deploy" [ref=e182] [cursor=pointer]:
+                - img [ref=e183]
+                - text: Deploy
+        - generic [ref=e186]:
+          - generic [ref=e187]:
+            - link "General" [ref=e188] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs
+            - link "Advanced" [ref=e189] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/advanced
+            - link "Environment Variables" [ref=e190] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/environment-variables
+            - link "Persistent Storage" [ref=e191] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/persistent-storage
+            - link "Git Source" [ref=e192] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/source
+            - link "Servers" [ref=e193] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/servers
+            - link "Scheduled Tasks" [ref=e194] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/scheduled-tasks
+            - link "Webhooks" [ref=e195] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/webhooks
+            - link "Healthcheck" [ref=e196] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/healthcheck
+            - link "Rollback" [ref=e197] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/rollback
+            - link "Resource Limits" [ref=e198] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/resource-limits
+            - link "Resource Operations" [ref=e199] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/resource-operations
+            - link "Metrics" [ref=e200] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/metrics
+            - link "Tags" [ref=e201] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/tags
+            - link "Danger Zone" [ref=e202] [cursor=pointer]:
+              - /url: https://coolify.nelsonbrilhante.com/project/yco04sw4s8sk80wgog8cwc40/environment/xsw0sow8s4sook4o0ss0sg8w/application/o4ck0w8woo4s88gg4gkg04gs/danger
+          - generic [ref=e205]:
+            - generic [ref=e206]:
+              - heading "General" [level=2] [ref=e207]
+              - button "Save" [ref=e208] [cursor=pointer]
+            - generic [ref=e209]: General configuration for your application.
+            - generic [ref=e210]:
+              - generic [ref=e211]:
+                - generic [ref=e212]:
+                  - generic [ref=e213]:
+                    - text: Name
+                    - generic [ref=e214]: "*"
+                  - textbox [ref=e215]: curious-centipede-o4ck0w8woo4s88gg4gkg04gs
+                - generic [ref=e216]:
+                  - generic [ref=e217]: Description
+                  - textbox [ref=e218]
+              - generic [ref=e221]:
+                - generic [ref=e222]:
+                  - text: Build Pack
+                  - generic [ref=e223]: "*"
+                - combobox [ref=e224]:
+                  - option "Nixpacks"
+                  - option "Static"
+                  - option "Dockerfile" [selected]
+                  - option "Docker Compose"
+              - generic [ref=e226]:
+                - generic [ref=e227]:
+                  - generic [ref=e228]:
+                    - text: Domains
+                    - img [ref=e231] [cursor=pointer]
+                  - textbox "https://coolify.io" [ref=e233]: http://o4ck0w8woo4s88gg4gkg04gs.10.10.10.1.sslip.io
+                - button "Generate Domain" [ref=e234] [cursor=pointer]
+              - generic [ref=e235]:
+                - generic [ref=e236]:
+                  - generic [ref=e237]:
+                    - text: Direction
+                    - generic [ref=e238]: "*"
+                    - img [ref=e241] [cursor=pointer]
+                  - combobox [ref=e243]:
+                    - option "Allow www & non-www." [selected]
+                    - option "Redirect to www."
+                    - option "Redirect to non-www."
+                - button "Set Direction" [ref=e245] [cursor=pointer]:
+                  - generic [ref=e246]: Set Direction
+              - generic [ref=e247]:
+                - heading "Docker Registry" [level=3] [ref=e248]
+                - img [ref=e251] [cursor=pointer]
+              - generic [ref=e253]:
+                - generic [ref=e254]:
+                  - generic [ref=e255]:
+                    - text: Docker Image
+                    - img [ref=e258] [cursor=pointer]
+                  - textbox "Empty means it won't push the image to a docker registry." [ref=e260]
+                - generic [ref=e261]:
+                  - generic [ref=e262]:
+                    - text: Docker Image Tag
+                    - img [ref=e265] [cursor=pointer]
+                  - textbox "Empty means only push commit sha tag." [ref=e267]
+              - generic [ref=e268]:
+                - heading "Build" [level=3] [ref=e269]
+                - generic [ref=e270]:
+                  - generic [ref=e271]:
+                    - generic [ref=e272]:
+                      - generic [ref=e273]:
+                        - text: Base Directory
+                        - img [ref=e276] [cursor=pointer]
+                      - textbox / [ref=e278]
+                    - generic [ref=e279]:
+                      - generic [ref=e280]:
+                        - text: Dockerfile Location
+                        - img [ref=e283] [cursor=pointer]
+                      - textbox "/Dockerfile" [ref=e285]
+                    - generic [ref=e286]:
+                      - generic [ref=e287]:
+                        - text: Docker Build Stage Target
+                        - img [ref=e290] [cursor=pointer]
+                      - textbox [ref=e292]
+                  - generic [ref=e293]:
+                    - generic [ref=e294]:
+                      - text: Custom Docker Options
+                      - img [ref=e297] [cursor=pointer]
+                    - textbox "--cap-add SYS_ADMIN --device=/dev/fuse --security-opt apparmor:unconfined --ulimit nofile=1024:1024 --tmpfs /run:rw,noexec,nosuid,size=65536k --hostname=myapp" [ref=e299]
+                  - generic [ref=e302]:
+                    - generic [ref=e303]:
+                      - text: Use a Build Server?
+                      - img [ref=e306] [cursor=pointer]
+                    - checkbox "Use a Build Server?" [ref=e308] [cursor=pointer]
+              - heading "Network" [level=3] [ref=e309]
+              - generic [ref=e310]:
+                - generic [ref=e311]:
+                  - generic [ref=e312]:
+                    - text: Ports Exposes
+                    - generic [ref=e313]: "*"
+                    - img [ref=e316] [cursor=pointer]
+                  - textbox "3000,3001" [ref=e318]: "80"
+                - generic [ref=e319]:
+                  - generic [ref=e320]:
+                    - text: Ports Mappings
+                    - img [ref=e323] [cursor=pointer]
+                  - textbox "3000:3000" [ref=e325]
+                - generic [ref=e326]:
+                  - generic [ref=e327]:
+                    - text: Network Aliases
+                    - img [ref=e330] [cursor=pointer]
+                  - textbox [ref=e332]
+              - heading "HTTP Basic Authentication" [level=3] [ref=e333]
+              - generic [ref=e337]:
+                - generic [ref=e338]:
+                  - text: Enable
+                  - img [ref=e341] [cursor=pointer]
+                - checkbox "Enable" [ref=e343] [cursor=pointer]
+              - generic [ref=e344]:
+                - generic [ref=e345]: Container Labels
+                - code [ref=e350]:
+                  - generic [ref=e351]:
+                    - generic [ref=e353]:
+                      - generic [ref=e356]: "1"
+                      - generic [ref=e358]: "2"
+                      - generic [ref=e360]: "3"
+                      - generic [ref=e362]: "4"
+                      - generic [ref=e364]: "5"
+                      - generic [ref=e366]: "6"
+                      - generic [ref=e368]: "7"
+                      - generic [ref=e370]: "8"
+                      - generic [ref=e372]: "9"
+                      - generic [ref=e374]: "10"
+                      - generic [ref=e376]: "11"
+                      - generic [ref=e378]: "12"
+                      - generic [ref=e380]: "13"
+                      - generic [ref=e382]: "14"
+                      - generic [ref=e384]: "15"
+                    - generic [ref=e402]:
+                      - generic [ref=e404]: traefik.enable=true
+                      - generic [ref=e406]: traefik.http.middlewares.gzip.compress=true
+                      - generic [ref=e408]: traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+                      - generic [ref=e410]: traefik.http.routers.http-0-o4ck0w8woo4s88gg4gkg04gs.entryPoints=http
+                      - generic [ref=e412]: traefik.http.routers.http-0-o4ck0w8woo4s88gg4gkg04gs.middlewares=gzip
+                      - generic [ref=e414]: "traefik.http.routers.http-0-o4ck0w8woo4s88gg4gkg04gs.rule=Host(`o4ck0w8woo4s88gg4gkg04gs.10.10.10.1.sslip.io`) && PathPrefix(`/`)"
+                      - generic [ref=e416]: traefik.http.routers.http-0-o4ck0w8woo4s88gg4gkg04gs.service=http-0-o4ck0w8woo4s88gg4gkg04gs
+                      - generic [ref=e418]: traefik.http.services.http-0-o4ck0w8woo4s88gg4gkg04gs.loadbalancer.server.port=80
+                      - generic [ref=e420]: caddy_0.encode=zstd gzip
+                      - generic [ref=e422]: "caddy_0.handle_path.0_reverse_proxy={{upstreams 80}}"
+                      - generic [ref=e424]: caddy_0.handle_path=/*
+                      - generic [ref=e426]: caddy_0.header=-Server
+                      - generic [ref=e428]: "caddy_0.try_files={path} /index.html /index.php"
+                      - generic [ref=e430]: caddy_0=http://o4ck0w8woo4s88gg4gkg04gs.10.10.10.1.sslip.io
+                      - generic [ref=e432]: caddy_ingress_network=coolify
+                    - textbox "Editor content" [ref=e434]
+              - generic [ref=e435]:
+                - generic [ref=e437]:
+                  - generic [ref=e438]:
+                    - text: Readonly labels
+                    - img [ref=e441] [cursor=pointer]
+                  - checkbox "Readonly labels" [checked] [ref=e443] [cursor=pointer]
+                - generic [ref=e445]:
+                  - generic [ref=e446]:
+                    - text: Escape special characters in labels?
+                    - img [ref=e449] [cursor=pointer]
+                  - checkbox "Escape special characters in labels?" [checked] [ref=e451] [cursor=pointer]
+              - button "Reset Labels to Defaults" [ref=e453] [cursor=pointer]
+              - heading "Pre/Post Deployment Commands" [level=3] [ref=e454]
+              - generic [ref=e456]:
+                - generic [ref=e457]:
+                  - text: Pre-deployment
+                  - img [ref=e460] [cursor=pointer]
+                - textbox "php artisan migrate" [ref=e462]
+              - generic [ref=e464]:
+                - generic [ref=e465]:
+                  - text: Post-deployment
+                  - img [ref=e468] [cursor=pointer]
+                - textbox "php artisan migrate" [ref=e470]
+  - img
+  - list
+  - generic [ref=e471]:
+    - alert
+    - alert

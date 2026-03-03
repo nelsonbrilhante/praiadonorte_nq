@@ -119,6 +119,12 @@ temp/
 *.backup
 
 # ===================
+# WordPress / WooCommerce
+# ===================
+
+wordpress/.env
+
+# ===================
 # Scripts PIDs
 # ===================
 
