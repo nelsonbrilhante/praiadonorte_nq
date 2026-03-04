@@ -237,6 +237,9 @@ php /var/www/html/artisan migrate --force --no-interaction 2>&1 || {
   php /var/www/html/artisan migrate --force --no-interaction 2>&1 || echo "ERROR: Migration failed after retry"
 }
 
+echo "==> Ensuring maintenance mode is active..."
+php /var/www/html/artisan tinker --execute="\\App\\Models\\SiteSetting::firstOrCreate(['key' => 'maintenance_mode'], ['value' => '1']);" 2>&1 || true
+
 echo "==> Creating storage symlink..."
 php /var/www/html/artisan storage:link --force 2>&1 || true
 

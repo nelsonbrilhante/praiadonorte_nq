@@ -4,8 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
-    <title>{{ $locale === 'pt' ? 'Em Manutenção — Nazaré Qualifica' : 'Under Maintenance — Nazaré Qualifica' }}</title>
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <title>{{ $locale === 'pt' ? 'Em Manutenção' : 'Under Maintenance' }}</title>
+    <!-- Favicon hidden until public presentation -->
+    <!-- <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}"> -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
@@ -242,7 +243,9 @@
     <div class="orb orb-orange"></div>
 
     <div class="content">
+        <!-- Logo hidden until public presentation
         <img src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}" alt="Nazaré Qualifica" class="logo">
+        -->
 
         <div class="icon-wrap">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
