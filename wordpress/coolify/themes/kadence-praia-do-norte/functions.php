@@ -756,6 +756,32 @@ add_filter('ngettext_with_context', function ($translation, $single, $plural, $n
     return $translation;
 }, 10, 6);
 
+// --- Custom Login Page Branding ---
+add_action('login_enqueue_scripts', function () {
+    wp_enqueue_style(
+        'pn-google-fonts',
+        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap',
+        [],
+        null
+    );
+    wp_enqueue_style(
+        'pn-login',
+        get_stylesheet_directory_uri() . '/assets/css/login.css',
+        [],
+        '1.0.0'
+    );
+});
+
+// Logo link → site principal (Laravel)
+add_filter('login_headerurl', function () {
+    return pn_get_laravel_url();
+});
+
+// Logo alt text
+add_filter('login_headertext', function () {
+    return 'Praia do Norte – Loja';
+});
+
 // AJAX cart fragment update for badge count in custom header
 add_filter('woocommerce_add_to_cart_fragments', function ($fragments) {
     $count = WC()->cart->get_cart_contents_count();
