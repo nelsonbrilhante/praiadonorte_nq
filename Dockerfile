@@ -231,7 +231,7 @@ echo "==> Publishing Livewire assets..."
 php /var/www/html/artisan livewire:publish --assets 2>&1 || true
 
 echo "==> Seeding database (first deploy only)..."
-SEED_SENTINEL="/var/www/html/storage/.db-seeded"
+SEED_SENTINEL="/var/www/html/storage/app/.db-seeded"
 if [ ! -f "$SEED_SENTINEL" ]; then
     echo "==> First deploy: seeding database..."
     php /var/www/html/artisan db:seed --force --no-interaction 2>&1 || true
@@ -241,7 +241,7 @@ else
 fi
 
 echo "==> Downloading content (first deploy only)..."
-CONTENT_SENTINEL="/var/www/html/storage/.content-downloaded"
+CONTENT_SENTINEL="/var/www/html/storage/app/.content-downloaded"
 if [ ! -f "$CONTENT_SENTINEL" ]; then
     echo "==> First deploy: downloading content..."
     php /var/www/html/artisan app:download-documents --no-interaction 2>&1 || true
