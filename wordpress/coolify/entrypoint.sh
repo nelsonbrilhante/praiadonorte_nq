@@ -2,6 +2,18 @@
 set -euo pipefail
 
 # ──────────────────────────────────────────────
+# Sentinel: Protect production data on redeploys
+# ──────────────────────────────────────────────
+SETUP_MARKER="/var/www/html/.setup-complete"
+IS_FIRST_RUN=true
+if [ -f "$SETUP_MARKER" ] && [ "${FORCE_SETUP:-false}" != "true" ]; then
+    IS_FIRST_RUN=false
+    echo "[wp-entrypoint] Existing setup detected. REDEPLOY mode — skipping destructive phases."
+else
+    echo "[wp-entrypoint] FIRST-TIME SETUP (or FORCE_SETUP=true)."
+fi
+
+# ──────────────────────────────────────────────
 # Phase 1: Copy WordPress files from image to volume
 # ──────────────────────────────────────────────
 # The official entrypoint only copies files when $1='apache2-foreground',
@@ -170,6 +182,7 @@ fi
 # ──────────────────────────────────────────────
 # Phase 5.6: Apply Kadence Customizer settings
 # ──────────────────────────────────────────────
+if $IS_FIRST_RUN; then
 echo "[wp-entrypoint] Phase 5.6: Applying Kadence Customizer settings..."
 
 wp eval '
@@ -229,6 +242,9 @@ echo "Customizer settings applied.";
 ' --allow-root --path=/var/www/html
 
 echo "[wp-entrypoint] Customizer configured."
+else
+    echo "[wp-entrypoint] Phase 5.6: Skipped (REDEPLOY mode)."
+fi
 
 # ──────────────────────────────────────────────
 # Phase 5.7: Upload logo from child theme
@@ -278,6 +294,7 @@ echo "[wp-entrypoint] Logo setup complete."
 # ──────────────────────────────────────────────
 # Phase 6: Configure WooCommerce
 # ──────────────────────────────────────────────
+if $IS_FIRST_RUN; then
 echo "[wp-entrypoint] Phase 6: Configuring WooCommerce..."
 wp option update woocommerce_currency EUR --allow-root --path=/var/www/html
 wp option update woocommerce_currency_pos left_space --allow-root --path=/var/www/html
@@ -293,14 +310,17 @@ wp option update woocommerce_shipping_cost_requires_address "yes" --allow-root -
 wp option update woocommerce_ship_to_destination "billing" --allow-root --path=/var/www/html
 wp option update blogname "${WP_SITE_TITLE:-Praia do Norte - Loja}" --allow-root --path=/var/www/html
 wp option update blogdescription "Loja oficial Praia do Norte Nazare" --allow-root --path=/var/www/html
+echo "[wp-entrypoint] WooCommerce configured (EUR, Portugal)."
+else
+    echo "[wp-entrypoint] Phase 6: Skipped WooCommerce options (REDEPLOY mode)."
+fi
 
-# Pretty permalinks (required for REST API)
+# Pretty permalinks — always run (idempotent, required for REST API)
 wp rewrite structure '/%postname%/' --allow-root --path=/var/www/html
 wp rewrite flush --allow-root --path=/var/www/html
+echo "[wp-entrypoint] Permalinks configured."
 
-echo "[wp-entrypoint] WooCommerce configured (EUR, Portugal, pretty permalinks)."
-
-# Set Laravel URL for custom header/footer navigation
+# Laravel URL — always run (may change between deploys)
 wp option update pn_laravel_url "${LARAVEL_URL:-http://localhost:8000}" --allow-root --path=/var/www/html
 echo "[wp-entrypoint] Laravel URL set to: ${LARAVEL_URL:-http://localhost:8000}"
 
@@ -392,15 +412,16 @@ echo "[wp-entrypoint] Shipping configured."
 # ──────────────────────────────────────────────
 echo "[wp-entrypoint] Phase 6.5: Setting Portuguese language..."
 
-# Install and activate Portuguese locale
+# Install and activate Portuguese locale — always run (idempotent)
 wp language core install pt_PT --allow-root --path=/var/www/html 2>/dev/null || true
 wp site switch-language pt_PT --allow-root --path=/var/www/html 2>/dev/null || \
     wp option update WPLANG pt_PT --allow-root --path=/var/www/html
 
-# Install WooCommerce + Kadence Portuguese language packs (includes JS translations for Blocks)
+# Install WooCommerce + Kadence Portuguese language packs — always run (idempotent)
 wp language plugin install woocommerce pt_PT --allow-root --path=/var/www/html 2>/dev/null || true
 wp language theme install kadence pt_PT --allow-root --path=/var/www/html 2>/dev/null || true
 
+if $IS_FIRST_RUN; then
 # Rename WooCommerce pages to Portuguese
 wp eval '
 $pages = array(
@@ -430,12 +451,16 @@ if [ -n "$SHOP_PAGE_ID" ] && [ "$SHOP_PAGE_ID" != "0" ]; then
     wp option update page_on_front "$SHOP_PAGE_ID" --allow-root --path=/var/www/html
     echo "[wp-entrypoint] Shop page set as homepage (ID: $SHOP_PAGE_ID)."
 fi
+else
+    echo "[wp-entrypoint] Phase 6.5: Skipped page renaming/homepage (REDEPLOY mode)."
+fi
 
 echo "[wp-entrypoint] Portuguese language configured."
 
 # ──────────────────────────────────────────────
 # Phase 6.6: Clean up demo content + navigation
 # ──────────────────────────────────────────────
+if $IS_FIRST_RUN; then
 echo "[wp-entrypoint] Phase 6.6: Cleaning up demo content..."
 
 # Delete "Hello world!" post
@@ -462,6 +487,17 @@ wp menu item add-custom "Primary" "Loja" "$SHOP_URL" --allow-root --path=/var/ww
 wp menu location assign "Primary" "primary" --allow-root --path=/var/www/html 2>/dev/null || true
 
 echo "[wp-entrypoint] Demo content cleaned, nav menu set."
+else
+    echo "[wp-entrypoint] Phase 6.6: Skipped demo cleanup (REDEPLOY mode)."
+fi
+
+# ──────────────────────────────────────────────
+# Write sentinel file after successful setup
+# ──────────────────────────────────────────────
+if $IS_FIRST_RUN; then
+    echo "Setup completed at $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > "$SETUP_MARKER"
+    echo "[wp-entrypoint] Sentinel file written. Future restarts will skip destructive phases."
+fi
 
 # ──────────────────────────────────────────────
 # Phase 7: Start Apache
