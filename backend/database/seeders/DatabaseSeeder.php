@@ -24,6 +24,12 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Nelson Brilhante', 'password' => 'Nzr€Qu@l!f1c4-2026']
         );
 
+        // Ensure maintenance mode is ON (won't override if already set)
+        \App\Models\SiteSetting::firstOrCreate(
+            ['key' => 'maintenance_mode'],
+            ['value' => '1']
+        );
+
         // Only seed content if tables are empty (handles partial seeding failure)
         if (\App\Models\Evento::count() === 0) {
             $this->command?->info('Seeding content (tables empty)...');
