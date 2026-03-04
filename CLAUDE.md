@@ -17,6 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Payment processing server-side ONLY** (Laravel) — Easypay credentials never exposed to client
 - **Multi-language from day one** — PT (primary) + EN. Content via JSON columns, UI strings via `lang/pt/` and `lang/en/`
 - **Never auto-commit** — Always ask user permission before `git commit`
+- **Always backup DB before seeding/importing** — Before any `migrate:fresh --seed`, `db:seed`, or import command, copy the SQLite DB: `cp backend/database/database.sqlite backend/storage/app/backups/backup-$(date +%Y%m%d-%H%M%S).sqlite`. For MySQL: `mysqldump` to `backend/storage/app/backups/`
 
 ## Development Commands
 
@@ -69,6 +70,8 @@ make reset      # Teardown + fresh setup
 ```
 
 **Dev URLs**: `localhost:8000/pt` (Portuguese), `localhost:8000/en` (English), `localhost:8000/admin` (Filament CMS, credentials: `nelson.brilhante@cm-nazare.pt` / `Nzr€Qu@l!f1c4-2026`), `localhost:8080` (WordPress admin: `admin` / `admin123`)
+
+**Credentials**: All environment credentials (production, dev, VPS, Coolify, WooCommerce API keys) are in `.credentials.md` (git-ignored). Check there for WordPress production/dev store logins, SSH access, and API tokens.
 
 ## Architecture
 

@@ -113,34 +113,6 @@ class NoticiaForm
                     ])
                     ->columns(2),
 
-                Section::make('SEO')
-                    ->schema([
-                        Tabs::make('SEO Idiomas')
-                            ->tabs([
-                                Tab::make('PT')
-                                    ->schema([
-                                        TextInput::make('seo_title.pt')
-                                            ->label('SEO Título (PT)')
-                                            ->maxLength(60),
-                                        Textarea::make('seo_description.pt')
-                                            ->label('SEO Descrição (PT)')
-                                            ->rows(2)
-                                            ->maxLength(160),
-                                    ]),
-                                Tab::make('EN')
-                                    ->schema([
-                                        TextInput::make('seo_title.en')
-                                            ->label('SEO Title (EN)')
-                                            ->maxLength(60),
-                                        Textarea::make('seo_description.en')
-                                            ->label('SEO Description (EN)')
-                                            ->rows(2)
-                                            ->maxLength(160),
-                                    ]),
-                            ])
-                            ->columnSpanFull(),
-                    ])
-                    ->collapsed(),
             ]);
     }
 }

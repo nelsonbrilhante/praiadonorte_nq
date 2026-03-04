@@ -21,8 +21,6 @@ class Noticia extends Model
         'tags',
         'featured',
         'published_at',
-        'seo_title',
-        'seo_description',
     ];
 
     protected $casts = [
@@ -30,8 +28,6 @@ class Noticia extends Model
         'content' => 'array',
         'excerpt' => 'array',
         'tags' => 'array',
-        'seo_title' => 'array',
-        'seo_description' => 'array',
         'featured' => 'boolean',
         'published_at' => 'datetime',
     ];

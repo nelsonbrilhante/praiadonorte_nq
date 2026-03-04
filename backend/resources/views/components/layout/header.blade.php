@@ -9,7 +9,7 @@
         $activeEntity = 'nq';
     } elseif (preg_match('#^(pt|en)/carsurf#', $currentPath)) {
         $activeEntity = 'carsurf';
-    } elseif (preg_match('#^(pt|en)/(sobre|surfer-wall|previsoes)#', $currentPath)) {
+    } elseif (preg_match('#^(pt|en)/praia-norte#', $currentPath)) {
         $activeEntity = 'pn';
     }
 
@@ -139,9 +139,6 @@
                                 <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/estacionamento') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.breadcrumbs.estacionamento') }}
                                 </a>
-                                <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/forte') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
-                                    {{ __('messages.breadcrumbs.forte') }}
-                                </a>
                                 <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/ale') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.breadcrumbs.ale') }}
                                 </a>
@@ -173,13 +170,19 @@
                              class="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50">
                             <div class="w-56 rounded-lg bg-white dark:bg-popover p-2 shadow-xl border border-border dropdown-stagger"
                                  :class="openDropdown === 'pn' ? 'is-open' : ''">
-                                <a href="{{ LaravelLocalization::localizeURL('/sobre') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                <a href="{{ LaravelLocalization::localizeURL('/praia-norte/sobre') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.navigation.about') }}
                                 </a>
-                                <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                <a href="{{ LaravelLocalization::localizeURL('/praia-norte/forte') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.breadcrumbs.forte') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/praia-norte/hidrografico') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.breadcrumbs.hidrografico') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/praia-norte/surfer-wall') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.navigation.surferWall') }}
                                 </a>
-                                <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                <a href="{{ LaravelLocalization::localizeURL('/praia-norte/previsoes') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.navigation.forecast') }}
                                 </a>
                             </div>
@@ -395,9 +398,6 @@
                             <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/estacionamento') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.breadcrumbs.estacionamento') }}
                             </a>
-                            <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/forte') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
-                                {{ __('messages.breadcrumbs.forte') }}
-                            </a>
                             <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/ale') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.breadcrumbs.ale') }}
                             </a>
@@ -410,13 +410,19 @@
                             {{ __('messages.entities.praiaDoNorte') }}
                         </h3>
                         <div class="space-y-3">
-                            <a href="{{ LaravelLocalization::localizeURL('/sobre') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/sobre') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.navigation.about') }}
                             </a>
-                            <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/forte') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.breadcrumbs.forte') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/hidrografico') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.breadcrumbs.hidrografico') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/surfer-wall') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.navigation.surferWall') }}
                             </a>
-                            <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/previsoes') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.navigation.forecast') }}
                             </a>
                         </div>
@@ -455,13 +461,13 @@
                                 </svg>
                                 <span class="text-sm font-medium text-white">{{ __('messages.navigation.events') }}</span>
                             </a>
-                            <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
+                            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/surfer-wall') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-ocean mb-3">
                                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                                 </svg>
                                 <span class="text-sm font-medium text-white">{{ __('messages.navigation.surferWall') }}</span>
                             </a>
-                            <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
+                            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/previsoes') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-ocean mb-3">
                                     <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
                                 </svg>

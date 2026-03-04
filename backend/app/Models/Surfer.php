@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Surfer extends Model
 {
@@ -12,25 +11,21 @@ class Surfer extends Model
 
     protected $fillable = [
         'name',
+        'aka',
         'slug',
         'bio',
+        'quote',
         'photo',
-        'nationality',
-        'achievements',
         'social_media',
+        'board_image',
         'featured',
         'order',
     ];
 
     protected $casts = [
         'bio' => 'array',
-        'achievements' => 'array',
+        'quote' => 'array',
         'social_media' => 'array',
         'featured' => 'boolean',
     ];
-
-    public function surfboards(): HasMany
-    {
-        return $this->hasMany(Surfboard::class)->orderBy('order');
-    }
 }

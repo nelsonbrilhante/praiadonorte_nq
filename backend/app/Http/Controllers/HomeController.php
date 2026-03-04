@@ -26,10 +26,9 @@ class HomeController extends Controller
             ->limit(2)
             ->get();
 
-        // Fetch featured surfers (up to 4)
+        // Fetch all featured surfers (for carousel)
         $surfers = Surfer::where('featured', true)
             ->orderBy('order')
-            ->limit(4)
             ->get();
 
         // Fetch homepage data with hero slides

@@ -8,16 +8,17 @@
         <meta name="description" content="{{ __('messages.shop.subtitle') }}">
     @endpush
 
-    {{-- Hero --}}
-    <section class="relative h-[35vh] min-h-[280px] overflow-hidden">
-        <div class="absolute inset-0 gradient-ocean-deep"></div>
-        <div class="container relative mx-auto flex h-full flex-col justify-end px-4 pb-10">
-            <x-ui.breadcrumbs :items="[
-                ['label' => __('messages.breadcrumbs.home'), 'href' => LaravelLocalization::localizeURL('/')],
-                ['label' => __('messages.shop.title'), 'current' => true],
-            ]" class="mb-4 text-white/60" />
-            <h1 class="text-4xl font-bold text-white md:text-5xl lg:text-6xl">{{ __('messages.shop.title') }}</h1>
-            <p class="mt-2 max-w-2xl text-lg text-white/80">{{ __('messages.shop.subtitle') }}</p>
+    {{-- Breadcrumbs --}}
+    <x-ui.breadcrumbs :items="[
+        ['label' => __('messages.breadcrumbs.home'), 'href' => LaravelLocalization::localizeURL('/')],
+        ['label' => __('messages.shop.title'), 'current' => true],
+    ]" />
+
+    {{-- Page Header --}}
+    <section class="py-8 border-b border-border">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold md:text-4xl">{{ __('messages.shop.title') }}</h1>
+            <p class="mt-1 text-muted-foreground">{{ __('messages.shop.subtitle') }}</p>
         </div>
     </section>
 

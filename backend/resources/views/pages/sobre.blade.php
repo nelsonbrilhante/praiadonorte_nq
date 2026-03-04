@@ -91,6 +91,7 @@
                 <div class="prose max-w-none">
                     <p>{{ __('messages.about.history.text1') }}</p>
                     <p>{{ __('messages.about.history.text2') }}</p>
+                    <p>{{ __('messages.about.history.text3') }}</p>
                 </div>
             </div>
         </div>
@@ -152,10 +153,10 @@
             <h2 class="mb-4 text-3xl font-bold">{{ __('messages.about.cta.title') }}</h2>
             <p class="mb-8 text-lg opacity-90">{{ __('messages.about.cta.subtitle') }}</p>
             <div class="flex flex-wrap justify-center gap-4">
-                <x-ui.button href="{{ route('surfers.index') }}" class="bg-white text-ocean hover:bg-white/90">
+                <x-ui.button href="{{ route('pn.surfers.index') }}" class="bg-white text-ocean hover:bg-white/90">
                     {{ __('messages.about.cta.surferWall') }}
                 </x-ui.button>
-                <x-ui.button href="{{ route('forecast') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
+                <x-ui.button href="{{ route('pn.forecast') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
                     {{ __('messages.about.cta.forecast') }}
                 </x-ui.button>
             </div>

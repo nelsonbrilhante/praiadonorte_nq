@@ -15,27 +15,27 @@
                 </h3>
                 <ul class="space-y-2 text-sm">
                     <li>
-                        <a href="{{ LaravelLocalization::localizeURL('/sobre') }}" class="text-white/60 transition-colors hover:text-white">
+                        <a href="{{ LaravelLocalization::localizeURL('/praia-norte/sobre') }}" class="text-white/60 transition-colors hover:text-white">
                             {{ __('messages.navigation.about') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ LaravelLocalization::localizeURL('/noticias') }}" class="text-white/60 transition-colors hover:text-white">
-                            {{ __('messages.navigation.news') }}
+                        <a href="{{ LaravelLocalization::localizeURL('/praia-norte/forte') }}" class="text-white/60 transition-colors hover:text-white">
+                            {{ __('messages.breadcrumbs.forte') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ LaravelLocalization::localizeURL('/eventos') }}" class="text-white/60 transition-colors hover:text-white">
-                            {{ __('messages.navigation.events') }}
+                        <a href="{{ LaravelLocalization::localizeURL('/praia-norte/hidrografico') }}" class="text-white/60 transition-colors hover:text-white">
+                            {{ __('messages.breadcrumbs.hidrografico') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ LaravelLocalization::localizeURL('/surfer-wall') }}" class="text-white/60 transition-colors hover:text-white">
+                        <a href="{{ LaravelLocalization::localizeURL('/praia-norte/surfer-wall') }}" class="text-white/60 transition-colors hover:text-white">
                             {{ __('messages.navigation.surferWall') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ LaravelLocalization::localizeURL('/previsoes') }}" class="text-white/60 transition-colors hover:text-white">
+                        <a href="{{ LaravelLocalization::localizeURL('/praia-norte/previsoes') }}" class="text-white/60 transition-colors hover:text-white">
                             {{ __('messages.navigation.forecast') }}
                         </a>
                     </li>
@@ -95,11 +95,6 @@
                     <li>
                         <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/estacionamento') }}" class="text-white/60 transition-colors hover:text-white">
                             {{ __('messages.breadcrumbs.estacionamento') }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/forte') }}" class="text-white/60 transition-colors hover:text-white">
-                            {{ __('messages.breadcrumbs.forte') }}
                         </a>
                     </li>
                     <li>
@@ -171,7 +166,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://www.sm-nazare.pt/" target="_blank" rel="noopener noreferrer" class="text-white/60 transition-colors hover:text-white">
+                        <a href="http://www.jf-nazare.pt/" target="_blank" rel="noopener noreferrer" class="text-white/60 transition-colors hover:text-white">
                             {{ __('messages.footer.partners.smNazare') }}
                             <span class="text-[10px]" aria-hidden="true">&#8599;</span>
                             <span class="sr-only">({{ $locale === 'pt' ? 'abre numa nova janela' : 'opens in a new window' }})</span>

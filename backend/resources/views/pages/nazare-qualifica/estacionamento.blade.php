@@ -109,7 +109,7 @@
         </div>
         <div class="aspect-[21/9] w-full bg-muted">
             <iframe
-                src="https://www.openstreetmap.org/export/embed.html?bbox=-9.0735%2C39.5985%2C-9.0665%2C39.6035&layer=mapnik&marker=39.6010%2C-9.0700"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=-9.0743%2C39.5948%2C-9.0673%2C39.5998&layer=mapnik&marker=39.5973%2C-9.0708"
                 width="100%"
                 height="100%"
                 style="border:0;"

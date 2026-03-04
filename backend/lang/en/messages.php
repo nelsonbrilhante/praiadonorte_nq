@@ -97,6 +97,14 @@ return [
         'backToList' => 'Back to Surfer Wall',
         'featuredSurfers' => 'Featured Surfers',
         'allSurfers' => 'All Surfers',
+        'otherSurfers' => 'Other Surfers',
+        'quote' => 'Quote',
+        'aka' => 'Also known as',
+        'board' => 'Board',
+        'zoom_board' => 'Zoom board image',
+        'close_fullscreen' => 'Close',
+        'previousSurfer' => 'Previous',
+        'nextSurfer' => 'Next',
         'specs' => [
             'width' => 'Width',
             'thickness' => 'Thickness',
@@ -178,11 +186,11 @@ return [
         'subtitle' => 'Home of the biggest waves in the world',
         'intro' => [
             'title' => 'About Praia do Norte',
-            'text' => 'Praia do Norte, located in Nazaré, Portugal, is world-famous for its giant waves, which can reach over 30 meters in height. This unique natural phenomenon is created by the Nazaré Canyon, an underwater geological fault approximately 230 km long and 5 km deep.',
+            'text' => 'Praia do Norte is a beach located in Nazaré, internationally known for its giant waves. It is here that the Fort of São Miguel Arcanjo stands, one of the most iconic observation points in the world. The giant wave phenomenon is created by the Nazaré Canyon, a submarine geological formation approximately 200 km long and 5,000 meters deep, whose valley begins less than 1 km from the coast.',
         ],
         'waves' => [
             'title' => 'The Giant Waves',
-            'text' => 'The waves at Praia do Norte are considered the biggest in the world, attracting elite surfers from all continents. The giant wave season typically runs from October to March.',
+            'text' => 'The waves at Praia do Norte are considered the biggest in the world, attracting elite surfers from all continents. In 2011, Garrett McNamara surfed a 23.77-meter wave, setting a world record. In 2017, Rodrigo Koxa broke that record with a 24.38-meter wave. The giant wave season runs from October to March, when the WSL Nazaré Tow Surfing Challenge takes place.',
             'height' => 'Maximum recorded height',
             'worldRecord' => 'Year of the first world record',
             'bigWaveTour' => 'Big Wave World Tour',
@@ -191,6 +199,7 @@ return [
             'title' => 'History',
             'text1' => 'The discovery of Praia do Norte as a big wave surfing destination began in 2011, when Garrett McNamara surfed a 23.77-meter wave, setting a new world record.',
             'text2' => 'Since then, Nazaré has become the world mecca of big wave surfing, hosting international competitions and attracting thousands of visitors annually.',
+            'text3' => 'In January 2018, Brazilian surfer Maya Gabeira surfed the biggest wave ever ridden by a woman — 20.72 meters — at Praia do Norte. This record was later broken by Maya herself in 2020 with a 22.4-meter wave.',
         ],
         'location' => [
             'title' => 'Location',
@@ -209,6 +218,84 @@ return [
             'subtitle' => 'Meet the heroes who challenge these waves and check real-time sea conditions',
             'surferWall' => 'Surfer Wall',
             'forecast' => 'Forecast',
+        ],
+    ],
+    'forte' => [
+        'title' => 'Fort of São Miguel Arcanjo',
+        'subtitle' => 'Looking at the Fort of São Miguel Arcanjo is like turning a page from an immense book of memories and stories that are part of our imagination, our past.',
+        'intro' => 'The Fort of São Miguel Arcanjo has been under municipal management since 2017 and, open to the public year-round since 2015, has already received over 650,000 visitors. With a privileged location, the fort is a monument that has become the main observation point for big waves at Praia do Norte, which made Nazaré a world surfing reference. With a strong historical and scientific component, the fort houses the Nazaré Canyon Interpretive Center, the Surfer Wall and various periodic exhibitions.',
+        'history' => [
+            'title' => 'Brief History',
+            'text' => 'Ordered to be built in 1577 by King Sebastian for defense against pirates and corsairs, the Fort of São Miguel Arcanjo was reinforced in 1644 during the reign of King John IV. Over the centuries, the fort withstood French invasions and served as a watchtower and coastal signaling post. In 1903, a lighthouse was installed in the fort, which remains operational to this day. Classified as a Property of Public Interest, the fort is a testament to Nazaré\'s rich maritime history.',
+        ],
+        'centro' => [
+            'title' => 'Nazaré Canyon Interpretive Center',
+            'text' => 'The Nazaré Canyon Interpretive Center was inaugurated on May 30, 2015, and is a pedagogical and scientific exhibition about the Nazaré Canyon, developed with the support of the Portuguese Navy\'s Hydrographic Institute.',
+            'ih' => [
+                'title' => 'Hydrographic Institute Room',
+                'text' => 'The Nazaré Canyon Interpretive Center contains scientific information explaining the formation and dimensions of the submarine canyon, the wave characteristics in Nazaré, and the shoaling and refraction phenomena that give rise to giant waves. The Hydrographic Institute Room also features a scale model of the seabed off Nazaré and information about the German submarine U-963, which sank off the canyon in 1945.',
+            ],
+        ],
+        'onda' => [
+            'title' => 'The Nazaré Wave: How It Forms',
+            'text' => 'The film shown at the fort explains the phenomenon of the Nazaré wave, from the formation of swell in the open ocean to the shoaling caused by the submarine canyon. The interaction between swell and the canyon\'s bathymetry is what makes Nazaré\'s waves unique in the world.',
+        ],
+        'surferWall' => [
+            'title' => 'Surfer Wall',
+            'text' => '"Surfer Wall" is a museum project, created in 2016, that honors the athletes who surf Nazaré\'s giant waves. The project consists of a permanent exhibition of the surfboards used by surfers in their most memorable sessions at Praia do Norte, accompanied by information about each athlete.',
+        ],
+        'stats' => [
+            'year' => 'Built in',
+            'visitors' => 'Visitors',
+            'centro' => 'Interpretive Center',
+            'surferWall' => 'Surfer Wall',
+        ],
+        'images' => [
+            'intro' => 'Aerial view of the Fort of São Miguel Arcanjo',
+            'history' => 'Historic interior of the Fort of São Miguel Arcanjo',
+            'salaIh' => 'Hydrographic Institute Room — seabed scale model',
+            'surferWall' => 'Surfer Wall exhibition room with surfboards',
+        ],
+        'cta' => [
+            'title' => 'Discover More',
+            'subtitle' => 'Meet the heroes of giant waves and check real-time sea conditions',
+        ],
+    ],
+    'hidrografico' => [
+        'title' => 'Hydrographic',
+        'subtitle' => 'The Nazaré Canyon',
+        'intro' => [
+            'title' => 'The Nazaré Canyon',
+            'text' => 'The Nazaré Canyon is the largest submarine canyon in Europe and one of the largest in the world. Approximately 200 km long and reaching depths of over 5,000 meters, this geological formation is responsible for the giant wave phenomenon that made Nazaré world-famous.',
+        ],
+        'canyon' => [
+            'title' => 'Europe\'s Largest Submarine Canyon',
+            'text' => 'The Nazaré Canyon extends approximately 200 km from the coastal zone to the abyssal plain. The canyon head is located less than 1 km from the coast, near Praia do Norte, which is a rare case worldwide. The maximum depth exceeds 5,000 meters, making it comparable to the largest submarine canyons on the planet.',
+        ],
+        'waves' => [
+            'title' => 'Wave Characteristics',
+            'text' => 'The interaction between ocean swell and the canyon\'s bathymetry produces two fundamental phenomena: shoaling, which concentrates wave energy as waves advance over shallower waters, and refraction, which directs waves toward Praia do Norte. These combined mechanisms allow waves measuring 4 meters in the open ocean to reach heights exceeding 8 meters near the coast — and, in exceptional conditions, surpass 20 meters.',
+        ],
+        'modeling' => [
+            'title' => 'Wave Modeling',
+            'text' => 'The Portuguese Navy\'s Hydrographic Institute developed wave modeling systems specific to the Nazaré area. These models, based on the MONICAN system (Nazaré Canyon Monitoring), allow precise prediction of wave behavior in the region. Collected data confirms that the energy concentration caused by the canyon can double wave height compared to the open ocean — 4-meter waves at sea can reach 8 meters or more at Praia do Norte.',
+        ],
+        'stats' => [
+            'length' => 'Length',
+            'depth' => 'Depth',
+            'distance' => 'Distance to coast',
+            'amplification' => 'Amplification',
+        ],
+        'images' => [
+            'hero' => 'Aerial view of the Nazaré coast and Nazaré Canyon',
+            'canhao' => 'Aerial view of the Praia do Norte cliffs',
+            'surfista' => 'Surfer riding a giant wave at Praia do Norte',
+            'ondulacao' => 'Wave patterns on the Nazaré coast',
+            'modelacao' => 'Maritime wave modeling at Nazaré',
+        ],
+        'cta' => [
+            'title' => 'Discover More',
+            'subtitle' => 'Check the marine forecast and visit the Fort of São Miguel Arcanjo',
         ],
     ],
     'carsurf' => [
@@ -556,6 +643,8 @@ return [
         'apresentacao-defesa' => 'Defense Submission',
         'documentos' => 'Documents',
         'loja' => 'Shop',
+        'hidrografico' => 'Hydrographic',
+        'praia-norte' => 'Praia do Norte',
     ],
     'common' => [
         'readMore' => 'Read more',

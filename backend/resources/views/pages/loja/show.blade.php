@@ -11,43 +11,38 @@
         @endif
     @endpush
 
-    {{-- Hero with product image --}}
-    <section class="relative h-[40vh] min-h-[320px] overflow-hidden">
-        @if($product['featured_image'])
-            <img src="{{ $product['featured_image']['src'] }}"
-                 class="absolute inset-0 h-full w-full object-cover"
-                 alt="{{ $product['name'] }}" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-        @else
-            <div class="absolute inset-0 gradient-ocean-deep"></div>
-        @endif
+    {{-- Breadcrumbs --}}
+    <x-ui.breadcrumbs :items="[
+        ['label' => __('messages.breadcrumbs.home'), 'href' => LaravelLocalization::localizeURL('/')],
+        ['label' => __('messages.shop.title'), 'href' => LaravelLocalization::localizeURL($lojaRoute)],
+        ['label' => \Illuminate\Support\Str::limit($product['name'], 40), 'current' => true],
+    ]" />
 
-        <div class="container relative mx-auto flex h-full flex-col justify-end px-4 pb-10">
-            <x-ui.breadcrumbs :items="[
-                ['label' => __('messages.breadcrumbs.home'), 'href' => LaravelLocalization::localizeURL('/')],
-                ['label' => __('messages.shop.title'), 'href' => LaravelLocalization::localizeURL($lojaRoute)],
-                ['label' => \Illuminate\Support\Str::limit($product['name'], 40), 'current' => true],
-            ]" class="mb-4 text-white/60" />
-
+    {{-- Page Header --}}
+    <section class="py-8 border-b border-border">
+        <div class="container mx-auto px-4">
             {{-- Categories --}}
             @if(count($product['categories']) > 0)
-                <div class="mb-3 flex flex-wrap gap-2">
+                <div class="mb-2 flex flex-wrap gap-2">
                     @foreach($product['categories'] as $cat)
-                        <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                        <span class="text-xs font-medium uppercase tracking-wider text-ocean">
                             {{ $cat['name'] }}
                         </span>
+                        @if(!$loop->last)
+                            <span class="text-xs text-muted-foreground">&middot;</span>
+                        @endif
                     @endforeach
                 </div>
             @endif
 
-            <h1 class="text-3xl font-bold text-white md:text-4xl lg:text-5xl">{{ $product['name'] }}</h1>
+            <h1 class="text-3xl font-bold md:text-4xl">{{ $product['name'] }}</h1>
 
-            {{-- Price on hero --}}
-            <div class="mt-3 flex items-baseline gap-3">
+            {{-- Price --}}
+            <div class="mt-2 flex items-baseline gap-3">
                 @if($product['price'])
-                    <span class="text-2xl font-bold text-white">{{ number_format((float) $product['price'], 2, ',', '.') }} &euro;</span>
+                    <span class="text-2xl font-bold">{{ number_format((float) $product['price'], 2, ',', '.') }} &euro;</span>
                     @if($product['on_sale'] && $product['regular_price'])
-                        <span class="text-lg text-white/60 line-through">
+                        <span class="text-lg text-muted-foreground line-through">
                             {{ number_format((float) $product['regular_price'], 2, ',', '.') }} &euro;
                         </span>
                     @endif
@@ -160,7 +155,7 @@
                                 <x-ui.button
                                     variant="ocean"
                                     size="lg"
-                                    href="{{ $product['permalink'] }}"
+                                    href="{{ $product['permalink'] }}{{ str_contains($product['permalink'], '?') ? '&' : '?' }}lang={{ app()->getLocale() }}"
                                     class="w-full justify-center"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">

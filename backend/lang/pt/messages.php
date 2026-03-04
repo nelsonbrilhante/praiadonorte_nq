@@ -97,6 +97,14 @@ return [
         'backToList' => 'Voltar ao Surfer Wall',
         'featuredSurfers' => 'Surfers em Destaque',
         'allSurfers' => 'Todos os Surfers',
+        'otherSurfers' => 'Outros Surfers',
+        'quote' => 'Citação',
+        'aka' => 'Também conhecido como',
+        'board' => 'Prancha',
+        'zoom_board' => 'Ampliar imagem da prancha',
+        'close_fullscreen' => 'Fechar',
+        'previousSurfer' => 'Anterior',
+        'nextSurfer' => 'Próximo',
         'specs' => [
             'width' => 'Largura',
             'thickness' => 'Espessura',
@@ -178,11 +186,11 @@ return [
         'subtitle' => 'O lar das maiores ondas do mundo',
         'intro' => [
             'title' => 'Sobre a Praia do Norte',
-            'text' => 'A Praia do Norte, situada na Nazaré, Portugal, é mundialmente conhecida pelas suas ondas gigantes, que podem atingir mais de 30 metros de altura. Este fenómeno natural único é criado pelo Canhão da Nazaré, uma falha geológica submarina com cerca de 230 km de comprimento e 5 km de profundidade.',
+            'text' => 'A Praia do Norte é uma praia, situada na Nazaré, internacionalmente conhecida pelas suas ondas gigantes. É nesta praia que se situa o Forte de S. Miguel Arcanjo, um dos pontos de observação mais icónicos do mundo. O fenómeno natural das ondas gigantes é criado pelo Canhão da Nazaré, uma formação geológica submarina com cerca de 200 km de comprimento e 5.000 metros de profundidade, cujo vale começa a menos de 1 km da costa.',
         ],
         'waves' => [
             'title' => 'As Ondas Gigantes',
-            'text' => 'As ondas da Praia do Norte são consideradas as maiores do mundo, atraindo surfistas de elite de todos os continentes. A temporada de ondas gigantes decorre tipicamente de outubro a março.',
+            'text' => 'As ondas da Praia do Norte são consideradas as maiores do mundo, atraindo surfistas de elite de todos os continentes. Em 2011, Garrett McNamara surfou uma onda de 23,77 metros, estabelecendo um recorde mundial. Em 2017, Rodrigo Koxa bateu esse recorde com uma onda de 24,38 metros. A temporada de ondas gigantes decorre de outubro a março, período em que se realiza o Nazaré Tow Surfing Challenge da WSL.',
             'height' => 'Altura máxima registada',
             'worldRecord' => 'Ano do primeiro recorde mundial',
             'bigWaveTour' => 'Circuito Mundial de Ondas Grandes',
@@ -191,6 +199,7 @@ return [
             'title' => 'História',
             'text1' => 'A descoberta da Praia do Norte como destino de surf de ondas gigantes começou em 2011, quando Garrett McNamara surfou uma onda de 23,77 metros, estabelecendo um novo recorde mundial.',
             'text2' => 'Desde então, a Nazaré tornou-se a meca mundial do big wave surfing, acolhendo competições internacionais e atraindo milhares de visitantes anualmente.',
+            'text3' => 'Em janeiro de 2018, a brasileira Maya Gabeira surfou a maior onda alguma vez surfada por uma mulher — 20,72 metros — na Praia do Norte. Este recorde foi posteriormente batido pela própria Maya em 2020 com uma onda de 22,4 metros.',
         ],
         'location' => [
             'title' => 'Localização',
@@ -209,6 +218,84 @@ return [
             'subtitle' => 'Conheça os heróis que desafiam estas ondas e as condições do mar em tempo real',
             'surferWall' => 'Surfer Wall',
             'forecast' => 'Previsões',
+        ],
+    ],
+    'forte' => [
+        'title' => 'Forte de S. Miguel Arcanjo',
+        'subtitle' => 'Olhar para o Forte de S. Miguel Arcanjo é como virar uma página de um livro imenso de memórias e estórias que fazem parte do nosso imaginário, do nosso passado.',
+        'intro' => 'O Forte de S. Miguel Arcanjo está afeto ao município desde 2017 e, aberto ao público todo o ano, desde 2015, já recebeu mais de 650 000 visitantes. Com uma localização privilegiada, o forte é um monumento que se tornou no principal posto de observação das ondas grandes na Praia do Norte, que tornaram a Nazaré numa referência do surf mundial. Com uma forte componente histórica e científica associada, o forte consagra o Centro Interpretativo do Canhão da Nazaré, a Surfer Wall e vários conteúdos expositivos periódicos.',
+        'history' => [
+            'title' => 'Breve História',
+            'text' => 'Mandado construir em 1577 pelo Rei D. Sebastião para defesa contra os piratas e corsários, o Forte de S. Miguel Arcanjo foi reforçado em 1644 durante o reinado de D. João IV. Ao longo dos séculos, o forte resistiu às invasões francesas e serviu como posto de vigia e sinalização costeira. Em 1903 foi instalado um farol no forte, que permanece em funcionamento até hoje. Classificado como Imóvel de Interesse Público, o forte é um testemunho da rica história marítima da Nazaré.',
+        ],
+        'centro' => [
+            'title' => 'Centro Interpretativo do Canhão da Nazaré',
+            'text' => 'O Centro Interpretativo do Canhão da Nazaré foi inaugurado no dia 30 de maio de 2015 e é uma exposição de caráter pedagógico e científico sobre o Canhão da Nazaré, que contou com o apoio do Instituto Hidrográfico da Marinha Portuguesa.',
+            'ih' => [
+                'title' => 'Sala do Instituto Hidrográfico',
+                'text' => 'O Centro Interpretativo do Canhão da Nazaré contém informação científica que explica a formação e dimensão do canhão submarino, as características da ondulação na Nazaré e os fenómenos de empolamento e refração que dão origem às ondas gigantes. A Sala do Instituto Hidrográfico apresenta também uma maquete do fundo marítimo ao largo da Nazaré e informação sobre o submarino alemão U-963, que naufragou ao largo do canhão em 1945.',
+            ],
+        ],
+        'onda' => [
+            'title' => 'Onda da Nazaré, como se forma',
+            'text' => 'O filme apresentado no forte explica o fenómeno da onda da Nazaré, desde a formação da ondulação em alto mar até ao empolamento provocado pelo canhão submarino. A interação entre a ondulação e a batimetria do canhão é o que torna as ondas da Nazaré únicas no mundo.',
+        ],
+        'surferWall' => [
+            'title' => 'Surfer Wall',
+            'text' => '"Surfer Wall" é um projeto museológico, criado em 2016, que consagra os atletas que surfam as ondas gigantes da Nazaré. O projeto consiste na exposição permanente das pranchas utilizadas pelos surfistas nas suas sessões mais memoráveis na Praia do Norte, acompanhadas de informação sobre cada atleta.',
+        ],
+        'stats' => [
+            'year' => 'Construído em',
+            'visitors' => 'Visitantes',
+            'centro' => 'Centro Interpretativo',
+            'surferWall' => 'Surfer Wall',
+        ],
+        'images' => [
+            'intro' => 'Vista aérea do Forte de S. Miguel Arcanjo',
+            'history' => 'Interior histórico do Forte de S. Miguel Arcanjo',
+            'salaIh' => 'Sala do Instituto Hidrográfico — maquete do fundo marítimo',
+            'surferWall' => 'Sala de exposição Surfer Wall com pranchas de surf',
+        ],
+        'cta' => [
+            'title' => 'Descubra Mais',
+            'subtitle' => 'Conheça os heróis das ondas gigantes e as condições do mar em tempo real',
+        ],
+    ],
+    'hidrografico' => [
+        'title' => 'Hidrográfico',
+        'subtitle' => 'O Canhão da Nazaré',
+        'intro' => [
+            'title' => 'O Canhão da Nazaré',
+            'text' => 'O Canhão da Nazaré é o maior desfiladeiro submarino da Europa e um dos maiores do mundo. Com cerca de 200 km de comprimento e atingindo profundidades superiores a 5.000 metros, esta formação geológica é responsável pelo fenómeno das ondas gigantes que tornaram a Nazaré mundialmente famosa.',
+        ],
+        'canyon' => [
+            'title' => 'O Maior Desfiladeiro Submerso da Europa',
+            'text' => 'O Canhão da Nazaré estende-se por aproximadamente 200 km desde a zona costeira até à planície abissal. A cabeceira do canhão localiza-se a menos de 1 km da costa, junto à Praia do Norte, o que é um caso raro a nível mundial. A profundidade máxima ultrapassa os 5.000 metros, tornando-o comparável aos maiores canhões submarinos do planeta.',
+        ],
+        'waves' => [
+            'title' => 'Características da Ondulação',
+            'text' => 'A interação entre a ondulação oceânica e a batimetria do canhão produz dois fenómenos fundamentais: o empolamento, que concentra a energia das ondas à medida que estas avançam sobre águas menos profundas, e a refração, que direciona as ondas para a Praia do Norte. Estes mecanismos conjugados permitem que ondas que em alto mar medem 4 metros atinjam alturas superiores a 8 metros junto à costa — e, em condições excecionais, ultrapassem os 20 metros.',
+        ],
+        'modeling' => [
+            'title' => 'Modelação de Agitação Marítima',
+            'text' => 'O Instituto Hidrográfico da Marinha Portuguesa desenvolveu modelos de agitação marítima específicos para a zona da Nazaré. Estes modelos, baseados no sistema MONICAN (Monitorização do Canhão da Nazaré), permitem prever com precisão o comportamento das ondas na região. Os dados recolhidos confirmam que a concentração de energia provocada pelo canhão pode duplicar a altura das ondas em relação ao oceano aberto — ondas de 4 metros em alto mar podem atingir 8 metros ou mais na Praia do Norte.',
+        ],
+        'stats' => [
+            'length' => 'Comprimento',
+            'depth' => 'Profundidade',
+            'distance' => 'Distância à costa',
+            'amplification' => 'Amplificação',
+        ],
+        'images' => [
+            'hero' => 'Vista aérea da costa da Nazaré e Canhão da Nazaré',
+            'canhao' => 'Vista aérea das falésias da Praia do Norte',
+            'surfista' => 'Surfista numa onda gigante na Praia do Norte',
+            'ondulacao' => 'Ondulação na costa da Nazaré',
+            'modelacao' => 'Modelação de agitação marítima na Nazaré',
+        ],
+        'cta' => [
+            'title' => 'Descubra Mais',
+            'subtitle' => 'Consulte as previsões marítimas e visite o Forte de S. Miguel Arcanjo',
         ],
     ],
     'carsurf' => [
@@ -556,6 +643,8 @@ return [
         'apresentacao-defesa' => 'Apresentação de Defesa',
         'documentos' => 'Documentos',
         'loja' => 'Loja',
+        'hidrografico' => 'Hidrográfico',
+        'praia-norte' => 'Praia do Norte',
     ],
     'common' => [
         'readMore' => 'Ler mais',
