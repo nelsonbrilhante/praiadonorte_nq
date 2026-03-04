@@ -77,7 +77,7 @@ class SearchSpotlight extends Component
                 'icon' => 'user',
                 'title' => $surfer->name,
                 'description' => $surfer->nationality,
-                'url' => LaravelLocalization::localizeURL('/surfer-wall/' . $surfer->slug),
+                'url' => LaravelLocalization::localizeURL('/praia-norte/surfer-wall/' . $surfer->slug),
             ];
         }
 

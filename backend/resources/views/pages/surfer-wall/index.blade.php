@@ -21,7 +21,12 @@
 
 <x-layouts.app>
     {{-- Hero --}}
-    <x-praia-norte.page-hero title="{{ __('messages.surfers.title') }}" subtitle="{{ __('messages.surfers.subtitle') }}" entity="praia-norte" />
+    <x-praia-norte.page-hero
+        title="{{ __('messages.surfers.title') }}"
+        subtitle="{{ __('messages.surfers.subtitle') }}"
+        entity="praia-norte"
+        image="{{ asset('storage/heroes/surfer-wall-hero.jpg') }}"
+    />
 
     {{-- Featured Surfers --}}
     @if($featuredSurfers->count() > 0)
@@ -30,7 +35,7 @@
                 <h2 class="mb-8 text-2xl font-bold">{{ __('messages.surfers.featuredSurfers') }}</h2>
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 reveal-stagger" x-data x-intersect.once="$el.classList.add('is-visible')">
                     @foreach($featuredSurfers as $surfer)
-                        <a href="{{ LaravelLocalization::localizeURL('/surfer-wall/' . $surfer->slug) }}">
+                        <a href="{{ LaravelLocalization::localizeURL('/praia-norte/surfer-wall/' . $surfer->slug) }}">
                             <x-ui.card class="group h-full cursor-pointer overflow-hidden transition-colors border-2 border-ocean" :noPadding="true">
                                 {{-- Photo --}}
                                 <div class="relative aspect-[3/4]">
@@ -52,27 +57,10 @@
 
                                 <x-ui.card-content class="p-4 space-y-2">
                                     <h3 class="font-semibold text-xl">{{ $surfer->name }}</h3>
-                                    @if($surfer->nationality)
-                                        <p class="text-sm text-muted-foreground">🌍 {{ $surfer->nationality }}</p>
-                                    @endif
                                     @if($surfer->bio)
                                         <p class="line-clamp-2 text-sm text-muted-foreground">
                                             {{ $stripHtml($getLocalized($surfer->bio, $locale)) }}
                                         </p>
-                                    @endif
-                                    @if($surfer->achievements && is_array($surfer->achievements) && count($surfer->achievements) > 0)
-                                        <div class="mt-2 flex flex-wrap gap-1">
-                                            @foreach(array_slice($surfer->achievements, 0, 2) as $achievement)
-                                                <x-ui.badge variant="secondary" class="text-xs">
-                                                    {{ $getLocalized($achievement, $locale) }}
-                                                </x-ui.badge>
-                                            @endforeach
-                                            @if(count($surfer->achievements) > 2)
-                                                <x-ui.badge variant="outline" class="text-xs">
-                                                    +{{ count($surfer->achievements) - 2 }}
-                                                </x-ui.badge>
-                                            @endif
-                                        </div>
                                     @endif
                                 </x-ui.card-content>
                             </x-ui.card>
@@ -93,7 +81,7 @@
             @if($surfers->count() > 0)
                 <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 reveal-stagger" x-data x-intersect.once="$el.classList.add('is-visible')">
                     @foreach($featuredSurfers->count() > 0 ? $regularSurfers : $surfers as $surfer)
-                        <a href="{{ LaravelLocalization::localizeURL('/surfer-wall/' . $surfer->slug) }}">
+                        <a href="{{ LaravelLocalization::localizeURL('/praia-norte/surfer-wall/' . $surfer->slug) }}">
                             <x-ui.card class="group h-full cursor-pointer overflow-hidden transition-colors" :noPadding="true">
                                 {{-- Photo --}}
                                 <div class="relative aspect-square">
@@ -112,9 +100,6 @@
 
                                 <x-ui.card-content class="p-4">
                                     <h3 class="font-semibold text-base">{{ $surfer->name }}</h3>
-                                    @if($surfer->nationality)
-                                        <p class="text-sm text-muted-foreground">🌍 {{ $surfer->nationality }}</p>
-                                    @endif
                                 </x-ui.card-content>
                             </x-ui.card>
                         </a>

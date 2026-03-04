@@ -42,17 +42,44 @@ Route::group([
         return view('pages.eventos.show', compact('slug'));
     })->name('eventos.show');
 
-    // Surfer Wall
-    Route::get('/surfer-wall', function () {
-        return view('pages.surfer-wall.index');
-    })->name('surfers.index');
+    // 301 Redirects - old Praia do Norte URLs
+    Route::get('/sobre', fn() => redirect(LaravelLocalization::localizeURL('/praia-norte/sobre'), 301))->name('sobre.redirect');
+    Route::get('/surfer-wall', fn() => redirect(LaravelLocalization::localizeURL('/praia-norte/surfer-wall'), 301));
+    Route::get('/surfer-wall/{slug}', fn($slug) => redirect(LaravelLocalization::localizeURL('/praia-norte/surfer-wall/' . $slug), 301));
+    Route::get('/previsoes', fn() => redirect(LaravelLocalization::localizeURL('/praia-norte/previsoes'), 301));
 
-    Route::get('/surfer-wall/{slug}', function ($slug) {
-        return view('pages.surfer-wall.show', compact('slug'));
-    })->name('surfers.show');
+    // Praia do Norte
+    Route::prefix('praia-norte')->name('pn.')->group(function () {
+        Route::get('/sobre', function () {
+            return view('pages.sobre');
+        })->name('sobre');
 
-    // Forecast
-    Route::get('/previsoes', [ForecastController::class, 'index'])->name('forecast');
+        Route::get('/surfer-wall', function () {
+            return view('pages.surfer-wall.index');
+        })->name('surfers.index');
+
+        Route::get('/surfer-wall/{slug}', function ($slug) {
+            return view('pages.surfer-wall.show', compact('slug'));
+        })->name('surfers.show');
+
+        Route::get('/previsoes', [ForecastController::class, 'index'])->name('forecast');
+
+        Route::get('/forte', function () {
+            $page = \App\Models\Pagina::where('entity', 'praia-norte')
+                ->where('slug', 'forte')
+                ->first() ?? new \App\Models\Pagina([
+                    'entity' => 'praia-norte',
+                    'slug' => 'forte',
+                    'title' => ['pt' => 'Forte de S. Miguel Arcanjo', 'en' => 'Fort of São Miguel Arcanjo'],
+                    'content' => []
+                ]);
+            return view('pages.forte', compact('page'));
+        })->name('forte');
+
+        Route::get('/hidrografico', function () {
+            return view('pages.hidrografico');
+        })->name('hidrografico');
+    });
 
     // Shop / Loja (/pt/loja, /en/shop)
     Route::get('/loja', [LojaController::class, 'index'])->name('loja.index');
@@ -117,12 +144,8 @@ Route::group([
             return view('pages.nazare-qualifica.estacionamento', compact('page'));
         })->name('estacionamento');
 
-        Route::get('/forte', function () {
-            $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
-                ->where('slug', 'forte')
-                ->first() ?? new \App\Models\Pagina(['entity' => 'nazare-qualifica', 'slug' => 'forte', 'title' => ['pt' => 'Forte de S. Miguel Arcanjo', 'en' => 'Fort of São Miguel Arcanjo'], 'content' => []]);
-            return view('pages.nazare-qualifica.forte', compact('page'));
-        })->name('forte');
+        // 301 Redirect - Forte moved to Praia do Norte
+        Route::get('/forte', fn() => redirect(LaravelLocalization::localizeURL('/praia-norte/forte'), 301));
 
         Route::get('/ale', function () {
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
@@ -152,10 +175,6 @@ Route::group([
     });
 
     // Static pages
-    Route::get('/sobre', function () {
-        return view('pages.sobre');
-    })->name('sobre');
-
     Route::get('/contacto', function () {
         return view('pages.contacto');
     })->name('contacto');

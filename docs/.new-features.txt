@@ -1,0 +1,7 @@
+- no backend, na pagina de edição de surfers, melhorar a distribuição das cards. ou seja, primeiro informacao basica, depois opções, depois biografia,  e depois, fotografia;
+- quero também que revejas o texto inserido em todos os surfistas e notícias porque estão sem formação correta. todos os textos de noticias devem estar em pt-PT (AO90) e com formatação correta. Todos os textos devem também ser traduzidos para inglês, nas noticias, eventos e surfers;
+- adicionar um campo de NIF/CIF/NIE para ser adicionado nas faturas;
+- Adicionar a funcionalidade de escolha do utilizador levantar a encomenda numa das lojas fisicas;
+- Integrar o Woocommerce com a EasyPay (Multibanco, MBWay, Cartão de Crédito);
+- Adicionar a funcionalidade identica ao que o plugin WooCommerce Shipping & Tax e WooCommerce Table Rate Shipping fazem;
+- 

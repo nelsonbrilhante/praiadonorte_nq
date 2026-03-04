@@ -5,9 +5,9 @@ namespace App\Filament\Resources\Surfers\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
@@ -24,15 +24,8 @@ class SurfersTable
                     ->label('Nome')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('nationality')
-                    ->label('Nacionalidade')
-                    ->searchable(),
-                TextColumn::make('surfboards_count')
-                    ->label('Pranchas')
-                    ->counts('surfboards'),
-                IconColumn::make('featured')
-                    ->label('Destaque')
-                    ->boolean(),
+                ToggleColumn::make('featured')
+                    ->label('Destaque'),
                 TextColumn::make('order')
                     ->label('Ordem')
                     ->sortable(),

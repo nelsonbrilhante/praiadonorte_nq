@@ -13,6 +13,7 @@
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-heading: 'Montserrat', system-ui, sans-serif;
   --font-display: 'Montserrat', system-ui, sans-serif;
+  --font-quote: 'Playfair Display', Georgia, serif;
 
   /* Cores do Projeto - Praia do Norte / Nazare Qualifica */
   --color-ocean: #0066cc;
@@ -406,10 +407,44 @@
    SCROLLBAR HIDE (for horizontal carousels)
    ============================================ */
 
+/* ============================================
+   LIGHT OCEAN SECTION (museum/gallery style)
+   ============================================ */
+
+.section-ocean-light {
+  background-color: var(--color-ocean-50);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'%3E%3Cpath d='M0 30 Q15 20 30 30 T60 30 T90 30 T120 30' fill='none' stroke='%230066cc' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M0 45 Q15 35 30 45 T60 45 T90 45 T120 45' fill='none' stroke='%230066cc' stroke-width='0.6' opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 120px 60px;
+  background-repeat: repeat;
+}
+
+.dark .section-ocean-light {
+  background-color: var(--color-ocean-900);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'%3E%3Cpath d='M0 30 Q15 20 30 30 T60 30 T90 30 T120 30' fill='none' stroke='%233399ff' stroke-width='0.8' opacity='0.06'/%3E%3Cpath d='M0 45 Q15 35 30 45 T60 45 T90 45 T120 45' fill='none' stroke='%233399ff' stroke-width='0.6' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* ============================================
+   SCROLLBAR HIDE (for horizontal carousels)
+   ============================================ */
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* ============================================
+   BOARD MAGNIFIER (surfer profile)
+   ============================================ */
+
+.board-magnifier-active { cursor: none; }
+
+.magnifier-lens {
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.8), 0 0 0 3px rgba(0,102,204,0.3), 0 8px 32px rgba(0,0,0,0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .magnifier-lens { transition: none !important; }
 }

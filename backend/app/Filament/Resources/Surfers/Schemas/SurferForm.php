@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\Surfers\Schemas;
 
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\KeyValue;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -29,12 +27,13 @@ class SurferForm
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn ($state, callable $set) =>
                                 $set('slug', Str::slug($state))),
+                        TextInput::make('aka')
+                            ->label('Alcunha / aka')
+                            ->maxLength(255)
+                            ->placeholder('e.g. MAYA, AXI'),
                         TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
-                            ->maxLength(255),
-                        TextInput::make('nationality')
-                            ->label('Nacionalidade')
                             ->maxLength(255),
                         TextInput::make('order')
                             ->label('Ordem')
@@ -42,6 +41,13 @@ class SurferForm
                             ->default(0),
                     ])
                     ->columns(2),
+
+                Section::make('Opções')
+                    ->schema([
+                        Toggle::make('featured')
+                            ->label('Surfista em Destaque')
+                            ->default(false),
+                    ]),
 
                 Section::make('Biografia')
                     ->schema([
@@ -65,7 +71,49 @@ class SurferForm
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Foto')
+                Section::make('Citação')
+                    ->schema([
+                        Tabs::make('Quote Idiomas')
+                            ->tabs([
+                                Tab::make('Português')
+                                    ->icon('heroicon-o-flag')
+                                    ->schema([
+                                        RichEditor::make('quote.pt')
+                                            ->label('Citação (PT)')
+                                            ->columnSpanFull(),
+                                    ]),
+                                Tab::make('English')
+                                    ->icon('heroicon-o-globe-alt')
+                                    ->schema([
+                                        RichEditor::make('quote.en')
+                                            ->label('Quote (EN)')
+                                            ->columnSpanFull(),
+                                    ]),
+                            ])
+                            ->columnSpanFull(),
+                    ]),
+
+                Section::make('Redes Sociais')
+                    ->schema([
+                        TextInput::make('social_media.instagram')
+                            ->label('Instagram')
+                            ->placeholder('handle sem @')
+                            ->afterStateHydrated(fn ($state, $set, $record) =>
+                                $set('social_media.instagram', $record?->social_media['instagram'] ?? $state)),
+                        TextInput::make('social_media.facebook')
+                            ->label('Facebook')
+                            ->placeholder('username ou page slug')
+                            ->afterStateHydrated(fn ($state, $set, $record) =>
+                                $set('social_media.facebook', $record?->social_media['facebook'] ?? $state)),
+                        TextInput::make('social_media.twitter')
+                            ->label('Twitter / X')
+                            ->placeholder('handle sem @')
+                            ->afterStateHydrated(fn ($state, $set, $record) =>
+                                $set('social_media.twitter', $record?->social_media['twitter'] ?? $state)),
+                    ])
+                    ->columns(3),
+
+                Section::make('Fotografia')
                     ->schema([
                         FileUpload::make('photo')
                             ->label('Foto do Surfista')
@@ -74,42 +122,13 @@ class SurferForm
                             ->directory('surfers')
                             ->visibility('public')
                             ->columnSpanFull(),
-                    ]),
-
-                Section::make('Conquistas')
-                    ->schema([
-                        Repeater::make('achievements')
-                            ->label('Conquistas/Prémios')
-                            ->schema([
-                                TextInput::make('pt')
-                                    ->label('Conquista (PT)')
-                                    ->required(),
-                                TextInput::make('en')
-                                    ->label('Achievement (EN)'),
-                            ])
-                            ->columns(2)
-                            ->collapsible()
-                            ->defaultItems(0)
+                        FileUpload::make('board_image')
+                            ->label('Imagem da Prancha')
+                            ->image()
+                            ->disk('public')
+                            ->directory('surfers/boards')
+                            ->visibility('public')
                             ->columnSpanFull(),
-                    ]),
-
-                Section::make('Redes Sociais')
-                    ->schema([
-                        KeyValue::make('social_media')
-                            ->label('Redes Sociais')
-                            ->keyLabel('Plataforma')
-                            ->valueLabel('URL/Username')
-                            ->keyPlaceholder('instagram, facebook, twitter, youtube...')
-                            ->valuePlaceholder('https://...')
-                            ->columnSpanFull(),
-                    ])
-                    ->collapsed(),
-
-                Section::make('Opções')
-                    ->schema([
-                        Toggle::make('featured')
-                            ->label('Surfista em Destaque')
-                            ->default(false),
                     ]),
             ]);
     }

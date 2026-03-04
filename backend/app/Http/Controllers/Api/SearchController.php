@@ -90,7 +90,7 @@ class SearchController extends Controller
                 'title' => ['pt' => $surfer->name, 'en' => $surfer->name],
                 'nationality' => $surfer->nationality,
                 'featured' => $surfer->featured,
-                'url' => "/surfer-wall/{$surfer->slug}",
+                'url' => "/praia-norte/surfer-wall/{$surfer->slug}",
             ];
         }
 

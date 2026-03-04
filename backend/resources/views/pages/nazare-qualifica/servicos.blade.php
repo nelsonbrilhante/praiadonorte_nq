@@ -41,7 +41,7 @@
                             $slug = $service['slug'] ?? '';
                             $visual = $serviceVisuals[$slug] ?? $serviceVisuals['carsurf'];
                         @endphp
-                        <a href="{{ route('nq.' . $slug) }}" class="group">
+                        <a href="{{ $slug === 'forte' ? LaravelLocalization::localizeURL('/praia-norte/forte') : route('nq.' . $slug) }}" class="group">
                             <x-ui.card class="h-full overflow-hidden transition-colors hover:border-institutional">
                                 <x-ui.card-header class="pb-4">
                                     <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-xl {{ $visual['colorBg'] }} transition-all group-hover:scale-110">

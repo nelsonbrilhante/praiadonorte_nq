@@ -29,7 +29,6 @@ class DatabaseSeeder extends Seeder
             $this->command?->info('Seeding content (tables empty)...');
             $this->call([
                 SurferSeeder::class,
-                SurfboardSeeder::class,
                 NoticiaSeeder::class,
                 EventoSeeder::class,
                 PaginaSeeder::class,
