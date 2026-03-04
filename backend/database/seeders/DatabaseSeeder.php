@@ -30,8 +30,12 @@ class DatabaseSeeder extends Seeder
             ['value' => '1']
         );
 
-        // Only seed content if tables are empty (handles partial seeding failure)
-        if (\App\Models\Evento::count() === 0) {
+        // Only seed content if ALL content tables are empty (protects production data)
+        $hasContent = \App\Models\Surfer::count() > 0
+            || \App\Models\Noticia::count() > 0
+            || \App\Models\Evento::count() > 0;
+
+        if (! $hasContent) {
             $this->command?->info('Seeding content (tables empty)...');
             $this->call([
                 SurferSeeder::class,

@@ -172,27 +172,6 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 
-[program:db-seed]
-command=php /var/www/html/artisan db:seed --force --no-interaction
-autostart=true
-autorestart=false
-exitcodes=0,1
-startsecs=0
-stdout_logfile=/dev/stdout
-stdout_logfile_maxbytes=0
-stderr_logfile=/dev/stderr
-stderr_logfile_maxbytes=0
-
-[program:content-download]
-command=sh -c "sleep 30 && php /var/www/html/artisan app:download-documents --no-interaction && php /var/www/html/artisan app:download-corporate-bodies --no-interaction"
-autostart=true
-autorestart=false
-exitcodes=0,1
-startsecs=0
-stdout_logfile=/dev/stdout
-stdout_logfile_maxbytes=0
-stderr_logfile=/dev/stderr
-stderr_logfile_maxbytes=0
 SUPERVISOR
 
 WORKDIR /var/www/html
@@ -250,6 +229,27 @@ php /var/www/html/artisan view:cache 2>&1 || true
 
 echo "==> Publishing Livewire assets..."
 php /var/www/html/artisan livewire:publish --assets 2>&1 || true
+
+echo "==> Seeding database (first deploy only)..."
+SEED_SENTINEL="/var/www/html/storage/.db-seeded"
+if [ ! -f "$SEED_SENTINEL" ]; then
+    echo "==> First deploy: seeding database..."
+    php /var/www/html/artisan db:seed --force --no-interaction 2>&1 || true
+    touch "$SEED_SENTINEL"
+else
+    echo "==> Skipping seed (sentinel exists)."
+fi
+
+echo "==> Downloading content (first deploy only)..."
+CONTENT_SENTINEL="/var/www/html/storage/.content-downloaded"
+if [ ! -f "$CONTENT_SENTINEL" ]; then
+    echo "==> First deploy: downloading content..."
+    php /var/www/html/artisan app:download-documents --no-interaction 2>&1 || true
+    php /var/www/html/artisan app:download-corporate-bodies --no-interaction 2>&1 || true
+    touch "$CONTENT_SENTINEL"
+else
+    echo "==> Skipping content download (sentinel exists)."
+fi
 
 echo "==> Starting supervisord..."
 exec /usr/bin/supervisord -c /etc/supervisord.conf
