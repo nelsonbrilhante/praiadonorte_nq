@@ -14,6 +14,12 @@ RUN { \
     echo 'upload_max_filesize = 32M'; \
 } > /usr/local/etc/php/conf.d/custom.ini
 
+# Copy child theme into the image
+COPY themes/kadence-praia-do-norte /usr/src/wordpress/wp-content/themes/kadence-praia-do-norte
+
+# Copy custom shipping plugin into the image
+COPY plugins/pn-table-rate-shipping /usr/src/wordpress/wp-content/plugins/pn-table-rate-shipping
+
 COPY entrypoint.sh /usr/local/bin/wp-entrypoint.sh
 RUN chmod +x /usr/local/bin/wp-entrypoint.sh
 
