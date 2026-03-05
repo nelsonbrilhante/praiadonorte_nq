@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Carsurf** — Surf training center
 - **Nazare Qualifica** — Municipal infrastructure management
 
-**Current Phase**: Quality Assurance (Phase 4) — SEO, performance optimization. Next: security hardening (Phase 5). Blade migration from Next.js is complete.
+**Current Phase**: Production (deployed) + ongoing QA. Blade migration from Next.js is complete. Surfboard model removed (board info now on Surfer). Forte da Nazaré and Posto Hidrográfico pages added. Admin-controlled maintenance mode operational. Next: Easypay payment integration, content translation.
 
 ## Critical Constraints
 
@@ -43,9 +43,10 @@ php artisan test --filter=ExampleTest  # Run single test
 # Build
 npm run build                  # Production asset build
 
-# Content download commands
+# Content download/import commands
 php artisan app:download-corporate-bodies  # Download photos/CVs from old site
 php artisan app:download-documents         # Download 102 PDFs across 13 categories
+php artisan app:import-wordpress {dump}    # Import surfers/news from WordPress DB dump
 ```
 
 ### WordPress/WooCommerce (from `wordpress/`)
@@ -71,6 +72,8 @@ make reset      # Teardown + fresh setup
 
 **Dev URLs**: `localhost:8000/pt` (Portuguese), `localhost:8000/en` (English), `localhost:8000/admin` (Filament CMS, credentials: `nelson.brilhante@cm-nazare.pt` / `Nzr€Qu@l!f1c4-2026`), `localhost:8080` (WordPress admin: `admin` / `admin123`)
 
+**Production URLs**: `nazarequalifica.pt` (Laravel, primary), `praiadonortenazare.pt`, `carsurf.nazare.pt`, `store.praiadonortenazare.pt` (WooCommerce). Old domains still active: `nq.nelsonbrilhante.com`, `store-nq.nelsonbrilhante.com`
+
 **Credentials**: All environment credentials (production, dev, VPS, Coolify, WooCommerce API keys) are in `.credentials.md` (git-ignored). Check there for WordPress production/dev store logins, SSH access, and API tokens.
 
 ## Architecture
@@ -81,11 +84,12 @@ make reset      # Teardown + fresh setup
 
 **Project structure**:
 ```
-backend/        ← Laravel application (main codebase)
-wordpress/      ← WooCommerce Docker setup (local dev + production reference)
-scripts/        ← start.sh, stop.sh, restart.sh (convenience)
-docs/           ← Technical documentation, phase guides, architecture docs
-Dockerfile      ← Multi-stage production build (Composer → Vite → PHP-FPM + Nginx)
+backend/           ← Laravel application (main codebase)
+wordpress/         ← WooCommerce Docker setup (local dev + production reference)
+wordpress/coolify/ ← Production WordPress deployment (Dockerfile, entrypoint, plugins, themes)
+scripts/           ← start.sh, stop.sh, restart.sh (convenience)
+docs/              ← Technical documentation, phase guides, architecture docs
+Dockerfile         ← Multi-stage production build (Composer → Vite → PHP-FPM + Nginx)
 ```
 
 ### WooCommerce Integration
@@ -95,6 +99,8 @@ Users browse products on the Laravel frontend (`/pt/loja`), click "Buy", get red
 - **`WooCommerceService`** (`backend/app/Services/WooCommerceService.php`) — REST API client. Methods: `getProducts()`, `getProductBySlug()`, `getCategories()`, `isAvailable()`. Responses cached 5min (configurable). Graceful fallback on connection failure.
 - **`LojaController`** (`backend/app/Http/Controllers/LojaController.php`) — Handles `/pt/loja` and `/en/shop` routes with category filtering and pagination.
 - **Config**: `backend/config/woocommerce.php` reads `WOOCOMMERCE_*` env vars. The `make setup` command in `wordpress/` auto-generates API keys and updates `backend/.env`.
+- **Production**: WooCommerce runs at `store.praiadonortenazare.pt` (old: `store-nq.nelsonbrilhante.com`) via Coolify. Uses Kadence child theme. `LARAVEL_URL` env var connects back to Laravel (`nazarequalifica.pt`).
+- **Sentinel protection**: `wordpress/coolify/entrypoint.sh` uses a sentinel file to prevent production data (uploads, plugins, theme customizations) from being overwritten on redeploys.
 
 ### Multi-Entity Content
 
@@ -140,19 +146,19 @@ use Filament\Tables\Actions\EditAction; // Wrong (v3)
 
 | Model | Key Details |
 |---|---|
-| **Noticia** | News/blog. i18n title/content/excerpt, cover image, entity, category, tags |
+| **Noticia** | News/blog. i18n title/content/excerpt, cover image, entity, category, tags, featured, published_at |
 | **Evento** | Events. Dates, location, entity, gallery, schedule, partners |
-| **Surfer** | Big wave surfer profiles. Bio, achievements, `hasMany(Surfboard)` |
-| **Surfboard** | Board specs, `belongsTo(Surfer)` |
+| **Surfer** | Big wave surfer profiles. name, aka, bio (i18n), quote (i18n), photo, board_image, social_media, featured, order. **Note**: `Surfboard` model was removed — board info is now the `board_image` field directly on Surfer |
 | **Pagina** | Institutional pages. i18n content, entity, hero_image. `hasMany(HeroSlide)` |
 | **HeroSlide** | Homepage hero slides (up to 5). Video/image, LIVE badge, auto-rotate. Pauses when any slide has `is_live=true` |
 | **CorporateBody** | Corpos Sociais (NQ). Sections: `conselho_gerencia`, `assembleia_geral`, `fiscal_unico` |
 | **DocumentCategory** | i18n name/description, ordered. `hasMany(Document)` |
 | **Document** | PDF uploads per category, i18n title |
+| **SiteSetting** | Key-value store with 60s cache. Powers admin-controlled maintenance mode (503 page, authenticated users bypass, bilingual support) |
 
 ### Routes
 
-See `backend/routes/web.php`. Route names: `home`, `noticias.index`, `noticias.show`, `eventos.*`, `surfers.*`, `forecast`, `loja.index`, `loja.show`, `carsurf.*`, `nq.*`, `sobre`, `contacto`, `privacidade`, `termos`, `cookies`.
+See `backend/routes/web.php`. Route names: `home`, `noticias.index`, `noticias.show`, `eventos.*`, `surfers.*`, `forecast`, `loja.index`, `loja.show`, `carsurf.*`, `nq.*`, `pn.forte`, `pn.hidrografico`, `sobre`, `contacto`, `privacidade`, `termos`, `cookies`.
 
 **Legacy API routes** (`/api/v1/*`) still exist from the Next.js era. The search spotlight (`Cmd+K`) uses `/api/v1/search` via Alpine.js fetch (converted from Livewire to avoid PHP built-in server single-thread issues).
 
@@ -186,9 +192,13 @@ Uses `@tailwindcss/vite` plugin (Tailwind v4 native Vite integration).
 
 ### Production Deployment
 
-**Dockerfile** (project root) — Multi-stage build: Composer (PHP deps) → Node (Vite assets) → PHP 8.4-FPM Alpine with Nginx + Supervisor. Runs PHP-FPM, Nginx, queue worker, database seeder, and content downloader. Entrypoint creates `.env` from Docker env vars, runs migrations, caches config, publishes Livewire assets.
+**Laravel Dockerfile** (project root) — Multi-stage build: Composer (PHP deps) → Node (Vite assets) → PHP 8.4-FPM Alpine with Nginx + Supervisor. Runs PHP-FPM, Nginx, queue worker, database seeder, and content downloader. Entrypoint creates `.env` from Docker env vars, runs migrations, caches config, publishes Livewire assets.
 
-**CI/CD**: Push to `main` triggers `.github/workflows/deploy.yml` which calls Coolify webhook (secrets: `COOLIFY_WEBHOOK_URL`, `COOLIFY_API_TOKEN`).
+**WordPress Dockerfile** (`wordpress/coolify/Dockerfile`) — Production WordPress with Kadence child theme, shipping plugin, and custom entrypoint. Uses sentinel file mechanism to protect production data (uploads, plugin settings, theme customizations) from being overwritten on redeploys.
+
+**CI/CD**: Push to `main` triggers `.github/workflows/deploy.yml` which calls Coolify webhook (secrets: `COOLIFY_WEBHOOK_URL`, `COOLIFY_API_TOKEN`). WordPress deployment is manual via Coolify rebuild.
+
+**Production URLs**: `nazarequalifica.pt` (Laravel, primary), `praiadonortenazare.pt`, `carsurf.nazare.pt`, `store.praiadonortenazare.pt` (WooCommerce). Old domains still active: `nq.nelsonbrilhante.com`, `store-nq.nelsonbrilhante.com`.
 
 ## Session Protocol
 
@@ -207,7 +217,7 @@ Branches: `main` (production), `feature/*`, `fix/*`, `hotfix/*`. Commits: conven
 - `docs/tech-stack/SETUP_LOG.md` — Version history, issues, solutions
 - `docs/phases/` — Phase-by-phase implementation guides
 - `docs/architecture/NAMING_CONVENTIONS.md` — Naming conventions
-- `DESIGN_GUIDELINES.md` — Visual identity and UX patterns
+- `DESIGN_GUIDELINES.md` — Visual identity and UX patterns (partially outdated: design tokens valid, Next.js/shadcn references are legacy)
 - `CYBERSECURITY_ASSESSMENT.md` — Security strategy
 - `PLANO_DESENVOLVIMENTO.md` — Full development plan (Portuguese)
 

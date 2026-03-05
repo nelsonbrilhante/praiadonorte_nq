@@ -21,32 +21,31 @@
     {{-- Introduction Section --}}
     <section class="py-12">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
-                <div class="relative aspect-video overflow-hidden rounded-lg">
-                    <img
-                        src="{{ asset('pn-ai-wave-hero.png') }}"
-                        alt="Praia do Norte"
-                        class="h-full w-full object-cover"
-                    />
+            <div class="text-center mb-8">
+                <img
+                    src="{{ asset('images/logos/LOGOTIPO PN.png') }}"
+                    alt="Praia do Norte"
+                    class="h-32 md:h-40 w-auto mx-auto"
+                />
+            </div>
+            <div class="mx-auto max-w-3xl">
+                <h2 class="mb-6 text-3xl font-bold">{{ __('messages.about.intro.title') }}</h2>
+                <div class="prose max-w-none">
+                    @if($pagina && $pagina->content)
+                        {!! $getLocalized($pagina->content, $locale) !!}
+                    @else
+                        <p class="text-lg text-muted-foreground">
+                            {{ __('messages.about.intro.text') }}
+                        </p>
+                    @endif
                 </div>
-                <div>
-                    {{-- Logo --}}
-                    <img
-                        src="{{ asset('images/logos/LOGOTIPO PN.png') }}"
-                        alt="Praia do Norte"
-                        class="mb-6 h-16 w-auto md:h-20"
-                    />
-                    <h2 class="mb-6 text-3xl font-bold">{{ __('messages.about.intro.title') }}</h2>
-                    <div class="prose max-w-none">
-                        @if($pagina && $pagina->content)
-                            {!! $getLocalized($pagina->content, $locale) !!}
-                        @else
-                            <p class="text-lg text-muted-foreground">
-                                {{ __('messages.about.intro.text') }}
-                            </p>
-                        @endif
-                    </div>
-                </div>
+            </div>
+            <div class="mt-8 relative aspect-video overflow-hidden rounded-lg">
+                <img
+                    src="{{ asset('pn-ai-wave-hero.png') }}"
+                    alt="Praia do Norte"
+                    class="h-full w-full object-cover"
+                />
             </div>
         </div>
     </section>

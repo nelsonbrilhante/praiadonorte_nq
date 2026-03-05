@@ -5,7 +5,7 @@
 
 <x-layouts.app>
     {{-- Hero --}}
-    <x-praia-norte.page-hero title="{{ $page->title[$locale] ?? $page->title['pt'] }}" subtitle="{{ __('messages.nq.about.subtitle') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : '' }}">
+    <x-praia-norte.page-hero title="{{ $page->title[$locale] ?? $page->title['pt'] }}" subtitle="{{ __('messages.nq.about.subtitle') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : asset('images/nq/ale.jpg') }}">
         <div class="flex flex-wrap gap-4">
             <x-ui.button href="{{ route('nq.equipa') }}" class="bg-white text-institutional hover:bg-white/90">
                 {{ __('messages.nq.team.title') }}
@@ -13,30 +13,23 @@
             <x-ui.button href="{{ route('nq.contraordenacoes') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
                 {{ __('messages.nq.contraordenacoes.title') }}
             </x-ui.button>
-            <x-ui.button href="{{ route('nq.servicos') }}" variant="outline" class="border-white bg-transparent text-white hover:bg-white/10">
-                {{ __('messages.nq.services.title') }}
-            </x-ui.button>
         </div>
     </x-praia-norte.page-hero>
 
     {{-- Intro Section --}}
     <section class="py-12">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center">
-                {{-- Logo --}}
-                <div class="lg:col-span-4 flex justify-center">
-                    <img
-                        src="{{ asset('images/logos/imagem-grafica-nq-vertical-elements.svg') }}"
-                        alt="Nazaré Qualifica - Empresa Municipal"
-                        class="h-48 w-auto md:h-64 lg:h-72"
-                    />
-                </div>
-                {{-- Text --}}
-                <div class="lg:col-span-8">
-                    <div class="prose max-w-none">
-                        <h2>{{ $content['intro']['title'] ?? __('messages.nq.about.intro.title') }}</h2>
-                        <p class="text-lg text-muted-foreground">{{ $content['intro']['text'] ?? '' }}</p>
-                    </div>
+            <div class="text-center mb-8">
+                <img
+                    src="{{ asset('images/logos/imagem-grafica-nq-vertical-elements.svg') }}"
+                    alt="Nazaré Qualifica - Empresa Municipal"
+                    class="h-32 md:h-40 w-auto mx-auto"
+                />
+            </div>
+            <div class="mx-auto max-w-3xl">
+                <div class="prose max-w-none">
+                    <h2>{{ $content['intro']['title'] ?? __('messages.nq.about.intro.title') }}</h2>
+                    <p class="text-lg text-muted-foreground">{{ $content['intro']['text'] ?? __('messages.nq.about.intro.text') }}</p>
                 </div>
             </div>
         </div>
@@ -78,6 +71,45 @@
     </section>
     @endif
 
+    {{-- Gallery --}}
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="mb-8 text-center text-3xl font-bold">{{ __('messages.nq.about.gallery.title') }}</h2>
+            <div class="grid grid-cols-1 gap-1 md:grid-cols-2">
+                @php
+                    $galleryItems = [
+                        ['image' => 'car.jpg', 'label' => __('messages.nq.services.carsurf.title'), 'route' => route('nq.carsurf')],
+                        ['image' => 'nazare.jpg', 'label' => __('messages.nq.services.estacionamento.title'), 'route' => route('nq.estacionamento')],
+                        ['image' => 'farol.jpg', 'label' => __('messages.nq.services.forte.title'), 'route' => route('pn.forte')],
+                        ['image' => 'ale.jpg', 'label' => __('messages.nq.services.ale.title'), 'route' => route('nq.ale')],
+                    ];
+                @endphp
+                @foreach($galleryItems as $item)
+                    @if($item['route'])
+                    <a href="{{ $item['route'] }}" class="group relative aspect-[16/10] overflow-hidden">
+                    @else
+                    <div class="group relative aspect-[16/10] overflow-hidden">
+                    @endif
+                        <img
+                            src="{{ asset('images/nq/' . $item['image']) }}"
+                            alt="{{ $item['label'] }}"
+                            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            loading="lazy"
+                        />
+                        <div class="absolute inset-0 bg-black/20 transition-colors duration-300 group-hover:bg-black/40"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-6">
+                            <h3 class="text-xl font-bold text-white drop-shadow-lg md:text-2xl">{{ $item['label'] }}</h3>
+                        </div>
+                    @if($item['route'])
+                    </a>
+                    @else
+                    </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     {{-- Quick Links to Services --}}
     <section class="py-12">
         <div class="container mx-auto px-4">
@@ -116,7 +148,7 @@
         <div class="container mx-auto px-4 text-center">
             <h2 class="mb-4 text-3xl font-bold">{{ $content['cta']['title'] ?? __('messages.nq.about.cta.title') }}</h2>
             <p class="mb-8 text-lg opacity-90">{{ $content['cta']['subtitle'] ?? __('messages.nq.about.cta.subtitle') }}</p>
-            <x-ui.button href="{{ route('nq.servicos') }}" class="bg-white text-institutional hover:bg-white/90">
+            <x-ui.button href="{{ route('contacto') }}" class="bg-white text-institutional hover:bg-white/90">
                 {{ __('messages.nq.about.cta.button') }}
             </x-ui.button>
         </div>

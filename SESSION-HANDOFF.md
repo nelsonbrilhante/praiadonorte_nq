@@ -7,297 +7,65 @@
 
 ## Última Sessão
 
-- **Data**: 2025-12-19
-- **Resumo**: Merge do Hero Slider para main + verificação dark mode
+- **Data**: 2026-03-04 (sessão 4)
+- **Resumo**: Shipping E2E verificado + SMTP email configurado e testado com sucesso
 - **Branch**: `main`
 
 ### O que foi feito:
 
-1. **Verificação Dark Mode**
-   - Confirmado que o frontend detecta automaticamente a preferência do sistema (prefers-color-scheme)
-   - Comportamento idêntico ao Filament (backend)
-   - No primeiro acesso, usa preferência do SO/browser
-   - Implementação via `window.matchMedia('(prefers-color-scheme: dark)')`
+1. **Shipping Rates E2E Verificado (Playwright)**
+   - Todos os produtos têm pesos atribuídos (0.3–0.5 kg)
+   - T-Shirt no carrinho → €6.80 shipping ✅
+   - Local Pickup "Recolha no Forte de S. Miguel Arcanjo" (grátis) disponível ✅
+   - Rate table funciona correctamente conforme plugin `pn-table-rate-shipping`
 
-2. **Merge do Hero Slider para main**
-   - Criado PR #1 no GitHub: `feat(hero): Hero Slider + cleanup logos`
-   - PR merged com sucesso via CLI (`gh pr merge`)
-   - Branch `feature/hero-slider` eliminada após merge
+2. **SMTP Email Configurado**
+   - Conta `store@nazarequalifica.pt` criada no WHM (cPanel `nq`)
+   - Plugin `wp-mail-smtp` configurado no WP Admin via Playwright
+   - **SMTP host discovery**: `mail.nazarequalifica.pt` resolve para VPS (sem mail server) → testado `whm.cm-nazare.pt` (SSL cert mismatch) → **`vm01.cm-nazare.pt:465/SSL` funciona**
+   - Config final: `vm01.cm-nazare.pt`, porta 465, SSL, auth `store@nazarequalifica.pt`
+   - Test email enviado com sucesso para `zumuha@gmail.com` ✅
 
-3. **Commit adicional antes do merge**
-   - `chore: cleanup NQ logos and add veo-assets`
-   - Removidos logos NQ antigos/duplicados
-   - Adicionados veo-assets (frames para animação do logo)
-   - Adicionado `server.php` ao `.gitignore`
+3. **Entrypoint.sh actualizado (Phase 6.7)**
+   - Adicionado bloco SMTP config que corre em todos os deploys (não gated por IS_FIRST_RUN)
+   - Defaults: `vm01.cm-nazare.pt:465/ssl`
+   - Usa env vars: `SMTP_HOST`, `SMTP_PORT`, `SMTP_ENCRYPTION`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM`, `SMTP_FROM_NAME`
 
-### Ficheiros modificados:
-- `.gitignore` - adicionado `backend/server.php`
-- Logos NQ reorganizados em `logos/nazarequalifica/`
-- Novos assets em `logos/nazarequalifica/veo-assets/`
+4. **WooCommerce Email Templates Verificados**
+   - "From" address actualizado de `admin@praiadonorte.pt` → `store@nazarequalifica.pt`
+   - "From" name: "Praia do Norte – Loja" ✅
+   - Recipient "New order": `nelsonbrilhante@gmail.com` ✅
+   - Recipients "Cancelled order" e "Failed order": actualizados de `admin@praiadonorte.pt` → `nelsonbrilhante@gmail.com`
+   - Todos os 14 email templates activos e configurados correctamente
 
----
+5. **Ficheiros modificados**
+   - `wordpress/coolify/entrypoint.sh` — Phase 6.7 SMTP config (defaults corrigidos para vm01.cm-nazare.pt:465/ssl)
+   - `.credentials.md` — Secção SMTP adicionada com credenciais e env vars correctos
 
-## Sessão Anterior (2025-12-18)
+### Acção pendente (manual):
+- **Coolify env vars**: Adicionar ao serviço WooCommerce no Coolify:
+  ```
+  SMTP_HOST=vm01.cm-nazare.pt
+  SMTP_PORT=465
+  SMTP_ENCRYPTION=ssl
+  SMTP_USER=store@nazarequalifica.pt
+  SMTP_PASSWORD=StoreNQ-2026!Smtp
+  SMTP_FROM=store@nazarequalifica.pt
+  SMTP_FROM_NAME=Praia do Norte - Loja
+  ```
+- **Redeploy WooCommerce** após adicionar env vars para que o entrypoint.sh aplique a config
 
-- **Resumo**: Hero Slider - conversão do Hero Section para slider profissional com múltiplos slides
-- **Branch**: `feature/hero-slider` (merged)
+### Sessão anterior (2026-03-04, sessão 3):
 
-### O que foi feito:
+- Teste E2E Easypay WooCommerce — integração bloqueada por "Connection not validated by easypay"
+- Requer contacto com suporte Easypay
 
-1. **Hero Slider - Nova Funcionalidade**
-   - Convertido Hero Section único para slider com até 5 slides
-   - Auto-rotação configurável (5-30 segundos, default 8s)
-   - Pausa automática quando qualquer slide tem toggle LIVE ativo
-   - Transições fade entre slides (1s duration)
-   - Cada slide mantém todas as funcionalidades originais:
-     - Vídeo YouTube com fallback image
-     - Título/Subtítulo com i18n (PT/EN)
-     - CTA button com URL configurável
-     - Toggle LIVE com badge animado
-     - Toggle áudio (quando LIVE)
-     - Logo alternativo em vez de título
+### Sessão anterior (2026-03-04, sessão 2):
 
-2. **Indicadores de Slide (dots)**
-   - Forma pill para slide ativo (mais largo)
-   - Forma circular para slides inativos
-   - Barra de progresso SVG à volta do indicador ativo
-   - Animação suave de preenchimento (sentido horário)
-   - Clique para navegar entre slides
-
-3. **Admin Panel (Filament)**
-   - Repeater com relacionamento `heroSlides`
-   - Drag & drop para reordenar slides
-   - Modal de confirmação ao eliminar (eliminação imediata, sem necessidade de guardar)
-   - Secções colapsáveis por slide
-   - Layout full-width para melhor UX
-   - Campos globais: intervalo e auto-rotação
-
-4. **Bug Fixes**
-   - Corrigido namespace Action (Filament 4)
-   - Corrigido delete não persistir na BD (implementado `->after()` callback)
-   - Corrigido indicador de progresso (mudado de rect para path SVG)
-
-### Ficheiros criados:
-- `database/migrations/2025_12_18_104415_create_hero_slides_table.php` - **NOVO**
-- `database/migrations/2025_12_18_104457_add_slider_settings_to_paginas_table.php` - **NOVO**
-- `database/migrations/2025_12_18_104641_migrate_hero_data_to_slides.php` - **NOVO**
-- `app/Models/HeroSlide.php` - **NOVO**
-- `resources/views/components/praia-norte/hero-slider.blade.php` - **NOVO**
-
-### Ficheiros modificados:
-- `app/Models/Pagina.php` - relationship heroSlides, hasAnyLiveSlide(), slider fields
-- `app/Filament/Resources/Geral/HomepageResource.php` - Repeater com slides, delete action
-- `app/Filament/Resources/Geral/Pages/EditHomepage.php` - afterSave cleanup orphans
-- `app/Http/Controllers/HomeController.php` - eager loading heroSlides
-- `resources/views/pages/home.blade.php` - usa hero-slider component
-
----
-
-## Sessão Anterior (2025-12-17 tarde)
-
-- **Resumo**: Fix botões invisíveis, nova página Contraordenações NQ, botões no header Sobre NQ
-
-### O que foi feito:
-
-1. **Fix Botões Invisíveis (outline variant)**
-   - **Problema**: Botões com `variant="outline"` e `text-white` tinham texto invisível
-   - **Causa**: Variante outline aplica `bg-background` (branco), combinado com `text-white` = invisível
-   - **Solução**: Adicionado `bg-transparent` aos botões afetados
-   - **Ficheiros corrigidos** (6):
-     - `pages/sobre.blade.php`
-     - `pages/carsurf/index.blade.php`
-     - `pages/nazare-qualifica/ale.blade.php`
-     - `pages/nazare-qualifica/estacionamento.blade.php`
-     - `pages/nazare-qualifica/forte.blade.php`
-     - `pages/nazare-qualifica/equipa.blade.php`
-
-2. **Nova Página: Contraordenações (NQ)**
-   - **URL**: `/pt/nazare-qualifica/contraordenacoes`
-   - **Rota**: `nq.contraordenacoes` em `routes/web.php`
-   - **Conteúdo**: 6 documentos PDF para download:
-     - Requerimento
-     - Formulário de Apresentação de Defesa
-     - Reclamação / Pedido de Esclarecimento
-     - Tabela de Taxas I
-     - Tabela de Taxas II
-     - Despacho de Subdelegação de Competências
-   - **PDFs**: Descarregados de nazarequalifica.pt e guardados em `public/documents/nq/`
-
-3. **Botões no Header da Página Sobre NQ**
-   - Adicionados 3 botões de navegação rápida (estilo Carsurf):
-     - Corpos Sociais (botão principal)
-     - Contraordenações (outline)
-     - Serviços (outline)
-
-4. **Link no Footer**
-   - Adicionado "Contraordenações" na secção Nazaré Qualifica do footer
-
-5. **Traduções PT/EN**
-   - Adicionadas traduções completas para a página de contraordenações
-   - Breadcrumb adicionado em ambos os idiomas
-
-### Ficheiros criados:
-- `pages/nazare-qualifica/contraordenacoes.blade.php` - **NOVO**
-- `public/documents/nq/requerimento.pdf` - **NOVO**
-- `public/documents/nq/formulario-apresentacao-defesa.pdf` - **NOVO**
-- `public/documents/nq/formulario-reclamacao.pdf` - **NOVO**
-- `public/documents/nq/tabela-taxas-1.pdf` - **NOVO**
-- `public/documents/nq/tabela-taxas-2.pdf` - **NOVO**
-- `public/documents/nq/despacho-subdelegacao.pdf` - **NOVO**
-
-### Ficheiros modificados:
-- `routes/web.php` - rota contraordenacoes
-- `pages/nazare-qualifica/sobre.blade.php` - botões no header
-- `components/layout/footer.blade.php` - link contraordenacoes
-- `lang/pt/messages.php` - traduções PT
-- `lang/en/messages.php` - traduções EN
-- 6 ficheiros com fix `bg-transparent` nos botões
-
----
-
-## Sessão Anterior (2025-12-17 manhã)
-
-- **Resumo**: Migração Forecast API, fix uploads, favicon, dark mode logo
-
-### O que foi feito:
-1. **Migração Forecast API (Next.js → Laravel)**
-   - Criado `ForecastService.php` - integra Open-Meteo Marine + Weather APIs
-   - Criado `ForecastController.php` - passa dados para a view
-   - Atualizado `routes/web.php` para usar ForecastController
-   - Reescrito `previsoes.blade.php` com dados reais:
-     - 8 cards de condições atuais (wave height, swell, period, direction, wind, gusts, air temp, water temp)
-     - Tabela de previsão 7 dias
-     - Código de cores para vento (verde=offshore, vermelho=onshore)
-     - Recomendação de fato baseada na temperatura da água
-
-2. **Fix Bug Upload de Imagens (Filament)**
-   - **Problema**: Imagens não apareciam no frontend após upload no admin
-   - **Causa**: FileUpload usava disk `local` (privado) em vez de `public`
-   - **Solução**: Adicionado `->disk('public')` e `->visibility('public')` em todos os FileUploads:
-     - `NoticiaForm.php`
-     - `EventoForm.php`
-     - `SurferForm.php`
-     - `SurfboardForm.php`
-     - `PaginaForm.php`
-     - `HomepageResource.php`
-
-3. **Favicon e App Icons**
-   - Adicionados: `favicon.ico`, `favicon.svg`, `favicon-16x16.png`, `favicon-32x32.png`
-   - Adicionados: `apple-touch-icon.png`, `android-chrome-192x192.png`, `android-chrome-512x512.png`
-   - Criado `site.webmanifest` para PWA
-   - Atualizado `app.blade.php` com links para favicon
-
-4. **Dark Mode Logo no Header**
-   - Header agora muda para logo branco quando dark mode está ativo
-   - Usa `MutationObserver` para detetar mudança da classe `dark` no `<html>`
-   - Estado `isDark` no Alpine.js controla visibilidade dos logos
-
-5. **Ficheiros criados:**
-   - `app/Services/ForecastService.php` - **NOVO**
-   - `app/Http/Controllers/ForecastController.php` - **NOVO**
-   - `public/favicon.svg`, `favicon.ico`, `favicon-*.png` - **NOVOS**
-   - `public/android-chrome-*.png`, `apple-touch-icon.png` - **NOVOS**
-   - `public/site.webmanifest` - **NOVO**
-
-6. **Ficheiros modificados:**
-   - `routes/web.php` - usa ForecastController
-   - `resources/views/pages/previsoes.blade.php` - dados reais + air temp
-   - `resources/views/components/layout/header.blade.php` - dark mode logo
-   - `resources/views/components/layouts/app.blade.php` - favicon links
-   - 6 ficheiros Filament Form - disk('public')
-
-7. **Commit**: `450a503` - feat: forecast API migration, image upload fix, and dark mode logo
-
----
-
-## Sessão Anterior (2025-12-16 tarde)
-
-- **Resumo**: Correção do search 404 e tema persistente dark/light
-
-### O que foi feito:
-1. **Correção do Search Spotlight (erro 404)**
-   - **Problema**: Livewire `wire:model` retornava 404 devido a problemas com PHP built-in server single-threaded
-   - **Solução**: Convertido de Livewire para Alpine.js puro
-   - Novo componente: `components/search-spotlight.blade.php` (Alpine.js + API fetch)
-   - Usa endpoint `/api/v1/search` em vez de `/livewire/update`
-   - Corrigido evento do botão: `openSearch` → `open-search` (Alpine é case-sensitive)
-   - Funciona agora com clique no botão E com Cmd+K
-
-2. **Tema Dark/Light Persistente**
-   - Adicionado script inline no `<head>` para aplicar tema antes do render (evita flash)
-   - Toggle guarda preferência no localStorage
-   - Suporta: dark, light, ou system (segue preferência do SO)
-   - Traduções adicionadas em PT/EN (`messages.theme.switchToDark/switchToLight`)
-
-3. **Ficheiros criados/modificados:**
-   - `components/search-spotlight.blade.php` - **NOVO** (Alpine.js)
-   - `components/layouts/app.blade.php` - script de inicialização do tema
-   - `components/layout/header.blade.php` - toggle persistente + fix evento search
-   - `livewire/search-spotlight.blade.php` - simplificado (Alpine.js para modal)
-   - `app/Livewire/SearchSpotlight.php` - simplificado (removido isOpen)
-   - `lang/pt/messages.php` - traduções tema
-   - `lang/en/messages.php` - traduções tema
-
-4. **Commit**: `890dba6` - feat(search+theme): fix search 404 and add persistent dark mode
-
----
-
-## Sessão Anterior (2025-12-16 manhã)
-
-- **Resumo**: Páginas legais, logo no header, inversão do botão de idioma
-
-### O que foi feito:
-1. **Páginas Legais (RGPD/Cookies)**
-   - Criadas 3 páginas: `/privacidade`, `/termos`, `/cookies`
-   - Rotas adicionadas ao `web.php`
-   - Traduções PT/EN completas em `lang/pt/legal.php` e `lang/en/legal.php`
-   - Links do footer já funcionais
-
-2. **Logo no Header**
-   - Substituído texto "Nazaré Qualifica" por imagem de logo
-   - Versão branca para header transparente (homepage)
-   - Versão original para header com fundo sólido
-   - Logos copiados para `public/images/logos/`
-
-3. **Botão de Idioma (UX)**
-   - Invertida lógica: agora mostra idioma destino em vez do atual
-   - Se está em PT → mostra "EN" (ação: mudar para inglês)
-   - Se está em EN → mostra "PT" (ação: mudar para português)
-
----
-
-## Sessão Anterior (2025-12-15)
-
-- **Resumo**: Correção do captcha do YouTube no Hero Section
-
-### O que foi feito:
-1. **Correção do Captcha do YouTube**
-   - O YouTube mostrava "Sign in to confirm you're not a bot" no vídeo embedado
-   - Alterado domínio do embed de `youtube.com` para `youtube-nocookie.com`
-   - Domínio nocookie é oficial do YouTube para embeds com privacidade melhorada
-
----
-
-## Sessão Anterior (2025-12-12)
-
-- **Resumo**: Implementação de logótipo dinâmico no Hero Section com slider de tamanho
-
-### O que foi feito:
-1. **Logótipo no Hero Section**
-   - Adicionados campos `hero_logo`, `hero_use_logo`, `hero_logo_height` à tabela `paginas`
-   - Toggle no admin para escolher entre texto ou imagem
-   - FileUpload para carregar logótipo
-   - Slider (80px-300px) para ajustar tamanho com feedback em tempo real
-
-2. **Ficheiros criados/modificados:**
-   - `database/migrations/2025_12_12_141145_add_hero_logo_to_paginas_table.php`
-   - `database/migrations/2025_12_12_141939_add_hero_logo_scale_to_paginas_table.php`
-   - `app/Models/Pagina.php` - adicionados campos ao fillable/casts
-   - `app/Filament/Resources/Geral/HomepageResource.php` - toggle, FileUpload, slider
-   - `resources/views/components/praia-norte/hero-section.blade.php` - props e condicional logo/texto
-   - `resources/views/pages/home.blade.php` - novos props passados
-
-3. **Logótipo utilizado:** `LOGOTIPO PN POSITIVO.png` (branco, transparente)
+- Migração de domínios — 4 novos domínios configurados e verificados
+- Store domain fix no Coolify, WP siteurl/home actualizado
+- Variáveis de ambiente Coolify actualizadas
+- Docker network fix
 
 ---
 
@@ -305,92 +73,15 @@
 
 | Item | Valor |
 |------|-------|
-| **Fase** | Quality Assurance (Phase 4) |
+| **Fase** | Produção (deployed) + QA contínuo |
 | **Branch** | `main` |
-| **Backend** | Laravel 12.41.1 + Filament 4.2.4 |
-| **Frontend** | Blade + Livewire (migração concluída) |
-| **Hero Slider** | ✅ Merged (PR #1) |
-| **i18n** | Laravel localization configurado |
-| **Admin Theme** | Navy Blue (#1e3a5f) |
-
----
-
-## Migração Blade - COMPLETA
-
-### Páginas Principais (100% concluídas)
-
-| Página | Ficheiro | Estado |
-|--------|----------|--------|
-| Homepage | `pages/home.blade.php` | ✅ |
-| Notícias (lista) | `pages/noticias/index.blade.php` | ✅ |
-| Notícias (detalhe) | `pages/noticias/show.blade.php` | ✅ |
-| Eventos (lista) | `pages/eventos/index.blade.php` | ✅ |
-| Eventos (detalhe) | `pages/eventos/show.blade.php` | ✅ |
-| Surfer Wall (lista) | `pages/surfer-wall/index.blade.php` | ✅ |
-| Surfer Wall (detalhe) | `pages/surfer-wall/show.blade.php` | ✅ |
-| Previsões | `pages/previsoes.blade.php` | ✅ |
-| Sobre | `pages/sobre.blade.php` | ✅ |
-| Contacto | `pages/contacto.blade.php` | ✅ |
-| Privacidade | `pages/privacidade.blade.php` | ✅ |
-| Termos | `pages/termos.blade.php` | ✅ |
-| Cookies | `pages/cookies.blade.php` | ✅ |
-
-### Carsurf (100% concluídas)
-
-| Página | Ficheiro | Estado |
-|--------|----------|--------|
-| Landing | `pages/carsurf/index.blade.php` | ✅ |
-| Sobre | `pages/carsurf/sobre.blade.php` | ✅ |
-| Programas | `pages/carsurf/programas.blade.php` | ✅ |
-
-### Nazaré Qualifica (100% concluídas)
-
-| Página | Ficheiro | Estado |
-|--------|----------|--------|
-| Sobre | `pages/nazare-qualifica/sobre.blade.php` | ✅ |
-| Equipa | `pages/nazare-qualifica/equipa.blade.php` | ✅ |
-| Serviços | `pages/nazare-qualifica/servicos.blade.php` | ✅ |
-| Contraordenações | `pages/nazare-qualifica/contraordenacoes.blade.php` | ✅ |
-| Carsurf | `pages/nazare-qualifica/carsurf.blade.php` | ✅ |
-| Estacionamento | `pages/nazare-qualifica/estacionamento.blade.php` | ✅ |
-| Forte | `pages/nazare-qualifica/forte.blade.php` | ✅ |
-| ALE | `pages/nazare-qualifica/ale.blade.php` | ✅ |
-
-### Componentes (100% concluídos)
-
-| Componente | Ficheiro | Estado |
-|------------|----------|--------|
-| Layout App | `components/layouts/app.blade.php` | ✅ |
-| Header | `components/layout/header.blade.php` | ✅ |
-| Footer | `components/layout/footer.blade.php` | ✅ |
-| Hero Section | `components/praia-norte/hero-section.blade.php` | ✅ |
-| Hero Slider | `components/praia-norte/hero-slider.blade.php` | ✅ |
-| Button | `components/ui/button.blade.php` | ✅ |
-| Card (+ header, title, description, content, footer) | `components/ui/card*.blade.php` | ✅ |
-| Badge | `components/ui/badge.blade.php` | ✅ |
-| Input | `components/ui/input.blade.php` | ✅ |
-| Textarea | `components/ui/textarea.blade.php` | ✅ |
-| Breadcrumbs | `components/ui/breadcrumbs.blade.php` | ✅ |
-
-### Livewire (configurado)
-
-| Componente | Ficheiro | Estado |
-|------------|----------|--------|
-| Language Switcher | `livewire/language-switcher.blade.php` | ✅ |
-
-### Alpine.js Components
-
-| Componente | Ficheiro | Estado |
-|------------|----------|--------|
-| Search Spotlight | `components/search-spotlight.blade.php` | ✅ |
-
-**SearchSpotlight Features:**
-- Atalho: `Cmd+K` (Mac) / `Ctrl+K` (Windows)
-- Clique no botão de pesquisa também funciona
-- Pesquisa em: Notícias, Eventos, Surfers, Páginas
-- Usa API endpoint `/api/v1/search` (Alpine.js + fetch)
-- Debounce 300ms, resultados agrupados por tipo
-- **Nota**: Convertido de Livewire para Alpine.js para evitar problemas com PHP built-in server
+| **Stack** | Laravel 12 + Filament 4.x + MySQL 8.0 + WooCommerce (Coolify) |
+| **Produção Laravel** | `nazarequalifica.pt` (+ `praiadonortenazare.pt`, `carsurf.nazare.pt`) |
+| **Produção WooCommerce** | `store.praiadonortenazare.pt` |
+| **Domínios antigos (activos)** | `nq.nelsonbrilhante.com`, `store-nq.nelsonbrilhante.com` |
+| **Dev Laravel** | `localhost:8000` |
+| **Dev WordPress** | `localhost:8080` |
+| **CI/CD** | Push to `main` → Coolify webhook (Laravel). WordPress deploy manual via Coolify. |
 
 ---
 
@@ -416,12 +107,13 @@
 
 🌊 Praia do Norte
    ├── Páginas
-   ├── Surfers
-   └── Pranchas
+   └── Surfers
 
 🌐 Website
    └── Ver Website (abre em nova aba)
 ```
+
+**Nota**: Resource `Pranchas` (Surfboard) foi eliminada. Surfer foi simplificado com campos `aka`, `quote`, `board_image`, `social_media` directamente no modelo.
 
 ### Resources por Entidade
 
@@ -430,37 +122,61 @@ backend/app/Filament/Resources/
 ├── Geral/
 │   ├── HomepageResource.php
 │   └── Pages/
-│       ├── ListHomepages.php
-│       └── EditHomepage.php
 ├── Paginas/
 │   └── BasePageResource.php          # Classe base abstracta
 ├── PraiaNorte/
 │   └── PraiaNortePageResource.php
 ├── Carsurf/
 │   └── CarsurfPageResource.php
-└── NazareQualifica/
-    └── NQPageResource.php
+├── NazareQualifica/
+│   └── NQPageResource.php
+└── Surfers/
+    ├── SurferResource.php
+    ├── Schemas/SurferForm.php
+    ├── Tables/SurfersTable.php
+    └── Pages/
 ```
 
 ---
 
-## URLs de Desenvolvimento
+## Content Models (actual)
 
-| Serviço | URL |
-|---------|-----|
-| **Site Público** | http://localhost:8000/pt |
-| **Site EN** | http://localhost:8000/en |
-| **Filament Admin** | http://localhost:8000/admin |
+| Model | Campos Chave |
+|-------|-------------|
+| **Surfer** | name, slug, aka, bio (i18n), quote (i18n), photo, board_image, social_media, featured, order |
+| **Noticia** | title (i18n), slug, content (i18n), excerpt (i18n), cover_image, author, category, entity, tags, featured, published_at |
+| **Evento** | Dates, location, entity, gallery, schedule, partners |
+| **Pagina** | i18n content, entity, hero_image. `hasMany(HeroSlide)` |
+| **HeroSlide** | Homepage hero slides (até 5). Video/image, LIVE badge, auto-rotate |
+| **CorporateBody** | Corpos Sociais (NQ). Secções: conselho_gerencia, assembleia_geral, fiscal_unico |
+| **DocumentCategory** | i18n name/description, ordered. `hasMany(Document)` |
+| **Document** | PDF uploads per category, i18n title |
 
-**Credenciais Filament:**
-- Email: `admin@nazarequalifica.pt`
-- Password: `password`
+**Nota**: Modelo `Surfboard` foi eliminado. Campos de surfboard movidos directamente para `Surfer` (`board_image`). Campos SEO removidos de `Noticia`.
 
-**Scripts:**
-```bash
-./scripts/start.sh    # Iniciar servidor Laravel
-./scripts/stop.sh     # Parar servidor
-```
+---
+
+## Próximas Tarefas
+
+### Prioridade Alta — WooCommerce & Pagamentos
+1. [ ] Integrar Easypay com WooCommerce (Multibanco, MBWay, Cartão de Crédito)
+2. [ ] Campo NIF/CIF/NIE nas facturas
+3. [ ] Locais de levantamento em loja física (pickup locations)
+
+### Prioridade Alta — Conteúdo
+4. [ ] Rever e corrigir texto de surfers e notícias (PT-PT, AO90, formatação)
+5. [ ] Traduzir conteúdo para EN (notícias, eventos, surfers)
+6. [ ] Melhorar distribuição de cards na edição de surfers no backend
+
+### Prioridade Média — QA
+7. [ ] Testes funcionais de todas as páginas
+8. [ ] Verificar responsividade (mobile, tablet, desktop)
+9. [ ] Lighthouse audit (target: >90 em todas as métricas)
+
+### Prioridade Média — Segurança (Phase 5)
+10. [ ] Security headers (CSP, HSTS, X-Frame-Options)
+11. [ ] Rate limiting nas rotas públicas
+12. [ ] Input sanitization audit
 
 ---
 
@@ -468,32 +184,61 @@ backend/app/Filament/Resources/
 
 | Item | Estado | Notas |
 |------|--------|-------|
-| Páginas Legais (`/privacidade`, `/termos`, `/cookies`) | ✅ Implementado | Sessão 16/12 |
 | Formulário de Contacto backend | ⚠️ Não implementado | `action="#"` sem handler POST |
-| `app/Services/ForecastService.php` | ✅ Implementado | Sessão 17/12 - Open-Meteo APIs |
+| Easypay WooCommerce | 🔴 Bloqueado | Plugin instalado e configurado, mas "Connection not validated by easypay" bloqueia checkout. Requer suporte Easypay. |
+| Easypay Success URL bug | ⚠️ Bug plugin | `epEasypaySuccessApi` tem `wp-json/wp-json/...` duplicado |
+| NIF/CIF em facturas | ⚠️ Não implementado | Campo custom no checkout |
+| Pickup locations | ⚠️ Não implementado | Local store pickup |
+| Conteúdo EN | ⚠️ Parcial | Estrutura i18n pronta, falta tradução |
+| Shipping WooCommerce | ✅ Verificado E2E | Plugin table-rate funcional, rates correctos, Local Pickup activo |
+| SMTP Email WooCommerce | ✅ Configurado | `vm01.cm-nazare.pt:465/SSL`, test email OK. Falta: adicionar env vars no Coolify + redeploy |
 
 ---
 
-## Próximas Tarefas
+## Arquivo — Sessões Anteriores (Dez 2025)
 
-### Prioridade Alta (Phase 4 - Quality)
-1. [x] Criar páginas legais (privacidade, termos, cookies) ✅
-2. [ ] Implementar backend do formulário de contacto
-3. [ ] Testes funcionais de todas as páginas
-4. [ ] Verificar responsividade (mobile, tablet, desktop)
-5. [ ] SEO metadata em todas as páginas
-6. [ ] Lighthouse audit (target: >90 em todas as métricas)
+<details>
+<summary>Sessões de Dezembro 2025 (clique para expandir)</summary>
 
-### Prioridade Média (Phase 5 - Security)
-1. [ ] Security headers (CSP, HSTS, X-Frame-Options)
-2. [ ] Rate limiting nas rotas públicas
-3. [ ] CSRF validation review
-4. [ ] Input sanitization audit
+### 2025-12-19 — Merge Hero Slider + Dark Mode
+- PR #1 merged: Hero Slider + cleanup logos
+- Verificação dark mode (prefers-color-scheme)
+- Branch `feature/hero-slider` eliminada
 
-### Prioridade Baixa (Polish)
-1. [ ] Reduzir espaçamento vertical no menu Filament (CSS customizado)
-2. [ ] Performance optimization (caching, lazy loading)
-3. [ ] Arquivar pasta `frontend/` (Next.js deprecated)
+### 2025-12-18 — Hero Slider
+- Convertido Hero Section para slider com até 5 slides
+- Auto-rotação, pausa LIVE, transições fade
+- Indicadores pill/circular com progresso SVG
+- Filament Repeater com drag & drop
+
+### 2025-12-17 (tarde) — Fix botões + Contraordenações
+- Fix botões invisíveis (outline variant + bg-transparent)
+- Nova página Contraordenações NQ com 6 PDFs
+- Botões navegação no header Sobre NQ
+
+### 2025-12-17 (manhã) — Forecast API + uploads + favicon
+- Migração Forecast API (Open-Meteo Marine + Weather)
+- Fix FileUpload disk (local → public)
+- Favicon e app icons
+- Dark mode logo no header
+
+### 2025-12-16 (tarde) — Search fix + dark theme
+- Search Spotlight: Livewire → Alpine.js (fix 404)
+- Tema dark/light persistente com localStorage
+
+### 2025-12-16 (manhã) — Páginas legais + logo header
+- Páginas /privacidade, /termos, /cookies
+- Logo no header (transparente/sólido)
+- Botão idioma invertido (mostra destino)
+
+### 2025-12-15 — YouTube captcha fix
+- Embed youtube.com → youtube-nocookie.com
+
+### 2025-12-12 — Logo dinâmico Hero Section
+- Campos hero_logo, hero_use_logo, hero_logo_height
+- Toggle texto/imagem no admin + slider tamanho
+
+</details>
 
 ---
 
@@ -510,16 +255,12 @@ use Filament\Actions\DeleteAction;      // ✅
 use Filament\Tables\Actions\EditAction; // ❌
 ```
 
-### viteTheme() Causa Problemas
-
-Não usar `->viteTheme()` no AdminPanelProvider - quebra o carregamento do CSS do Filament.
-
 ### Entity Filter nas Queries
 
 Cada Resource de páginas filtra por `entity`:
-- `praia-norte` - Praia do Norte (exclui homepage)
-- `carsurf` - Carsurf
-- `nazare-qualifica` - Nazaré Qualifica
+- `praia-norte` — Praia do Norte (exclui homepage)
+- `carsurf` — Carsurf
+- `nazare-qualifica` — Nazaré Qualifica
 - Homepage usa query `where('slug', 'homepage')` (sem filtro de entity)
 
 ### Hidratação de Campos JSON Aninhados
@@ -539,14 +280,16 @@ TextInput::make('content.pt.intro.title')
 ```bash
 # 1. Ler este ficheiro para contexto
 # 2. Iniciar servidor
-cd backend && php artisan serve
+cd backend && composer dev    # Full dev environment (server + queue + logs + vite)
 
-# 3. Em outro terminal, iniciar Vite (para assets)
-cd backend && npm run dev
-
-# 4. Aceder ao admin
+# 3. Aceder ao admin
 open http://localhost:8000/admin
 
-# 5. Continuar com testes e quality assurance
+# 4. Produção
+# Laravel: nazarequalifica.pt (+ praiadonortenazare.pt, carsurf.nazare.pt)
+# WooCommerce: store.praiadonortenazare.pt
+# Antigos (ainda activos): nq.nelsonbrilhante.com, store-nq.nelsonbrilhante.com
+
+# 5. Continuar com tarefas prioritárias
 # 6. Actualizar este ficheiro no final da sessão
 ```

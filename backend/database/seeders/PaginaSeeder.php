@@ -280,18 +280,18 @@ class PaginaSeeder extends Seeder
             ],
             [
                 'title' => [
-                    'pt' => 'Programas de Treino',
-                    'en' => 'Training Programs',
+                    'pt' => 'Instalações',
+                    'en' => 'Facilities',
                 ],
-                'slug' => 'programas',
+                'slug' => 'instalacoes',
                 'content' => [
                     'pt' => '<h2>Programas Disponíveis</h2><h3>Programa de Iniciação</h3><p>Para quem quer dar os primeiros passos no surf. Inclui aulas práticas e teóricas sobre segurança, técnica básica e leitura de ondas.</p><h3>Programa de Evolução</h3><p>Para surfistas intermédios que querem melhorar a sua técnica e consistência. Análise de vídeo e treino físico específico.</p><h3>Programa de Alto Rendimento</h3><p>Para atletas de competição e surfistas avançados. Preparação física, mental e técnica ao mais alto nível.</p><h3>Programa Big Wave</h3><p>Preparação específica para surf de ondas grandes. Inclui treino de apneia, segurança aquática e sessões supervisionadas na Praia do Norte.</p>',
                     'en' => '<h2>Available Programs</h2><h3>Initiation Program</h3><p>For those who want to take their first steps in surfing. Includes practical and theoretical classes on safety, basic technique, and wave reading.</p><h3>Evolution Program</h3><p>For intermediate surfers who want to improve their technique and consistency. Video analysis and specific physical training.</p><h3>High Performance Program</h3><p>For competition athletes and advanced surfers. Physical, mental, and technical preparation at the highest level.</p><h3>Big Wave Program</h3><p>Specific preparation for big wave surfing. Includes breath-hold training, water safety, and supervised sessions at Praia do Norte.</p>',
                 ],
                 'entity' => 'carsurf',
                 'published' => true,
-                'seo_title' => ['pt' => 'Programas de Treino Carsurf', 'en' => 'Carsurf Training Programs'],
-                'seo_description' => ['pt' => 'Descubra os programas de treino do Carsurf para todos os níveis.', 'en' => 'Discover Carsurf training programs for all levels.'],
+                'seo_title' => ['pt' => 'Instalações Carsurf', 'en' => 'Carsurf Facilities'],
+                'seo_description' => ['pt' => 'Conheça as instalações do Centro de Alto Rendimento de Surf da Nazaré.', 'en' => 'Discover the facilities at the Nazaré High Performance Surf Center.'],
                 // Kids/beginner surfing lesson
                 'hero_image_url' => 'https://images.unsplash.com/photo-1530870110042-98b2cb110834?w=1600&h=900&fit=crop',
             ],

@@ -34,18 +34,13 @@
             'nazare-qualifica' => 'gradient-institutional',
         ];
 
-        $heroNoticia = $featuredNoticias->first() ?? $noticias->first();
     @endphp
 
-    {{-- Hero with featured news image or dark gradient fallback --}}
+    {{-- Hero --}}
     <section class="relative h-[40vh] min-h-[320px] overflow-hidden">
-        @if($heroNoticia?->cover_image)
-            <img src="{{ asset('storage/' . $heroNoticia->cover_image) }}"
-                 class="absolute inset-0 h-full w-full object-cover" alt="" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
-        @else
-            <div class="absolute inset-0 gradient-ocean-deep"></div>
-        @endif
+        <img src="{{ asset('images/carsurf/carsurf-big-09.jpg') }}"
+             class="absolute inset-0 h-full w-full object-cover" alt="" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
         <div class="container relative mx-auto flex h-full flex-col justify-end px-4 pb-10">
             <h1 class="text-4xl font-bold text-white md:text-5xl lg:text-6xl">{{ __('messages.news.title') }}</h1>
             <p class="mt-2 max-w-2xl text-lg text-white/80">{{ __('messages.news.subtitle') }}</p>

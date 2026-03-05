@@ -134,7 +134,7 @@ return [
         'partners' => [
             'title' => 'Partners',
             'cmNazare' => 'Nazaré City Council',
-            'smNazare' => 'Nazaré Parish Council',
+            'smNazare' => 'Nazaré Municipal Services',
         ],
     ],
     'contact' => [
@@ -178,7 +178,8 @@ return [
     'pages' => [
         'pages' => 'Pages',
         'about' => 'About',
-        'programs' => 'Programs',
+        'facilities' => 'Facilities',
+        'forms' => 'Forms',
         'services' => 'Services',
     ],
     'about' => [
@@ -302,7 +303,7 @@ return [
         'hero' => [
             'title' => 'Carsurf',
             'subtitle' => 'High Performance Center for Surfers',
-            'programs' => 'View Programs',
+            'facilities' => 'View Facilities',
             'about' => 'About Carsurf',
         ],
         'about' => [
@@ -324,6 +325,22 @@ return [
                 'item1' => 'Sporting excellence and continuous development',
                 'item2' => 'Athlete safety and well-being',
                 'item3' => 'Sustainable development of surfing in Nazaré',
+            ],
+            'video' => [
+                'title' => 'Discover Carsurf',
+            ],
+            'vista' => [
+                'title' => 'An Inspiring View',
+                'text' => 'Besides the high recognition that our Sea offers for Water Sports, we also have a sports complex for Beach Sports; a Gymnasium; Municipal Pavilion; Municipal Pool; Municipal Stadium with natural turf; Synthetic turf field; Skate Park.',
+            ],
+            'gallery' => [
+                'title' => 'Our Facilities',
+                'tagline' => 'Elevate your performance at the Nazaré High Performance Surf Center',
+            ],
+            'cta' => [
+                'title' => 'Ready to evolve?',
+                'subtitle' => 'Join the world\'s best surfers and train at Carsurf',
+                'button' => 'Contact us',
             ],
         ],
         'facilities' => [
@@ -347,43 +364,59 @@ return [
             'subtitle' => 'Join the world\'s best surfers and train at Carsurf',
             'button' => 'Contact us',
         ],
-        'programs' => [
-            'title' => 'Training Programs',
-            'subtitle' => 'Choose the ideal program for your level and goals',
-            'program1' => [
-                'title' => 'Big Wave Introduction',
-                'description' => '5-day program for experienced surfers who want to take their first steps in big waves.',
-                'price' => 'From €1,500',
+        'instalacoes' => [
+            'title' => 'Facilities',
+            'subtitle' => 'Nazaré High Performance Surf Center',
+            'intro' => 'Naturally, CARSURF is characterized by offering excellent conditions for the development of athletes from sports governed by the Portuguese Surf Federation. However, Nazaré offers optimal conditions for practicing other sports, whether indoor or outdoor. Thus, the Nazaré High Performance Center extends its offer to the most varied sports that the municipality\'s sports and natural park allows.',
+            'mission' => 'This mission is based on the objective of helping high-performance athletes, not only residents but also all those who seek us, to achieve their best sporting results.',
+            'sports' => 'Indoor Handball; Beach Handball; Football; Beach Football; Futsal; Kick Boxing; Taekwondo; Figure Skating; Swimming; Free Ride; Triathlon; Frisbee.',
+            'center_tagline' => 'Elevate your performance at the Nazaré High Performance Surf Center',
+            'equipment_intro' => 'The Nazaré High Performance Surf Center is equipped with various equipment for practicing different types of training, namely: Cardiovascular; Strength; Functional and Muscle Recovery.',
+            'cardio' => [
+                'title' => 'Cardiovascular Training',
+                'description' => 'It is the ability to perform dynamic exercises, of moderate to high intensity, involving large muscle groups, for extended periods of time.',
             ],
-            'program2' => [
-                'title' => 'Intensive Performance',
-                'description' => '2-week intensive training focused on technique, physical and mental preparation.',
-                'price' => 'From €3,500',
+            'strength' => [
+                'title' => 'Strength Training',
+                'description' => 'Strength training involves performing physical exercises that are designed to improve strength and endurance, often associated with weightlifting. It can also incorporate a variety of training techniques such as calisthenics, isometrics and plyometrics.',
             ],
-            'program3' => [
-                'title' => 'Athlete Residency',
-                'description' => 'Complete monthly program with accommodation, personalized training, and coaching.',
-                'price' => 'From €5,000/month',
+            'functional' => [
+                'title' => 'Functional Training',
+                'description' => 'Functional training is characterized by developing your performance as a whole. In an integrated way and without isolated actions, daily or sporting activities of the individual are performed to improve their physical condition or technical gestures. It is a type of training that can complement weight training.',
             ],
-            'program4' => [
-                'title' => 'Tow-In Training',
-                'description' => 'Specialized training in tow-in surfing for giant waves.',
-                'price' => 'From €2,000',
-            ],
-            'program5' => [
-                'title' => 'Physical Preparation',
-                'description' => 'Physical conditioning program specific to high-performance surfing.',
-                'price' => 'From €800',
-            ],
-            'program6' => [
-                'title' => 'Custom Program',
-                'description' => 'Training tailored to your specific needs and goals.',
-                'price' => 'On request',
+            'recovery' => [
+                'title' => 'Muscle Recovery',
+                'description' => 'Physiotherapy equipment and services that allow optimized muscle recovery, as well as the application of strategies aimed at injury prevention, thus enhancing the margin of performance evolution.',
             ],
             'cta' => [
-                'title' => 'Didn\'t find what you\'re looking for?',
-                'subtitle' => 'Contact us to create a custom program',
-                'button' => 'Talk to us',
+                'title' => 'Join Us',
+                'subtitle' => 'Everything in one place. Elevate your concentration levels. Focus on the triad of Training, Nutrition and Rest.',
+                'button' => 'Contact',
+            ],
+        ],
+        'formularios' => [
+            'title' => 'Forms',
+            'subtitle' => 'Gym Assignment Forms',
+            'intro' => [
+                'title' => 'Assignment Forms',
+                'text' => 'The forms below are intended to formalize the request for gym assignment at Carsurf. After completing them, they must be sent to tiago.barbosa@cm-nazare.pt for analysis and decision.',
+            ],
+            'documentsTitle' => 'Available Forms',
+            'download' => 'Download PDF',
+            'documents' => [
+                'pt' => 'Assignment Form — Portuguese',
+                'ptDesc' => 'Gym assignment request form in Portuguese.',
+                'en' => 'Gym Assignment Form — English',
+                'enDesc' => 'Gym assignment request form in English.',
+                'fr' => 'Assignment Form — French',
+                'frDesc' => 'Gym assignment request form in French.',
+                'es' => 'Assignment Form — Spanish',
+                'esDesc' => 'Gym assignment request form in Spanish.',
+            ],
+            'cta' => [
+                'title' => 'Need Help?',
+                'subtitle' => 'Get in touch with us for any questions about the forms.',
+                'button' => 'Contact Us',
             ],
         ],
         'team' => [
@@ -435,6 +468,9 @@ return [
                     'title' => 'Essential Services',
                     'description' => 'Services of common interest, essential for meeting basic community needs.',
                 ],
+            ],
+            'gallery' => [
+                'title' => 'What We Do',
             ],
             'cta' => [
                 'title' => 'Discover Our Services',
@@ -632,7 +668,8 @@ return [
         'previsoes' => 'Forecast',
         'carsurf' => 'Carsurf',
         'nazare-qualifica' => 'Nazaré Qualifica',
-        'programas' => 'Programs',
+        'instalacoes' => 'Facilities',
+        'formularios' => 'Forms',
         'servicos' => 'Services',
         'equipa' => 'Corporate Bodies',
         'estacionamento' => 'Parking',

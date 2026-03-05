@@ -134,7 +134,7 @@ return [
         'partners' => [
             'title' => 'Parceiros',
             'cmNazare' => 'Câmara Municipal da Nazaré',
-            'smNazare' => 'Junta de Freguesia da Nazaré',
+            'smNazare' => 'Serviços Municipalizados da Nazaré',
         ],
     ],
     'contact' => [
@@ -178,7 +178,8 @@ return [
     'pages' => [
         'pages' => 'Páginas',
         'about' => 'Sobre',
-        'programs' => 'Programas',
+        'facilities' => 'Instalações',
+        'forms' => 'Formulários',
         'services' => 'Serviços',
     ],
     'about' => [
@@ -302,7 +303,7 @@ return [
         'hero' => [
             'title' => 'Carsurf',
             'subtitle' => 'Centro de Alto Rendimento para Surfistas',
-            'programs' => 'Ver Programas',
+            'facilities' => 'Ver Instalações',
             'about' => 'Sobre o Carsurf',
         ],
         'about' => [
@@ -324,6 +325,22 @@ return [
                 'item1' => 'Excelência desportiva e formação contínua',
                 'item2' => 'Segurança e bem-estar dos atletas',
                 'item3' => 'Desenvolvimento sustentável do surf na Nazaré',
+            ],
+            'video' => [
+                'title' => 'Conheça o Carsurf',
+            ],
+            'vista' => [
+                'title' => 'Uma Vista Inspiradora',
+                'text' => 'Além do alto reconhecimento que o seu Mar oferece à prática de Desportos Aquáticos, dispomos ainda de um complexo desportivo para Desportos de Praia; Pavilhão Gimnodesportivo; Pavilhão Municipal; Piscina Municipal; Estádio Municipal com relvado natural; Campo de relvado sintético; Skate Parque.',
+            ],
+            'gallery' => [
+                'title' => 'As Nossas Instalações',
+                'tagline' => 'Albergue num patamar de rendimento com o Centro de Alto Rendimento de Surf da Nazaré',
+            ],
+            'cta' => [
+                'title' => 'Pronto para evoluir?',
+                'subtitle' => 'Junte-se aos melhores surfistas do mundo e treine no Carsurf',
+                'button' => 'Contacte-nos',
             ],
         ],
         'facilities' => [
@@ -347,43 +364,59 @@ return [
             'subtitle' => 'Junte-se aos melhores surfistas do mundo e treine no Carsurf',
             'button' => 'Contacte-nos',
         ],
-        'programs' => [
-            'title' => 'Programas de Treino',
-            'subtitle' => 'Escolha o programa ideal para o seu nível e objetivos',
-            'program1' => [
-                'title' => 'Iniciação ao Big Wave',
-                'description' => 'Programa de 5 dias para surfistas experientes que querem dar os primeiros passos nas ondas grandes.',
-                'price' => 'Desde €1.500',
+        'instalacoes' => [
+            'title' => 'Instalações',
+            'subtitle' => 'Centro de Alto Rendimento de Surf da Nazaré',
+            'intro' => 'Naturalmente, o CARSURF caracteriza-se pela oferta de ótimas condições para o desenvolvimento de atletas, provenientes das modalidades tuteladas pela Federação Portuguesa de Surf. No entanto, a Nazaré oferece condições ótimas para a prática de outras modalidades, sejam elas indoor ou outdoor. Assim, o Centro de Alto Rendimento da Nazaré, estende a sua oferta aos mais variados desportos que o parque desportivo e natural do concelho permite realizar.',
+            'mission' => 'Esta missão está alicerçada no objetivo de ajudar os atletas de alto rendimento, não só residentes, mas também todos os que nos procuram, a obterem os seus melhores resultados desportivos.',
+            'sports' => 'Andebol de Pavilhão; Andebol de Praia; Futebol 11; Futebol de Praia; Futsal; Kick Boxing; Taekwondo; Patinagem Artística; Natação; Free Ride; Triatlo; Freesbee.',
+            'center_tagline' => 'Albergue num patamar de rendimento com o Centro de Alto Rendimento de Surf da Nazaré',
+            'equipment_intro' => 'O Centro de Alto Rendimento de Surf da Nazaré está equipado com diversos equipamentos para a prática de diversos tipos de treino, nomeadamente: Cardiovascular; Força; Funcional e Recuperação Muscular.',
+            'cardio' => [
+                'title' => 'Treino Cardiovascular',
+                'description' => 'É a capacidade de realizar exercícios dinâmicos, de intensidade moderada a alta, que envolvam grandes grupos musculares, por longos períodos de tempo.',
             ],
-            'program2' => [
-                'title' => 'Performance Intensivo',
-                'description' => 'Treino intensivo de 2 semanas focado em técnica, preparação física e mental.',
-                'price' => 'Desde €3.500',
+            'strength' => [
+                'title' => 'Treino de Força',
+                'description' => 'O treino de força envolve a execução de exercícios físicos que são projetados para melhorar a força e a resistência, estando eles frequentemente associados ao levantamento de pesos. Ele também pode incorporar uma variedade de técnicas de treino como a calistenia, isometria e pliometria.',
             ],
-            'program3' => [
-                'title' => 'Residência de Atleta',
-                'description' => 'Programa mensal completo com alojamento, treino personalizado e acompanhamento.',
-                'price' => 'Desde €5.000/mês',
+            'functional' => [
+                'title' => 'Treino Funcional',
+                'description' => 'O treino Funcional caracteriza-se por desenvolver a sua performance como um todo. De forma integrada e sem ações isoladas realizam-se atividades quotidianas ou desportivas do individuo para melhorar a sua condição física ou gestos técnicos. Trata-se de um tipo de treino que pode servir de complemento à musculação.',
             ],
-            'program4' => [
-                'title' => 'Tow-In Training',
-                'description' => 'Treino especializado em surf de reboque para ondas gigantes.',
-                'price' => 'Desde €2.000',
-            ],
-            'program5' => [
-                'title' => 'Preparação Física',
-                'description' => 'Programa de condicionamento físico específico para surf de alto rendimento.',
-                'price' => 'Desde €800',
-            ],
-            'program6' => [
-                'title' => 'Programa Personalizado',
-                'description' => 'Treino à medida das suas necessidades e objetivos específicos.',
-                'price' => 'Sob consulta',
+            'recovery' => [
+                'title' => 'Recuperação Muscular',
+                'description' => 'Equipamentos e serviços de Fisioterapia que permitam uma recuperação muscular otimizada, bem como, aplicação de estratégias que visem a prevenção de lesões, e assim, potenciar a margem de evolução da performance.',
             ],
             'cta' => [
-                'title' => 'Não encontrou o que procura?',
-                'subtitle' => 'Contacte-nos para criar um programa personalizado',
-                'button' => 'Fale connosco',
+                'title' => 'Junte-se a Nós',
+                'subtitle' => 'Tudo num só lugar. Eleve os seus níveis de concentração. Centralize-se na tríade de Treino, Alimentação e Descanso.',
+                'button' => 'Contactos',
+            ],
+        ],
+        'formularios' => [
+            'title' => 'Formulários',
+            'subtitle' => 'Formulários de Cedência do Ginásio',
+            'intro' => [
+                'title' => 'Formulários de Cedência',
+                'text' => 'Os formulários abaixo destinam-se a formalizar o pedido de cedência do ginásio do Carsurf. Após o preenchimento, devem ser enviados para o email tiago.barbosa@cm-nazare.pt, para análise e decisão.',
+            ],
+            'documentsTitle' => 'Formulários Disponíveis',
+            'download' => 'Descarregar PDF',
+            'documents' => [
+                'pt' => 'Formulário de Cedência — Português',
+                'ptDesc' => 'Formulário em língua portuguesa para cedência do ginásio do Carsurf.',
+                'en' => 'Gym Assignment Form — English',
+                'enDesc' => 'Gym assignment request form in English.',
+                'fr' => 'Formulaire de Cession — Français',
+                'frDesc' => 'Formulaire de demande de cession du gymnase en français.',
+                'es' => 'Formulario de Asignación — Español',
+                'esDesc' => 'Formulario de solicitud de asignación del gimnasio en español.',
+            ],
+            'cta' => [
+                'title' => 'Precisa de Ajuda?',
+                'subtitle' => 'Entre em contacto connosco para qualquer questão sobre os formulários.',
+                'button' => 'Contactar',
             ],
         ],
         'team' => [
@@ -435,6 +468,9 @@ return [
                     'title' => 'Serviços Essenciais',
                     'description' => 'Serviços em interesse comum, indispensáveis à satisfação de necessidades básicas da comunidade.',
                 ],
+            ],
+            'gallery' => [
+                'title' => 'O Que Fazemos',
             ],
             'cta' => [
                 'title' => 'Conheça os Nossos Serviços',
@@ -632,7 +668,8 @@ return [
         'previsoes' => 'Previsões',
         'carsurf' => 'Carsurf',
         'nazare-qualifica' => 'Nazaré Qualifica',
-        'programas' => 'Programas',
+        'instalacoes' => 'Instalações',
+        'formularios' => 'Formulários',
         'servicos' => 'Serviços',
         'equipa' => 'Corpos Sociais',
         'estacionamento' => 'Estacionamento',

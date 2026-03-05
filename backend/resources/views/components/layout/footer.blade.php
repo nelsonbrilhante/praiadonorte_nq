@@ -49,13 +49,13 @@
                 </h3>
                 <ul class="space-y-2 text-sm">
                     <li>
-                        <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}" class="text-white/60 transition-colors hover:text-white">
+                        <a href="{{ LaravelLocalization::localizeURL('/carsurf/sobre') }}" class="text-white/60 transition-colors hover:text-white">
                             {{ __('messages.navigation.about') }}
                         </a>
                     </li>
                     <li>
-                        <a href="{{ LaravelLocalization::localizeURL('/carsurf/programas') }}" class="text-white/60 transition-colors hover:text-white">
-                            {{ __('messages.breadcrumbs.programas') }}
+                        <a href="{{ LaravelLocalization::localizeURL('/carsurf/instalacoes') }}" class="text-white/60 transition-colors hover:text-white">
+                            {{ __('messages.pages.facilities') }}
                         </a>
                     </li>
                 </ul>
@@ -166,7 +166,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="http://www.jf-nazare.pt/" target="_blank" rel="noopener noreferrer" class="text-white/60 transition-colors hover:text-white">
+                        <a href="https://www.sm-nazare.pt/" target="_blank" rel="noopener noreferrer" class="text-white/60 transition-colors hover:text-white">
                             {{ __('messages.footer.partners.smNazare') }}
                             <span class="text-[10px]" aria-hidden="true">&#8599;</span>
                             <span class="sr-only">({{ $locale === 'pt' ? 'abre numa nova janela' : 'opens in a new window' }})</span>

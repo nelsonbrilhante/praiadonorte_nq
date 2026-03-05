@@ -314,7 +314,7 @@ wp option update blogdescription "Loja oficial Praia do Norte Nazare" --allow-ro
 echo "[wp-entrypoint] WooCommerce configured (EUR, Portugal)."
 
 # Enable easypay payment gateway
-wp option update woocommerce_easypay_checkout_settings '{"enabled":"yes","title":"easypay Checkout","description":"Pay with MB Way, Ref. Multibanco, Visa \u0026 Mastercard Cards, Apple Pay, Santander Consumer Finance"}' --format=json --allow-root --path=/var/www/html
+wp option update woocommerce_easypay_checkout_settings '{"enabled":"yes","title":"easypay Checkout","description":"Pay with MB Way, Ref. Multibanco, Visa \u0026 Mastercard Cards, Apple Pay, Santander Consumer Finance","connection_key":"'"${EASYPAY_CONNECTION_KEY:-}"'","sandbox":"'"${EASYPAY_SANDBOX:-1}"'"}' --format=json --allow-root --path=/var/www/html
 echo "[wp-entrypoint] Easypay payment gateway enabled."
 else
     echo "[wp-entrypoint] Phase 6: Skipped WooCommerce options (REDEPLOY mode)."
@@ -502,6 +502,37 @@ fi
 if $IS_FIRST_RUN; then
     echo "Setup completed at $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > "$SETUP_MARKER"
     echo "[wp-entrypoint] Sentinel file written. Future restarts will skip destructive phases."
+fi
+
+# ──────────────────────────────────────────────
+# Phase 6.7: Configure wp-mail-smtp (always run — env vars may change between deploys)
+# ──────────────────────────────────────────────
+if [ -n "${SMTP_HOST:-}" ]; then
+    echo "[wp-entrypoint] Phase 6.7: Configuring wp-mail-smtp..."
+    wp eval '
+    $settings = array(
+        "mail" => array(
+            "from_email" => "'"${SMTP_FROM:-store@nazarequalifica.pt}"'",
+            "from_name" => "'"${SMTP_FROM_NAME:-Praia do Norte - Loja}"'",
+            "mailer" => "smtp",
+            "return_path" => true,
+        ),
+        "smtp" => array(
+            "host" => "'"${SMTP_HOST}"'",
+            "port" => '"${SMTP_PORT:-465}"',
+            "encryption" => "'"${SMTP_ENCRYPTION:-ssl}"'",
+            "auth" => true,
+            "user" => "'"${SMTP_USER}"'",
+            "pass" => "'"${SMTP_PASSWORD}"'",
+            "autotls" => true,
+        ),
+    );
+    update_option("wp_mail_smtp", $settings);
+    echo "wp-mail-smtp configured.";
+    ' --allow-root --path=/var/www/html
+    echo "[wp-entrypoint] SMTP email configured."
+else
+    echo "[wp-entrypoint] WARNING: SMTP_HOST not set — email delivery will fail."
 fi
 
 # ──────────────────────────────────────────────

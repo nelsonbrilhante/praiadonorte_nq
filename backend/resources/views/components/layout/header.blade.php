@@ -213,11 +213,14 @@
                              class="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50">
                             <div class="w-56 rounded-lg bg-white dark:bg-popover p-2 shadow-xl border border-border dropdown-stagger"
                                  :class="openDropdown === 'carsurf' ? 'is-open' : ''">
-                                <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                <a href="{{ LaravelLocalization::localizeURL('/carsurf/sobre') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.navigation.about') }}
                                 </a>
-                                <a href="{{ LaravelLocalization::localizeURL('/carsurf/programas') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
-                                    {{ __('messages.pages.programs') }}
+                                <a href="{{ LaravelLocalization::localizeURL('/carsurf/instalacoes') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.pages.facilities') }}
+                                </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/carsurf/formularios') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.pages.forms') }}
                                 </a>
                             </div>
                         </div>
@@ -434,11 +437,14 @@
                             {{ __('messages.entities.carsurf') }}
                         </h3>
                         <div class="space-y-3">
-                            <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                            <a href="{{ LaravelLocalization::localizeURL('/carsurf/sobre') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.navigation.about') }}
                             </a>
-                            <a href="{{ LaravelLocalization::localizeURL('/carsurf/programas') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
-                                {{ __('messages.pages.programs') }}
+                            <a href="{{ LaravelLocalization::localizeURL('/carsurf/instalacoes') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.pages.facilities') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/carsurf/formularios') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.pages.forms') }}
                             </a>
                         </div>
                     </div>

@@ -62,8 +62,8 @@
                 <x-ui.button href="{{ route('carsurf.index') }}" class="bg-surf hover:bg-surf/90">
                     {{ __('messages.carsurf.hero.about') }}
                 </x-ui.button>
-                <x-ui.button href="{{ route('carsurf.programas') }}" variant="outline" class="border-surf text-surf hover:bg-surf/10">
-                    {{ __('messages.carsurf.hero.programs') }}
+                <x-ui.button href="{{ route('carsurf.instalacoes') }}" variant="outline" class="border-surf text-surf hover:bg-surf/10">
+                    {{ __('messages.carsurf.hero.facilities') }}
                 </x-ui.button>
             </div>
         </div>
@@ -74,7 +74,7 @@
         <div class="container mx-auto px-4 text-center">
             <h2 class="mb-4 text-3xl font-bold">{{ __('messages.nq.services.cta.title') }}</h2>
             <p class="mb-8 text-lg opacity-90">{{ __('messages.nq.services.cta.text') }}</p>
-            <x-ui.button href="{{ route('nq.servicos') }}" class="bg-white text-institutional hover:bg-white/90">
+            <x-ui.button href="{{ route('nq.sobre') }}" class="bg-white text-institutional hover:bg-white/90">
                 {{ __('messages.nq.services.title') }}
             </x-ui.button>
         </div>

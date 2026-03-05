@@ -54,18 +54,13 @@
             'nazare-qualifica' => 'text-institutional',
         ];
 
-        $featuredEvento = $eventos->firstWhere('featured', true) ?? $eventos->first();
     @endphp
 
-    {{-- Hero with featured event image or dark gradient fallback --}}
+    {{-- Hero --}}
     <section class="relative h-[40vh] min-h-[320px] overflow-hidden">
-        @if($featuredEvento?->image)
-            <img src="{{ asset('storage/' . $featuredEvento->image) }}"
-                 class="absolute inset-0 h-full w-full object-cover" alt="" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
-        @else
-            <div class="absolute inset-0 gradient-ocean-deep"></div>
-        @endif
+        <img src="{{ asset('storage/noticias/nic-von-rupp-e-clement-roseyro-foram-novamente-os-grandes-vencedores-donazare-challenge.jpg') }}"
+             class="absolute inset-0 h-full w-full object-cover" alt="" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
         <div class="container relative mx-auto flex h-full flex-col justify-end px-4 pb-10">
             <h1 class="text-4xl font-bold text-white md:text-5xl lg:text-6xl">{{ __('messages.events.title') }}</h1>
             <p class="mt-2 max-w-2xl text-lg text-white/80">{{ __('messages.events.subtitle') }}</p>

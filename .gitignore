@@ -139,3 +139,11 @@ backend/server.php
 /*.png
 /*.jpg
 /*.jpeg
+
+# ===================
+# Personal Snapshots
+# ===================
+
+cloudflare-save-snapshot.md
+email-settings-snapshot.md
+products-backpacks-snap.md

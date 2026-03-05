@@ -97,9 +97,13 @@ Route::group([
             return view('pages.carsurf.sobre');
         })->name('sobre');
 
-        Route::get('/programas', function () {
-            return view('pages.carsurf.programas');
-        })->name('programas');
+        Route::get('/instalacoes', function () {
+            return view('pages.carsurf.instalacoes');
+        })->name('instalacoes');
+
+        Route::get('/formularios', function () {
+            return view('pages.carsurf.formularios');
+        })->name('formularios');
     });
 
     // Nazare Qualifica
@@ -122,12 +126,7 @@ Route::group([
             return view('pages.nazare-qualifica.equipa', compact('page', 'members'));
         })->name('equipa');
 
-        Route::get('/servicos', function () {
-            $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')
-                ->where('slug', 'servicos')
-                ->first() ?? new \App\Models\Pagina(['entity' => 'nazare-qualifica', 'slug' => 'servicos', 'title' => ['pt' => 'Serviços', 'en' => 'Services'], 'content' => []]);
-            return view('pages.nazare-qualifica.servicos', compact('page'));
-        })->name('servicos');
+        Route::get('/servicos', fn() => redirect(LaravelLocalization::localizeURL('/nazare-qualifica/sobre'), 301))->name('servicos');
 
         // Individual Service Pages
         Route::get('/carsurf', function () {
@@ -145,7 +144,7 @@ Route::group([
         })->name('estacionamento');
 
         // 301 Redirect - Forte moved to Praia do Norte
-        Route::get('/forte', fn() => redirect(LaravelLocalization::localizeURL('/praia-norte/forte'), 301));
+        Route::get('/forte', fn() => redirect(LaravelLocalization::localizeURL('/praia-norte/forte'), 301))->name('forte');
 
         Route::get('/ale', function () {
             $page = \App\Models\Pagina::where('entity', 'nazare-qualifica')

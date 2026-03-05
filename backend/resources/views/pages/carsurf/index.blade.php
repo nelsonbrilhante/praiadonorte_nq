@@ -16,8 +16,8 @@
         image="{{ $pagina?->hero_image ? asset('storage/' . $pagina->hero_image) : '' }}"
     >
         <div class="flex flex-wrap gap-4">
-            <x-ui.button href="{{ route('carsurf.programas') }}" class="bg-white text-performance hover:bg-white/90">
-                {{ __('messages.carsurf.hero.programs') }}
+            <x-ui.button href="{{ route('carsurf.instalacoes') }}" class="bg-white text-performance hover:bg-white/90">
+                {{ __('messages.carsurf.hero.facilities') }}
             </x-ui.button>
             <x-ui.button variant="outline" href="{{ route('carsurf.sobre') }}" class="border-white bg-transparent text-white hover:bg-white/10">
                 {{ __('messages.carsurf.hero.about') }}
