@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'url' => env('WOOCOMMERCE_URL', 'https://loja.praiadonortenazare.pt'),
+    'url' => env('WOOCOMMERCE_URL', 'https://store.praiadonortenazare.pt'),
 
     'consumer_key' => env('WOOCOMMERCE_CONSUMER_KEY', ''),
 

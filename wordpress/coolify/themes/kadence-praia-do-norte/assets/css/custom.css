@@ -3,6 +3,22 @@
    ============================================ */
 
 /* ------------------------------------------
+   0. Global Utility Classes
+   ------------------------------------------ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+
+/* ------------------------------------------
    1. CSS Custom Properties — Brand Tokens
    ------------------------------------------ */
 :root {
@@ -327,10 +343,16 @@ body.pn-surf-theme .site {
     padding-top: 4rem !important;
 }
 
-/* Single product: reduced offset (breadcrumbs + product header provide visual spacing) */
+/* WooCommerce pages with hero banner: no extra offset (hero fills the gap) */
+body.pn-surf-theme.post-type-archive-product #inner-wrap,
+body.pn-surf-theme.post-type-archive-product .site,
 body.pn-surf-theme.single-product #inner-wrap,
-body.pn-surf-theme.single-product .site {
-    padding-top: 2rem !important;
+body.pn-surf-theme.single-product .site,
+body.pn-surf-theme.woocommerce-cart #inner-wrap,
+body.pn-surf-theme.woocommerce-cart .site,
+body.pn-surf-theme.woocommerce-checkout #inner-wrap,
+body.pn-surf-theme.woocommerce-checkout .site {
+    padding-top: 0 !important;
 }
 
 /* Also offset entry-hero if present */
@@ -427,6 +449,7 @@ body.pn-surf-theme.single-product .site {
     font-size: 0.85rem !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
+    line-height: 1 !important;
     padding: 0.7rem 1.5rem !important;
     transition: all var(--pn-transition) !important;
     cursor: pointer;
@@ -854,18 +877,6 @@ body.pn-surf-theme.single-product .site {
     opacity: 0.5;
 }
 
-.pn-breadcrumbs .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
 /* Hide Kadence breadcrumbs inside product content (replaced by custom bar) */
 .single-product .product-title.product-above {
     display: none !important;
@@ -912,20 +923,30 @@ body.pn-surf-theme.single-product .site {
     border-bottom: 1px solid var(--pn-gray-light);
 }
 
-/* Hide entry-hero on single product — title shown in custom page header instead */
+/* Hide entry-hero on all WooCommerce pages (replaced by custom pn-shop-hero) */
 .single-product .entry-hero-container-inner,
 .single-product .entry-hero,
-.single-product .kadence-page-title {
+.single-product .kadence-page-title,
+.woocommerce-cart .entry-hero-container-inner,
+.woocommerce-cart .entry-hero,
+.woocommerce-cart .kadence-page-title,
+.woocommerce-checkout .entry-hero-container-inner,
+.woocommerce-checkout .entry-hero,
+.woocommerce-checkout .kadence-page-title {
     display: none !important;
 }
 
-/* Remove extra padding/margin on single product — .site already offsets for fixed header */
-.single-product #inner-wrap {
-    padding-top: 0 !important;
+/* Remove extra padding/margin on WooCommerce pages with hero */
+.single-product .content-area,
+.woocommerce-cart .content-area,
+.woocommerce-checkout .content-area {
+    margin-top: 0 !important;
 }
 
-.single-product .content-area {
-    margin-top: 0 !important;
+.single-product #inner-wrap,
+.woocommerce-cart #inner-wrap,
+.woocommerce-checkout #inner-wrap {
+    padding-top: 0 !important;
 }
 
 .entry-hero-container-inner .entry-title,
@@ -949,6 +970,106 @@ body.pn-surf-theme.single-product .site {
 
 .entry-hero .kadence-breadcrumbs a:hover {
     color: var(--pn-ocean-deep) !important;
+}
+
+
+/* ------------------------------------------
+   11c. Shop Hero Banner
+   ------------------------------------------ */
+
+/* Hide ALL Kadence/WooCommerce page-title elements on store pages with hero */
+body.post-type-archive-product .entry-hero-container-inner,
+body.post-type-archive-product .entry-hero,
+body.post-type-archive-product .entry-hero-container,
+body.post-type-archive-product .kadence-page-title,
+body.post-type-archive-product .woocommerce-products-header,
+body.post-type-archive-product .product-archive-hero-section,
+body.post-type-archive-product .page-title {
+    display: none !important;
+}
+
+/* Remove extra spacing between hero and content on all store pages */
+body.post-type-archive-product #inner-wrap,
+body.post-type-archive-product .wrap.kt-clear,
+body.woocommerce-cart .wrap.kt-clear,
+body.woocommerce-checkout .wrap.kt-clear {
+    padding-top: 0 !important;
+}
+
+body.post-type-archive-product .content-area,
+body.post-type-archive-product .site-main,
+body.woocommerce-cart .content-area,
+body.woocommerce-cart .site-main,
+body.woocommerce-checkout .content-area,
+body.woocommerce-checkout .site-main {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+body.post-type-archive-product .woocommerce-notices-wrapper:empty {
+    display: none;
+}
+
+/* Spacing between hero and product grid on shop page */
+body.post-type-archive-product .pn-shop-hero {
+    margin-bottom: 1.5rem;
+}
+
+.pn-shop-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 286px;
+    background-size: cover;
+    background-position: center 40%;
+}
+
+.pn-shop-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 29, 61, 0.85) 0%, rgba(0, 53, 102, 0.7) 100%);
+    z-index: 1;
+}
+
+.pn-shop-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2.5rem 1rem;
+}
+
+.pn-shop-hero h1 {
+    font-family: var(--pn-font-heading);
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--pn-white);
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.02em;
+}
+
+.pn-shop-hero p {
+    font-family: var(--pn-font-body);
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .pn-shop-hero {
+        min-height: 208px;
+    }
+
+    .pn-shop-hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .pn-shop-hero p {
+        font-size: 0.875rem;
+    }
 }
 
 

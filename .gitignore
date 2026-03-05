@@ -123,6 +123,7 @@ temp/
 # ===================
 
 wordpress/.env
+wordpress/data/
 
 # ===================
 # Scripts PIDs

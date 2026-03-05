@@ -1,89 +1,88 @@
 #!/bin/bash
 
-# Nazaré Qualifica - Stop Script
-# Para o servidor Laravel e Vite
+# Nazare Qualifica - Stop Script
+# Stops Laravel, Vite, and queue worker
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PID_DIR="$PROJECT_DIR/.pids"
 
-# Cores para output
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+DIM='\033[2m'
+NC='\033[0m'
 
-echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}  Nazaré Qualifica - Parando Sistema${NC}"
-echo -e "${BLUE}========================================${NC}"
-echo ""
+STOPPED=()
+ALREADY_STOPPED=()
 
-# Parar Laravel
-if [ -f "$PID_DIR/laravel.pid" ]; then
-    PID=$(cat "$PID_DIR/laravel.pid")
-    if kill -0 $PID 2>/dev/null; then
-        echo -e "${RED}Parando Laravel (PID: $PID)...${NC}"
-        kill $PID 2>/dev/null
-        rm "$PID_DIR/laravel.pid"
-        echo -e "  Laravel parado"
-    else
-        echo -e "${YELLOW}Laravel não estava a correr${NC}"
-        rm "$PID_DIR/laravel.pid"
+# Graceful kill: SIGTERM, wait up to 5s, then SIGKILL
+kill_graceful() {
+    local pid=$1
+    local name=$2
+    if kill -0 "$pid" 2>/dev/null; then
+        kill "$pid" 2>/dev/null
+        local waited=0
+        while kill -0 "$pid" 2>/dev/null && [ $waited -lt 5 ]; do
+            sleep 1
+            waited=$((waited + 1))
+        done
+        if kill -0 "$pid" 2>/dev/null; then
+            kill -9 "$pid" 2>/dev/null
+        fi
+        STOPPED+=("$name (PID $pid)")
+        return 0
     fi
-else
-    echo -e "${YELLOW}Laravel não estava a correr${NC}"
-fi
+    return 1
+}
 
-# Parar Vite
-if [ -f "$PID_DIR/vite.pid" ]; then
-    PID=$(cat "$PID_DIR/vite.pid")
-    if kill -0 $PID 2>/dev/null; then
-        echo -e "${RED}Parando Vite (PID: $PID)...${NC}"
-        kill $PID 2>/dev/null
-        rm "$PID_DIR/vite.pid"
-        echo -e "  Vite parado"
+echo -e "${RED}Stopping services...${NC}"
+echo ""
+
+# Stop services from PID files
+for service in laravel vite queue; do
+    pidfile="$PID_DIR/$service.pid"
+    if [ -f "$pidfile" ]; then
+        pid=$(cat "$pidfile")
+        if kill_graceful "$pid" "$service"; then
+            :
+        else
+            ALREADY_STOPPED+=("$service")
+        fi
+        rm -f "$pidfile"
     else
-        echo -e "${YELLOW}Vite não estava a correr${NC}"
-        rm "$PID_DIR/vite.pid"
+        ALREADY_STOPPED+=("$service")
     fi
-else
-    echo -e "${YELLOW}Vite não estava a correr${NC}"
-fi
+done
 
-# Matar processos órfãos (caso existam)
+# Clean up legacy PID files
+rm -f "$PID_DIR/backend.pid" "$PID_DIR/frontend.pid" 2>/dev/null
+
+# Kill orphaned processes
+pkill -f "artisan serve" 2>/dev/null
+pkill -f "artisan queue:listen" 2>/dev/null
+pkill -f "artisan queue:work" 2>/dev/null
+pkill -f "vite" 2>/dev/null
+pkill -f "npm run dev" 2>/dev/null
+
+# Port cleanup
+for port in 8000 5173 5174; do
+    pids=$(lsof -ti:"$port" 2>/dev/null)
+    if [ -n "$pids" ]; then
+        echo "$pids" | xargs kill 2>/dev/null
+    fi
+done
+
+# Summary
 echo ""
-echo -e "${YELLOW}Verificando processos órfãos...${NC}"
-
-# Matar php artisan serve
-pkill -f "artisan serve" 2>/dev/null && echo -e "  Processos 'artisan serve' terminados"
-
-# Matar vite
-pkill -f "vite" 2>/dev/null && echo -e "  Processos 'vite' terminados"
-
-# Matar npm run dev (processos pai)
-pkill -f "npm run dev" 2>/dev/null && echo -e "  Processos 'npm run dev' terminados"
-
-# Verificar portas
-LARAVEL_PID=$(lsof -ti:8000 2>/dev/null)
-if [ ! -z "$LARAVEL_PID" ]; then
-    echo -e "  Matando processo na porta 8000 (PID: $LARAVEL_PID)"
-    kill $LARAVEL_PID 2>/dev/null
+if [ ${#STOPPED[@]} -gt 0 ]; then
+    for s in "${STOPPED[@]}"; do
+        echo -e "  ${RED}Stopped${NC} $s"
+    done
 fi
-
-VITE_PID=$(lsof -ti:5173 2>/dev/null)
-if [ ! -z "$VITE_PID" ]; then
-    echo -e "  Matando processo na porta 5173 (PID: $VITE_PID)"
-    kill $VITE_PID 2>/dev/null
+if [ ${#ALREADY_STOPPED[@]} -gt 0 ]; then
+    echo -e "  ${DIM}Already stopped: ${ALREADY_STOPPED[*]}${NC}"
 fi
-
-VITE_PID2=$(lsof -ti:5174 2>/dev/null)
-if [ ! -z "$VITE_PID2" ]; then
-    echo -e "  Matando processo na porta 5174 (PID: $VITE_PID2)"
-    kill $VITE_PID2 2>/dev/null
-fi
-
 echo ""
-echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}  Sistema parado com sucesso!${NC}"
-echo -e "${GREEN}========================================${NC}"
+echo -e "${GREEN}All services stopped.${NC}"
