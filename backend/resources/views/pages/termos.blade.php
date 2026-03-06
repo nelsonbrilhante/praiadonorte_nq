@@ -23,90 +23,48 @@
 
                 {{-- Sections --}}
                 <div class="space-y-8">
-                    {{-- 1. Acceptance --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.terms.sections.acceptance.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.terms.sections.acceptance.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                    @php
+                        $sections = __('legal.terms.sections');
+                    @endphp
 
-                    {{-- 2. Services --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.terms.sections.services.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.terms.sections.services.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                    @foreach ($sections as $key => $section)
+                        <x-ui.card id="{{ $key === 'disputes' ? 'litigios' : '' }}">
+                            <x-ui.card-header>
+                                <x-ui.card-title>{{ $section['title'] }}</x-ui.card-title>
+                            </x-ui.card-header>
+                            <x-ui.card-content>
+                                <p class="text-muted-foreground">{{ $section['content'] }}</p>
 
-                    {{-- 3. Intellectual Property --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.terms.sections.intellectualProperty.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.terms.sections.intellectualProperty.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                                @if (isset($section['items']))
+                                    <ul class="mt-4 list-disc pl-6 space-y-2 text-muted-foreground">
+                                        @foreach ($section['items'] as $item)
+                                            <li>{{ $item }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
 
-                    {{-- 4. User Conduct --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.terms.sections.userConduct.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="mb-4 text-muted-foreground">{{ __('legal.terms.sections.userConduct.content') }}</p>
-                            <ul class="list-disc pl-6 space-y-2 text-muted-foreground">
-                                @foreach(__('legal.terms.sections.userConduct.items') as $item)
-                                    <li>{{ $item }}</li>
-                                @endforeach
-                            </ul>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                                @if (isset($section['extra']))
+                                    <p class="mt-4 text-muted-foreground">{{ $section['extra'] }}</p>
+                                @endif
 
-                    {{-- 5. Liability --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.terms.sections.liability.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.terms.sections.liability.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                                @if (isset($section['odrLink']))
+                                    <p class="mt-4">
+                                        <a href="{{ $section['odrLink'] }}" target="_blank" rel="noopener noreferrer" class="text-ocean font-medium hover:underline">
+                                            {{ $section['odrLink'] }}
+                                            <span class="text-xs" aria-hidden="true">&#8599;</span>
+                                        </a>
+                                    </p>
+                                @endif
 
-                    {{-- 6. Links --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.terms.sections.links.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.terms.sections.links.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
-
-                    {{-- 7. Modifications --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.terms.sections.modifications.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.terms.sections.modifications.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
-
-                    {{-- 8. Law --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.terms.sections.law.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.terms.sections.law.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                                @if (isset($section['formTitle']))
+                                    <div class="mt-6 rounded-lg border border-border bg-muted/50 p-6">
+                                        <h4 class="mb-3 font-semibold text-foreground">{{ $section['formTitle'] }}</h4>
+                                        <p class="text-sm text-muted-foreground whitespace-pre-line">{{ $section['formContent'] }}</p>
+                                    </div>
+                                @endif
+                            </x-ui.card-content>
+                        </x-ui.card>
+                    @endforeach
                 </div>
 
                 {{-- Back link --}}

@@ -122,11 +122,11 @@ A arquitectura foi alterada de **split** (Next.js + Laravel API) para **monolít
 
 ## Documentação Relacionada
 
-- [Plano Geral](../../PLANO_DESENVOLVIMENTO.md) - Visão executiva
+- [Plano Geral](../PLANO_DESENVOLVIMENTO.md) - Visão executiva
 - [CLAUDE.md](../../CLAUDE.md) - Referência técnica principal
 - [SESSION-HANDOFF.md](../../SESSION-HANDOFF.md) - Estado actual e continuidade
-- [Migration Plan](../../MIGRATION_PLAN.md) - Deploy para produção
-- [Security](../../CYBERSECURITY_ASSESSMENT.md) - Avaliação de segurança
+- [Migration Plan](../MIGRATION_PLAN.md) - Deploy para produção
+- [Security](../CYBERSECURITY_ASSESSMENT.md) - Avaliação de segurança
 - [Livewire Guide](../tech-stack/LIVEWIRE_3.md) - Guia de componentes Livewire
 
 ---

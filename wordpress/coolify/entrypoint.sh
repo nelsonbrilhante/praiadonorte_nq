@@ -313,12 +313,17 @@ wp option update blogname "${WP_SITE_TITLE:-Praia do Norte - Loja}" --allow-root
 wp option update blogdescription "Loja oficial Praia do Norte Nazare" --allow-root --path=/var/www/html
 echo "[wp-entrypoint] WooCommerce configured (EUR, Portugal)."
 
-# Enable easypay payment gateway
-wp option update woocommerce_easypay_checkout_settings '{"enabled":"yes","title":"easypay Checkout","description":"Pay with MB Way, Ref. Multibanco, Visa \u0026 Mastercard Cards, Apple Pay, Santander Consumer Finance","connection_key":"'"${EASYPAY_CONNECTION_KEY:-}"'","sandbox":"'"${EASYPAY_SANDBOX:-1}"'"}' --format=json --allow-root --path=/var/www/html
+# Enable easypay payment gateway (enabled/title/description only — connection key is a standalone option)
+wp option update woocommerce_easypay_checkout_settings '{"enabled":"yes","title":"easypay Checkout","description":"Pay with MB Way, Ref. Multibanco, Visa \u0026 Mastercard Cards, Apple Pay, Santander Consumer Finance"}' --format=json --allow-root --path=/var/www/html
 echo "[wp-entrypoint] Easypay payment gateway enabled."
 else
     echo "[wp-entrypoint] Phase 6: Skipped WooCommerce options (REDEPLOY mode)."
 fi
+
+# Easypay connection settings — always run (env vars may change between deploys)
+wp option update easypay_store_key "${EASYPAY_CONNECTION_KEY:-}" --allow-root --path=/var/www/html
+wp option update easypay_sandbox "${EASYPAY_SANDBOX:-1}" --allow-root --path=/var/www/html
+echo "[wp-entrypoint] Easypay settings updated (sandbox=${EASYPAY_SANDBOX:-1})."
 
 # Pretty permalinks — always run (idempotent, required for REST API)
 wp rewrite structure '/%postname%/' --allow-root --path=/var/www/html

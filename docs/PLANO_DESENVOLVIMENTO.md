@@ -120,7 +120,7 @@ Esta arquitectura foi abandonada devido a problemas técnicos com proxy de image
 
 ## 3. ESTRUTURA DO PROJETO
 
-> **Documentação Completa**: Ver [docs/architecture/FOLDER_STRUCTURE.md](docs/architecture/FOLDER_STRUCTURE.md)
+> **Documentação Completa**: Ver [docs/architecture/FOLDER_STRUCTURE.md](architecture/FOLDER_STRUCTURE.md)
 
 ```
 praia-do-norte-unified/
@@ -287,13 +287,13 @@ O desenvolvimento está dividido em **11 fases** organizadas em **4 blocos**.
 
 ## Documentação Relacionada
 
-- **Referência Técnica**: [CLAUDE.md](CLAUDE.md)
-- **Handoff de Sessão**: [SESSION-HANDOFF.md](SESSION-HANDOFF.md)
-- **Estrutura de Pastas**: [docs/architecture/FOLDER_STRUCTURE.md](docs/architecture/FOLDER_STRUCTURE.md)
-- **Convenções de Nomenclatura**: [docs/architecture/NAMING_CONVENTIONS.md](docs/architecture/NAMING_CONVENTIONS.md)
+- **Referência Técnica**: [CLAUDE.md](../CLAUDE.md)
+- **Handoff de Sessão**: [SESSION-HANDOFF.md](../SESSION-HANDOFF.md)
+- **Estrutura de Pastas**: [docs/architecture/FOLDER_STRUCTURE.md](architecture/FOLDER_STRUCTURE.md)
+- **Convenções de Nomenclatura**: [docs/architecture/NAMING_CONVENTIONS.md](architecture/NAMING_CONVENTIONS.md)
 - **Guia de Deploy**: [MIGRATION_PLAN.md](MIGRATION_PLAN.md)
 - **Segurança**: [CYBERSECURITY_ASSESSMENT.md](CYBERSECURITY_ASSESSMENT.md)
-- **Design**: [DESIGN_GUIDELINES.md](DESIGN_GUIDELINES.md)
+- **Design**: [DESIGN_GUIDELINES.md](design/DESIGN_GUIDELINES.md)
 
 ---
 

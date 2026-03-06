@@ -1,8 +1,1 @@
-- adicionar um campo de NIF/CIF/NIE para ser adicionado nas faturas;
-- Adicionar a funcionalidade de escolha do utilizador levantar a encomenda numa das lojas fisicas;
-- Integrar o Woocommerce com a EasyPay (Multibanco, MBWay, Cartão de Crédito);
 - verificar a politica de privacidade ou utilização com a analise ao email enviado pelo juridico da NQ pela Ana Água
-- quero redireccionar de novo para o website antigo e está a dar erro de valor TXT em TLS
-- está a ocorrer um erro na pagina http://localhost:8000/pt/nazare-qualifica/sobre, verifica o que se passa;
-- importar conteudo da pagina carsurf.nazare.pt para o novo website (o novo tem conteudo falso), somente o conteudo que esta no
-website do carsurf é valido. é necessario importar o video que está a funcionar na pagina principal (website antigo) para o hero section (novo slide) sobre o carsurf.

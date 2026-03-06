@@ -142,9 +142,20 @@ backend/server.php
 /*.jpeg
 
 # ===================
-# Personal Snapshots
+# Screenshots organizados
 # ===================
 
-cloudflare-save-snapshot.md
-email-settings-snapshot.md
-products-backpacks-snap.md
+docs/screenshots/
+
+# ===================
+# Snapshots de configuração/debugging
+# ===================
+
+docs/snapshots/
+
+# ===================
+# Presentation & verification assets
+# ===================
+
+apresentacao/
+legal-verification/

@@ -120,6 +120,7 @@ return [
             'privacy' => 'Política de Privacidade',
             'terms' => 'Termos de Uso',
             'cookies' => 'Política de Cookies',
+            'disputes' => 'Resolução de Litígios',
         ],
         'contact' => [
             'title' => 'Contacto',

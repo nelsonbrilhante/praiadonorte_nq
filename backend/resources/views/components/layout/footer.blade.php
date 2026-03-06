@@ -198,6 +198,9 @@
                 <a href="{{ LaravelLocalization::localizeURL('/cookies') }}" class="transition-colors hover:text-white/70">
                     {{ __('messages.footer.links.cookies') }}
                 </a>
+                <a href="{{ LaravelLocalization::localizeURL('/termos') }}#litigios" class="transition-colors hover:text-white/70">
+                    {{ __('messages.footer.links.disputes') }}
+                </a>
             </nav>
         </div>
     </div>

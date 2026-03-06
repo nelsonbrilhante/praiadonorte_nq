@@ -23,100 +23,32 @@
 
                 {{-- Sections --}}
                 <div class="space-y-8">
-                    {{-- 1. Responsible --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.privacy.sections.responsible.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.privacy.sections.responsible.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                    @php
+                        $sections = __('legal.privacy.sections');
+                    @endphp
 
-                    {{-- 2. Data Collected --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.privacy.sections.dataCollected.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="mb-4 text-muted-foreground">{{ __('legal.privacy.sections.dataCollected.content') }}</p>
-                            <ul class="list-disc pl-6 space-y-2 text-muted-foreground">
-                                @foreach(__('legal.privacy.sections.dataCollected.items') as $item)
-                                    <li>{{ $item }}</li>
-                                @endforeach
-                            </ul>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                    @foreach ($sections as $key => $section)
+                        <x-ui.card>
+                            <x-ui.card-header>
+                                <x-ui.card-title>{{ $section['title'] }}</x-ui.card-title>
+                            </x-ui.card-header>
+                            <x-ui.card-content>
+                                <p class="text-muted-foreground">{{ $section['content'] }}</p>
 
-                    {{-- 3. Purpose --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.privacy.sections.purpose.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="mb-4 text-muted-foreground">{{ __('legal.privacy.sections.purpose.content') }}</p>
-                            <ul class="list-disc pl-6 space-y-2 text-muted-foreground">
-                                @foreach(__('legal.privacy.sections.purpose.items') as $item)
-                                    <li>{{ $item }}</li>
-                                @endforeach
-                            </ul>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                                @if (isset($section['items']))
+                                    <ul class="mt-4 list-disc pl-6 space-y-2 text-muted-foreground">
+                                        @foreach ($section['items'] as $item)
+                                            <li>{{ $item }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
 
-                    {{-- 4. Legal Basis --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.privacy.sections.legalBasis.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.privacy.sections.legalBasis.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
-
-                    {{-- 5. Retention --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.privacy.sections.retention.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.privacy.sections.retention.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
-
-                    {{-- 6. Rights --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.privacy.sections.rights.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="mb-4 text-muted-foreground">{{ __('legal.privacy.sections.rights.content') }}</p>
-                            <ul class="list-disc pl-6 space-y-2 text-muted-foreground">
-                                @foreach(__('legal.privacy.sections.rights.items') as $item)
-                                    <li>{{ $item }}</li>
-                                @endforeach
-                            </ul>
-                        </x-ui.card-content>
-                    </x-ui.card>
-
-                    {{-- 7. Security --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.privacy.sections.security.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.privacy.sections.security.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
-
-                    {{-- 8. Contact --}}
-                    <x-ui.card>
-                        <x-ui.card-header>
-                            <x-ui.card-title>{{ __('legal.privacy.sections.contact.title') }}</x-ui.card-title>
-                        </x-ui.card-header>
-                        <x-ui.card-content>
-                            <p class="text-muted-foreground">{{ __('legal.privacy.sections.contact.content') }}</p>
-                        </x-ui.card-content>
-                    </x-ui.card>
+                                @if (isset($section['extra']))
+                                    <p class="mt-4 text-muted-foreground">{{ $section['extra'] }}</p>
+                                @endif
+                            </x-ui.card-content>
+                        </x-ui.card>
+                    @endforeach
                 </div>
 
                 {{-- Back link --}}

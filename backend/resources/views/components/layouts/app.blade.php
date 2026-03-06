@@ -84,6 +84,9 @@
     {{-- Footer --}}
     <x-layout.footer />
 
+    {{-- Cookie Consent Banner --}}
+    <x-layout.cookie-consent />
+
     {{-- Livewire Scripts --}}
     @livewireScripts
 

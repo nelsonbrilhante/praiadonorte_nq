@@ -31,17 +31,16 @@ praia-do-norte-unified/
 ├── content/                # Conteúdo de teste
 ├── logos/                  # Assets visuais
 ├── CLAUDE.md               # Instruções para Claude Code
-├── PLANO_DESENVOLVIMENTO.md # Plano de desenvolvimento
-└── DESIGN_GUIDELINES.md    # Identidade visual
+└── README.md
 ```
 
 ## Documentação
 
 | Documento | Descrição |
 |-----------|-----------|
-| [PLANO_DESENVOLVIMENTO.md](./PLANO_DESENVOLVIMENTO.md) | Plano completo de desenvolvimento |
+| [PLANO_DESENVOLVIMENTO.md](./docs/PLANO_DESENVOLVIMENTO.md) | Plano completo de desenvolvimento |
 | [CLAUDE.md](./CLAUDE.md) | Referência técnica para desenvolvimento |
-| [DESIGN_GUIDELINES.md](./DESIGN_GUIDELINES.md) | Identidade visual e UX |
+| [DESIGN_GUIDELINES.md](./docs/design/DESIGN_GUIDELINES.md) | Identidade visual e UX |
 | [docs/phases/](./docs/phases/) | Guias fase a fase |
 | [docs/architecture/](./docs/architecture/) | Estrutura e nomenclaturas |
 
@@ -58,7 +57,7 @@ O projeto está organizado em **4 blocos**:
 
 ## Como Começar
 
-1. Ler [PLANO_DESENVOLVIMENTO.md](./PLANO_DESENVOLVIMENTO.md)
+1. Ler [PLANO_DESENVOLVIMENTO.md](./docs/PLANO_DESENVOLVIMENTO.md)
 2. Seguir [docs/phases/FASE_00_SETUP.md](./docs/phases/FASE_00_SETUP.md)
 3. Configurar ambiente de desenvolvimento
 

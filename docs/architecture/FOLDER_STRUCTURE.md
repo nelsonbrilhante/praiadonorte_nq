@@ -23,7 +23,6 @@ praia-do-norte-unified/
 ├── scripts/                             # Scripts de desenvolvimento
 ├── CLAUDE.md                            # Referência técnica principal
 ├── SESSION-HANDOFF.md                   # Continuidade entre sessões
-├── PLANO_DESENVOLVIMENTO.md             # Plano de desenvolvimento
 └── README.md
 ```
 
@@ -301,7 +300,7 @@ Route::prefix('{locale}')
 ## Documentação Relacionada
 
 - [NAMING_CONVENTIONS.md](./NAMING_CONVENTIONS.md) - Padrões de nomenclatura
-- [PLANO_DESENVOLVIMENTO.md](../../PLANO_DESENVOLVIMENTO.md) - Plano de desenvolvimento
+- [PLANO_DESENVOLVIMENTO.md](../PLANO_DESENVOLVIMENTO.md) - Plano de desenvolvimento
 - [CLAUDE.md](../../CLAUDE.md) - Referência técnica
 - [SESSION-HANDOFF.md](../../SESSION-HANDOFF.md) - Continuidade entre sessões
 

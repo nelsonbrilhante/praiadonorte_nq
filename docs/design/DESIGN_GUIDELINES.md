@@ -2,7 +2,7 @@
 ## Praia do Norte Unified Platform
 
 **Version:** 1.0
-**Based on:** `PLANO_DESENVOLVIMENTO.md` & `concept.txt`
+**Based on:** `docs/PLANO_DESENVOLVIMENTO.md` & `concept.txt`
 
 This document outlines the design philosophy, visual identity, and user experience guidelines for the unified platform merging **Praia do Norte**, **Carsurf**, and **Nazaré Qualifica**.
 

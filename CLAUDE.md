@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Carsurf** — Surf training center
 - **Nazare Qualifica** — Municipal infrastructure management
 
-**Current Phase**: Production (deployed) + ongoing QA. Blade migration from Next.js is complete. Surfboard model removed (board info now on Surfer). Forte da Nazaré and Posto Hidrográfico pages added. Admin-controlled maintenance mode operational. Next: Easypay payment integration, content translation.
+**Current Phase**: Production (deployed) + ongoing QA. Easypay payment integration in progress (entrypoint fixed, awaiting production API keys from Easypay). Next: content translation.
 
 ## Critical Constraints
 
@@ -101,6 +101,9 @@ Users browse products on the Laravel frontend (`/pt/loja`), click "Buy", get red
 - **Config**: `backend/config/woocommerce.php` reads `WOOCOMMERCE_*` env vars. The `make setup` command in `wordpress/` auto-generates API keys and updates `backend/.env`.
 - **Production**: WooCommerce runs at `store.praiadonortenazare.pt` (old: `store-nq.nelsonbrilhante.com`) via Coolify. Uses Kadence child theme. `LARAVEL_URL` env var connects back to Laravel (`nazarequalifica.pt`).
 - **Sentinel protection**: `wordpress/coolify/entrypoint.sh` uses a sentinel file to prevent production data (uploads, plugins, theme customizations) from being overwritten on redeploys.
+- **Easypay plugin options**: The `easypay-gateway-checkout-wc` plugin reads `easypay_store_key` (Connection Key UUID) and `easypay_sandbox` (1=sandbox, 0=production) as **standalone WP options** — NOT from inside `woocommerce_easypay_checkout_settings` JSON. The gateway enabled/title/description settings DO go in `woocommerce_easypay_checkout_settings`.
+- **Easypay platforms**: Backoffice (`backoffice.easypay.pt`), E-commerce platform (`e-commerce.easypay.pt`), Sandbox backoffice (`backoffice.test.easypay.pt`). The WooCommerce plugin page in the new backoffice requires special account permissions (may return 403). API keys can be found in Backoffice 1.0 → Web Services → Configuração Código.
+- **`ForecastService`** (`backend/app/Services/ForecastService.php`) — Surf forecast data service for the `/pt/previsao` page.
 
 ### Multi-Entity Content
 
@@ -200,6 +203,8 @@ Uses `@tailwindcss/vite` plugin (Tailwind v4 native Vite integration).
 
 **Production URLs**: `nazarequalifica.pt` (Laravel, primary), `praiadonortenazare.pt`, `carsurf.nazare.pt`, `store.praiadonortenazare.pt` (WooCommerce). Old domains still active: `nq.nelsonbrilhante.com`, `store-nq.nelsonbrilhante.com`.
 
+**Production access**: VPS SSH and Docker container names are in `.credentials.md`. WordPress container management uses `docker exec` with `wp` CLI commands (`--allow-root --path=/var/www/html`).
+
 ## Session Protocol
 
 - **Start of session**: Read `SESSION-HANDOFF.md` for context
@@ -217,9 +222,9 @@ Branches: `main` (production), `feature/*`, `fix/*`, `hotfix/*`. Commits: conven
 - `docs/tech-stack/SETUP_LOG.md` — Version history, issues, solutions
 - `docs/phases/` — Phase-by-phase implementation guides
 - `docs/architecture/NAMING_CONVENTIONS.md` — Naming conventions
-- `DESIGN_GUIDELINES.md` — Visual identity and UX patterns (partially outdated: design tokens valid, Next.js/shadcn references are legacy)
-- `CYBERSECURITY_ASSESSMENT.md` — Security strategy
-- `PLANO_DESENVOLVIMENTO.md` — Full development plan (Portuguese)
+- `docs/design/DESIGN_GUIDELINES.md` — Visual identity and UX patterns (partially outdated: design tokens valid, Next.js/shadcn references are legacy)
+- `docs/CYBERSECURITY_ASSESSMENT.md` — Security strategy
+- `docs/PLANO_DESENVOLVIMENTO.md` — Full development plan (Portuguese)
 
 ## Performance Targets
 
