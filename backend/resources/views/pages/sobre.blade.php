@@ -42,10 +42,13 @@
             </div>
             <div class="mt-8 relative aspect-video overflow-hidden rounded-lg">
                 <img
-                    src="{{ asset('pn-ai-wave-hero.png') }}"
-                    alt="Praia do Norte"
+                    src="{{ asset('images/praia-norte/wsl-nazare-wave.jpg') }}"
+                    alt="Praia do Norte - Nazare Big Wave"
                     class="h-full w-full object-cover"
                 />
+                <div class="absolute bottom-0 right-0 bg-black/60 px-3 py-1.5 text-xs text-white/80">
+                    Foto: <a href="https://www.facebook.com/WSL" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">World Surf League</a>
+                </div>
             </div>
         </div>
     </section>
