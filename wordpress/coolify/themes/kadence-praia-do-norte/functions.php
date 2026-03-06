@@ -186,7 +186,8 @@ function pn_t(string $key): string {
                 'nav.violations' => 'Contraordenações', 'nav.documents' => 'Documentos',
                 'nav.parking' => 'Estacionamento', 'nav.fort' => 'Forte', 'nav.ale' => 'ALE',
                 'nav.surferWall' => 'Surfer Wall', 'nav.forecast' => 'Previsões',
-                'nav.programs' => 'Programas', 'nav.events' => 'Eventos', 'nav.news' => 'Notícias',
+                'nav.programs' => 'Programas', 'nav.forms' => 'Formulários',
+                'nav.events' => 'Eventos', 'nav.news' => 'Notícias',
                 'nav.shop' => 'Loja', 'nav.cart' => 'Carrinho',
                 'nav.forte' => 'Forte de S. Miguel Arcanjo',
                 'nav.hidrografico' => 'Hidrográfico',
@@ -197,6 +198,7 @@ function pn_t(string $key): string {
                 'footer.copyright' => 'Todos os direitos reservados.',
                 'footer.privacy' => 'Política de Privacidade', 'footer.terms' => 'Termos de Uso',
                 'footer.cookies' => 'Política de Cookies',
+                'footer.disputes' => 'Litígios',
                 'footer.address' => 'Rua da Praia do Norte, Centro de Alto Rendimento de Surf, 2450-504 Nazaré',
                 'footer.landline' => '+351 262 550 010', 'footer.phone' => '934 000 126',
                 'footer.cmNazare' => 'Câmara Municipal da Nazaré',
@@ -215,7 +217,8 @@ function pn_t(string $key): string {
                 'nav.violations' => 'Violations', 'nav.documents' => 'Documents',
                 'nav.parking' => 'Parking', 'nav.fort' => 'Fort', 'nav.ale' => 'ALE',
                 'nav.surferWall' => 'Surfer Wall', 'nav.forecast' => 'Forecast',
-                'nav.programs' => 'Programs', 'nav.events' => 'Events', 'nav.news' => 'News',
+                'nav.programs' => 'Programs', 'nav.forms' => 'Forms',
+                'nav.events' => 'Events', 'nav.news' => 'News',
                 'nav.shop' => 'Shop', 'nav.cart' => 'Cart',
                 'nav.forte' => 'Fort of São Miguel Arcanjo',
                 'nav.hidrografico' => 'Hydrographic',
@@ -226,6 +229,7 @@ function pn_t(string $key): string {
                 'footer.copyright' => 'All rights reserved.',
                 'footer.privacy' => 'Privacy Policy', 'footer.terms' => 'Terms of Use',
                 'footer.cookies' => 'Cookie Policy',
+                'footer.disputes' => 'Disputes',
                 'footer.address' => 'Rua da Praia do Norte, Centro de Alto Rendimento de Surf, 2450-504 Nazaré',
                 'footer.landline' => '+351 262 550 010', 'footer.phone' => '934 000 126',
                 'footer.cmNazare' => 'Nazaré City Council',
@@ -296,7 +300,6 @@ function pn_render_custom_header() {
                             <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/contraordenacoes')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.violations')); ?></a>
                             <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/documentos')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.documents')); ?></a>
                             <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/estacionamento')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.parking')); ?></a>
-                            <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/forte')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.fort')); ?></a>
                             <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/ale')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.ale')); ?></a>
                         </div>
                     </div>
@@ -309,6 +312,8 @@ function pn_render_custom_header() {
                         </button>
                         <div class="pn-dropdown-menu">
                             <a href="<?php echo esc_url(pn_laravel_url('sobre')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.about')); ?></a>
+                            <a href="<?php echo esc_url(pn_laravel_url('praia-norte/forte')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.forte')); ?></a>
+                            <a href="<?php echo esc_url(pn_laravel_url('praia-norte/hidrografico')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.hidrografico')); ?></a>
                             <a href="<?php echo esc_url(pn_laravel_url('surfer-wall')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.surferWall')); ?></a>
                             <a href="<?php echo esc_url(pn_laravel_url('previsoes')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.forecast')); ?></a>
                         </div>
@@ -321,8 +326,9 @@ function pn_render_custom_header() {
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pn-chevron"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                         <div class="pn-dropdown-menu">
-                            <a href="<?php echo esc_url(pn_laravel_url('carsurf')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.about')); ?></a>
-                            <a href="<?php echo esc_url(pn_laravel_url('carsurf/programas')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.programs')); ?></a>
+                            <a href="<?php echo esc_url(pn_laravel_url('carsurf/sobre')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.about')); ?></a>
+                            <a href="<?php echo esc_url(pn_laravel_url('carsurf/instalacoes')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.facilities')); ?></a>
+                            <a href="<?php echo esc_url(pn_laravel_url('carsurf/formularios')); ?>" class="pn-dropdown-item"><?php echo esc_html(pn_t('nav.forms')); ?></a>
                         </div>
                     </div>
 
@@ -381,7 +387,6 @@ function pn_render_custom_header() {
                         <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/contraordenacoes')); ?>"><?php echo esc_html(pn_t('nav.violations')); ?></a>
                         <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/documentos')); ?>"><?php echo esc_html(pn_t('nav.documents')); ?></a>
                         <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/estacionamento')); ?>"><?php echo esc_html(pn_t('nav.parking')); ?></a>
-                        <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/forte')); ?>"><?php echo esc_html(pn_t('nav.fort')); ?></a>
                         <a href="<?php echo esc_url(pn_laravel_url('nazare-qualifica/ale')); ?>"><?php echo esc_html(pn_t('nav.ale')); ?></a>
                     </div>
                 </div>
@@ -394,6 +399,8 @@ function pn_render_custom_header() {
                     </button>
                     <div class="pn-mobile-section-items">
                         <a href="<?php echo esc_url(pn_laravel_url('sobre')); ?>"><?php echo esc_html(pn_t('nav.about')); ?></a>
+                        <a href="<?php echo esc_url(pn_laravel_url('praia-norte/forte')); ?>"><?php echo esc_html(pn_t('nav.forte')); ?></a>
+                        <a href="<?php echo esc_url(pn_laravel_url('praia-norte/hidrografico')); ?>"><?php echo esc_html(pn_t('nav.hidrografico')); ?></a>
                         <a href="<?php echo esc_url(pn_laravel_url('surfer-wall')); ?>"><?php echo esc_html(pn_t('nav.surferWall')); ?></a>
                         <a href="<?php echo esc_url(pn_laravel_url('previsoes')); ?>"><?php echo esc_html(pn_t('nav.forecast')); ?></a>
                     </div>
@@ -406,8 +413,9 @@ function pn_render_custom_header() {
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pn-chevron"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
                     <div class="pn-mobile-section-items">
-                        <a href="<?php echo esc_url(pn_laravel_url('carsurf')); ?>"><?php echo esc_html(pn_t('nav.about')); ?></a>
-                        <a href="<?php echo esc_url(pn_laravel_url('carsurf/programas')); ?>"><?php echo esc_html(pn_t('nav.programs')); ?></a>
+                        <a href="<?php echo esc_url(pn_laravel_url('carsurf/sobre')); ?>"><?php echo esc_html(pn_t('nav.about')); ?></a>
+                        <a href="<?php echo esc_url(pn_laravel_url('carsurf/instalacoes')); ?>"><?php echo esc_html(pn_t('nav.facilities')); ?></a>
+                        <a href="<?php echo esc_url(pn_laravel_url('carsurf/formularios')); ?>"><?php echo esc_html(pn_t('nav.forms')); ?></a>
                     </div>
                 </div>
 
@@ -517,6 +525,7 @@ function pn_render_custom_footer() {
                     <a href="<?php echo esc_url(pn_laravel_url('privacidade')); ?>"><?php echo esc_html(pn_t('footer.privacy')); ?></a>
                     <a href="<?php echo esc_url(pn_laravel_url('termos')); ?>"><?php echo esc_html(pn_t('footer.terms')); ?></a>
                     <a href="<?php echo esc_url(pn_laravel_url('cookies')); ?>"><?php echo esc_html(pn_t('footer.cookies')); ?></a>
+                    <a href="<?php echo esc_url(pn_laravel_url('termos')); ?>#litigios"><?php echo esc_html(pn_t('footer.disputes')); ?></a>
                 </nav>
             </div>
         </div>
