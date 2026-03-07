@@ -1,11 +1,11 @@
 @php
     $locale = app('laravellocalization')->getCurrentLocale();
-    $content = $page->content[$locale] ?? $page->content['pt'] ?? [];
+    $content = ($page->content[$locale] ?? null) ?: ($page->content['pt'] ?? []);
 @endphp
 
 <x-layouts.app>
     {{-- Hero --}}
-    <x-praia-norte.page-hero title="{{ $page->title[$locale] ?? $page->title['pt'] }}" subtitle="{{ __('messages.nq.services.estacionamento.shortDescription') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : '' }}" />
+    <x-praia-norte.page-hero title="{{ ($page->title[$locale] ?? null) ?: ($page->title['pt'] ?? '') }}" subtitle="{{ __('messages.nq.services.estacionamento.shortDescription') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : '' }}" />
 
     {{-- Description --}}
     <section class="py-12">

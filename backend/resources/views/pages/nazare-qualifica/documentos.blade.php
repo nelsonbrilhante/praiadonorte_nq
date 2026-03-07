@@ -46,7 +46,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-institutional" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
                                     </svg>
-                                    <span class="font-semibold">{{ $category->name[$locale] ?? $category->name['pt'] ?? '' }}</span>
+                                    <span class="font-semibold">{{ ($category->name[$locale] ?? null) ?: ($category->name['pt'] ?? '') }}</span>
                                     <span class="inline-flex items-center rounded-full bg-institutional/10 px-2.5 py-0.5 text-xs font-medium text-institutional">
                                         {{ $category->documents->count() }} {{ __('messages.nq.documentos.documents') }}
                                     </span>
@@ -88,7 +88,7 @@
                                                     </svg>
                                                     <div class="min-w-0">
                                                         <p class="text-sm font-medium truncate">
-                                                            {{ $document->title[$locale] ?? $document->title['pt'] ?? '' }}
+                                                            {{ ($document->title[$locale] ?? null) ?: ($document->title['pt'] ?? '') }}
                                                         </p>
                                                         @if($document->published_at)
                                                             <p class="text-xs text-muted-foreground">

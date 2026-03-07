@@ -1,11 +1,11 @@
 @php
     $locale = app('laravellocalization')->getCurrentLocale();
-    $content = $page->content[$locale] ?? $page->content['pt'] ?? [];
+    $content = ($page->content[$locale] ?? null) ?: ($page->content['pt'] ?? []);
 @endphp
 
 <x-layouts.app>
     {{-- Hero --}}
-    <x-praia-norte.page-hero title="{{ $page->title[$locale] ?? $page->title['pt'] }}" subtitle="{{ __('messages.nq.about.subtitle') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : asset('images/nq/ale.jpg') }}">
+    <x-praia-norte.page-hero title="{{ ($page->title[$locale] ?? null) ?: ($page->title['pt'] ?? '') }}" subtitle="{{ __('messages.nq.about.subtitle') }}" entity="nazare-qualifica" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : asset('images/nq/ale.jpg') }}">
         <div class="flex flex-wrap gap-4">
             <x-ui.button href="{{ route('nq.equipa') }}" class="bg-white text-institutional hover:bg-white/90">
                 {{ __('messages.nq.team.title') }}
@@ -19,11 +19,11 @@
     {{-- Intro Section --}}
     <section class="py-12">
         <div class="container mx-auto px-4">
-            <div class="text-center mb-8">
+            <div class="flex flex-col items-center gap-3 mb-8">
                 <img
-                    src="{{ asset('images/logos/imagem-grafica-nq-vertical-elements.svg') }}"
-                    alt="Nazaré Qualifica - Empresa Municipal"
-                    class="h-32 md:h-40 w-auto mx-auto"
+                    src="{{ asset('images/logos/nq-vertical@2x.png') }}"
+                    alt="Nazaré Qualifica"
+                    class="h-40 md:h-52 w-auto"
                 />
             </div>
             <div class="mx-auto max-w-3xl">

@@ -87,7 +87,7 @@ if is_running laravel; then
     echo -e "  ${YELLOW}Laravel already running (PID $(cat "$PID_DIR/laravel.pid"))${NC}"
 else
     cd "$BACKEND_DIR" || exit 1
-    php artisan serve > "$LOG_DIR/laravel.log" 2>&1 &
+    php artisan serve --host=0.0.0.0 > "$LOG_DIR/laravel.log" 2>&1 &
     echo $! > "$PID_DIR/laravel.pid"
     echo -e "  ${GREEN}Laravel${NC}  started (PID $!)"
 fi
@@ -133,6 +133,9 @@ else
     echo -e "  ${DIM}Check logs: tail -f $LOG_DIR/laravel.log${NC}"
 fi
 
+# Detect local network IP
+LOCAL_IP=$(ifconfig 2>/dev/null | grep "inet " | grep -v 127.0.0.1 | grep -v "inet 10\." | awk '{print $2}' | head -1)
+
 # Summary
 echo ""
 echo -e "${GREEN}Ready!${NC}"
@@ -140,6 +143,10 @@ echo ""
 echo -e "  Website (PT):   ${BLUE}http://localhost:8000/pt${NC}"
 echo -e "  Website (EN):   ${BLUE}http://localhost:8000/en${NC}"
 echo -e "  Filament Admin: ${BLUE}http://localhost:8000/admin${NC}"
+if [ -n "$LOCAL_IP" ]; then
+    echo ""
+    echo -e "  ${YELLOW}Network (mobile):${NC} ${BLUE}http://${LOCAL_IP}:8000/pt${NC}"
+fi
 echo ""
 echo -e "  ${DIM}Logs: $LOG_DIR${NC}"
 echo -e "  ${DIM}Stop: ./scripts/stop.sh${NC}"

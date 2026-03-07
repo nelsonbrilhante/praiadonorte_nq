@@ -11,7 +11,7 @@
 
 <x-layouts.app>
     {{-- Hero --}}
-    <x-praia-norte.page-hero title="{{ $page->title[$locale] ?? $page->title['pt'] }}" subtitle="{{ __('messages.nq.team.subtitle') }}" entity="nazare-qualifica" image="{{ $heroImage }}" />
+    <x-praia-norte.page-hero title="{{ ($page->title[$locale] ?? null) ?: ($page->title['pt'] ?? '') }}" subtitle="{{ __('messages.nq.team.subtitle') }}" entity="nazare-qualifica" image="{{ $heroImage }}" />
 
     {{-- Conselho de Gerência --}}
     @if($conselho->isNotEmpty())
@@ -43,7 +43,7 @@
                         {{-- Content --}}
                         <div class="absolute inset-x-0 bottom-0 p-6 text-white">
                             <h3 class="text-xl font-bold">{{ $member->name }}</h3>
-                            <p class="mt-1 text-sm font-medium text-white/80">{{ $member->role[$locale] ?? $member->role['pt'] ?? '' }}</p>
+                            <p class="mt-1 text-sm font-medium text-white/80">{{ ($member->role[$locale] ?? null) ?: ($member->role['pt'] ?? '') }}</p>
 
                             @if($member->cv_file && file_exists(storage_path('app/public/' . $member->cv_file)))
                                 <a
@@ -95,7 +95,7 @@
 
                             <div class="mt-6 min-w-0 text-center">
                                 <h3 class="text-xl font-bold">{{ $member->name }}</h3>
-                                <p class="mt-1 text-base font-medium text-institutional">{{ $member->role[$locale] ?? $member->role['pt'] ?? '' }}</p>
+                                <p class="mt-1 text-base font-medium text-institutional">{{ ($member->role[$locale] ?? null) ?: ($member->role['pt'] ?? '') }}</p>
                                 @if($member->cv_file && file_exists(storage_path('app/public/' . $member->cv_file)))
                                     <a
                                         href="{{ asset('storage/' . $member->cv_file) }}"
@@ -139,7 +139,7 @@
 
                             <div class="mt-6 min-w-0 text-center">
                                 <h3 class="text-xl font-bold">{{ $member->name }}</h3>
-                                <p class="mt-1 text-base text-muted-foreground">{{ $member->role[$locale] ?? $member->role['pt'] ?? '' }}</p>
+                                <p class="mt-1 text-base text-muted-foreground">{{ ($member->role[$locale] ?? null) ?: ($member->role['pt'] ?? '') }}</p>
                             </div>
                         </div>
                     @endforeach

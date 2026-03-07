@@ -3,7 +3,7 @@
         // Helper function to get localized field
         $getLocalized = function($field, $locale) {
             if (is_array($field)) {
-                return $field[$locale] ?? $field['pt'] ?? '';
+                return ($field[$locale] ?? null) ?: ($field['pt'] ?? '');
             }
             return $field ?? '';
         };

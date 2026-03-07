@@ -1,6 +1,6 @@
 @php
     $locale = app('laravellocalization')->getCurrentLocale();
-    $content = $page->content[$locale] ?? $page->content['pt'] ?? [];
+    $content = ($page->content[$locale] ?? null) ?: ($page->content['pt'] ?? []);
 @endphp
 
 <x-layouts.app>
@@ -17,7 +17,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-4xl font-bold md:text-5xl">{{ $page->title[$locale] ?? $page->title['pt'] }}</h1>
+                    <h1 class="text-4xl font-bold md:text-5xl">{{ ($page->title[$locale] ?? null) ?: ($page->title['pt'] ?? '') }}</h1>
                     <p class="text-xl opacity-90">{{ __('messages.nq.services.carsurf.shortDescription') }}</p>
                 </div>
             </div>

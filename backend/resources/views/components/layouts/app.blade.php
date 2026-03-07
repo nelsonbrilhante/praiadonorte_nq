@@ -49,11 +49,6 @@
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <meta name="theme-color" content="#1e3a5f">
 
-    {{-- Google Fonts --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&family=Playfair+Display:ital,wght@1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-
     {{-- Styles --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -66,7 +61,7 @@
     {{-- JSON-LD Structured Data --}}
     @stack('json-ld')
 </head>
-<body class="min-h-screen bg-background font-sans antialiased {{ App\Models\SiteSetting::isMaintenanceMode() && auth()->check() ? 'pt-6' : '' }}">
+<body class="min-h-screen bg-background font-sans {{ App\Models\SiteSetting::isMaintenanceMode() && auth()->check() ? 'pt-6' : '' }}">
     {{-- Maintenance Banner (visible to authenticated users only) --}}
     <x-maintenance-banner />
 
