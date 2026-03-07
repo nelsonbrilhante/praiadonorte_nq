@@ -113,10 +113,16 @@
             font-size: 2rem;
             line-height: 1.2;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff, #7fb3e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #fff;
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                background: linear-gradient(135deg, #ffffff, #7fb3e0);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
         }
 
         .description {
