@@ -216,7 +216,10 @@
     <div class="orb orb-orange"></div>
 
     <div class="content">
-        <img src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}" alt="Nazaré Qualifica" class="logo">
+        <picture>
+            <source media="(min-width: 768px)" srcset="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}" type="image/svg+xml">
+            <img src="{{ asset('images/logos/imagem-grafica-nq-white-name@2x.png') }}" alt="Nazaré Qualifica" class="logo">
+        </picture>
 
         <h1>
             @if($locale === 'pt')

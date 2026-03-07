@@ -282,7 +282,10 @@
                     <div class="relative h-64 md:h-72" style="background-color: #3d2800;">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                         <div class="absolute bottom-0 p-6">
-                            <img src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}" alt="Nazaré Qualifica" class="h-10 mb-3" />
+                            <picture>
+                                <source media="(min-width: 768px)" srcset="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}" type="image/svg+xml">
+                                <img src="{{ asset('images/logos/imagem-grafica-nq-white-name@2x.png') }}" alt="Nazaré Qualifica" class="h-10 mb-3" />
+                            </picture>
                             <p class="text-sm text-white/80">
                                 {{ $locale === 'pt' ? 'Empresa municipal gestora das infraestruturas' : 'Municipal company managing infrastructure' }}
                             </p>

@@ -76,18 +76,22 @@
 
                 {{-- Logo --}}
                 <a href="{{ LaravelLocalization::localizeURL('/') }}" class="flex items-center">
-                    <img
-                        src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}"
-                        alt="Nazaré Qualifica"
-                        :class="((isHomepage && !scrolled && !fullMenuOpen) || isDark) ? 'block' : 'hidden'"
-                        class="h-10 w-auto transition-opacity duration-300"
-                    />
-                    <img
-                        src="{{ asset('images/logos/imagem-grafica-nq-original-name.svg') }}"
-                        alt="Nazaré Qualifica"
-                        :class="((isHomepage && !scrolled && !fullMenuOpen) || isDark) ? 'hidden' : 'block'"
-                        class="h-10 w-auto transition-opacity duration-300"
-                    />
+                    <picture :class="((isHomepage && !scrolled && !fullMenuOpen) || isDark) ? 'block' : 'hidden'">
+                        <source media="(min-width: 768px)" srcset="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}" type="image/svg+xml">
+                        <img
+                            src="{{ asset('images/logos/imagem-grafica-nq-white-name@2x.png') }}"
+                            alt="Nazaré Qualifica"
+                            class="h-10 w-auto transition-opacity duration-300"
+                        />
+                    </picture>
+                    <picture :class="((isHomepage && !scrolled && !fullMenuOpen) || isDark) ? 'hidden' : 'block'">
+                        <source media="(min-width: 768px)" srcset="{{ asset('images/logos/imagem-grafica-nq-original-name.svg') }}" type="image/svg+xml">
+                        <img
+                            src="{{ asset('images/logos/imagem-grafica-nq-original-name@2x.png') }}"
+                            alt="Nazaré Qualifica"
+                            class="h-10 w-auto transition-opacity duration-300"
+                        />
+                    </picture>
                 </a>
             </div>
 
@@ -354,11 +358,14 @@
         {{-- Top Bar --}}
         <div class="container mx-auto flex h-16 items-center justify-between px-4">
             <a href="{{ LaravelLocalization::localizeURL('/') }}" @click="fullMenuOpen = false" class="flex items-center">
-                <img
-                    src="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}"
-                    alt="Nazaré Qualifica"
-                    class="h-10 w-auto"
-                />
+                <picture>
+                    <source media="(min-width: 768px)" srcset="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}" type="image/svg+xml">
+                    <img
+                        src="{{ asset('images/logos/imagem-grafica-nq-white-name@2x.png') }}"
+                        alt="Nazaré Qualifica"
+                        class="h-10 w-auto"
+                    />
+                </picture>
             </a>
             <button
                 type="button"
