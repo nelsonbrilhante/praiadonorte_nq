@@ -154,7 +154,7 @@
             this.isMuted[index] = !this.isMuted[index];
         }
     }"
-    class="relative h-screen overflow-hidden"
+    class="relative h-[70dvh] md:h-dvh overflow-hidden"
 >
     {{-- Slides --}}
     @foreach($activeSlides as $index => $slide)
@@ -171,10 +171,10 @@
             $hasVideo = !empty($youtubeVideoId);
 
             // Get localized content
-            $slideTitle = $slide->title[$locale] ?? $slide->title['pt'] ?? __('messages.home.hero.title');
-            $slideSubtitle = $slide->subtitle[$locale] ?? $slide->subtitle['pt'] ?? __('messages.home.hero.subtitle');
-            $slideCtaText = $slide->cta_text[$locale] ?? $slide->cta_text['pt'] ?? __('messages.home.hero.cta');
-            $slideCtaUrl = $slide->cta_url[$locale] ?? $slide->cta_url['pt'] ?? '/sobre';
+            $slideTitle = ($slide->title[$locale] ?? null) ?: ($slide->title['pt'] ?? __('messages.home.hero.title'));
+            $slideSubtitle = ($slide->subtitle[$locale] ?? null) ?: ($slide->subtitle['pt'] ?? __('messages.home.hero.subtitle'));
+            $slideCtaText = ($slide->cta_text[$locale] ?? null) ?: ($slide->cta_text['pt'] ?? __('messages.home.hero.cta'));
+            $slideCtaUrl = ($slide->cta_url[$locale] ?? null) ?: ($slide->cta_url['pt'] ?? '/sobre');
         @endphp
 
         <div
@@ -188,20 +188,23 @@
             class="absolute inset-0"
             :class="{ 'z-10': currentSlide === {{ $index }}, 'z-0': currentSlide !== {{ $index }} }"
         >
-            <section class="relative flex h-screen flex-col justify-end overflow-hidden text-white">
+            <section class="relative isolation-isolate flex h-full flex-col justify-end overflow-hidden text-white">
                 {{-- YouTube Video Background --}}
                 @if($hasVideo)
-                    <div class="absolute inset-0 overflow-hidden">
+                    <div class="absolute inset-0 z-0 overflow-hidden">
                         <iframe
                             id="hero-youtube-player-{{ $index }}"
-                            src="https://www.youtube-nocookie.com/embed/{{ $youtubeVideoId }}?autoplay=1&mute=1&loop=1&playlist={{ $youtubeVideoId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&vq=hd1080&enablejsapi=1&origin={{ url('/') }}"
+                            src="https://www.youtube-nocookie.com/embed/{{ $youtubeVideoId }}?autoplay=1&mute=1&loop=1&playlist={{ $youtubeVideoId }}&controls=0&rel=0&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&vq=hd1080&enablejsapi=1&origin={{ url('/') }}"
                             allow="autoplay; encrypted-media"
                             allowfullscreen
-                            class="pointer-events-none absolute left-1/2 top-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2"
+                            class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[100dvh] min-w-[177.78dvh]"
                             style="border: none;"
                             title="Background video slide {{ $index + 1 }}"
                         ></iframe>
                     </div>
+                    {{-- Gradient overlays to hide YouTube UI (title top-left, logo bottom-right) --}}
+                    <div class="absolute inset-x-0 top-0 z-20 h-40 bg-gradient-to-b from-black/90 via-black/50 to-transparent pointer-events-none"></div>
+                    <div class="absolute inset-x-0 bottom-0 z-20 h-48 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
                 @else
                     {{-- Fallback Image --}}
                     <img
@@ -214,7 +217,7 @@
 
                 {{-- LIVE Badge - Top Right --}}
                 @if($slide->is_live)
-                    <div class="absolute right-4 top-20 z-20 md:right-8 md:top-24">
+                    <div class="absolute right-4 top-20 z-30 md:right-8 md:top-24">
                         <div class="flex items-center gap-2 rounded-md bg-red-600 px-3 py-1.5 text-sm font-bold uppercase tracking-wide text-white shadow-lg">
                             <span class="relative flex h-2.5 w-2.5">
                                 <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
@@ -230,7 +233,7 @@
                     <button
                         @click="toggleAudio({{ $index }})"
                         type="button"
-                        class="absolute bottom-24 right-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-all hover:bg-black/70 md:bottom-28 md:right-8"
+                        class="absolute bottom-24 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-all hover:bg-black/70 md:bottom-28 md:right-8"
                         title="{{ __('messages.home.hero.toggleAudio') }}"
                         aria-label="Toggle audio"
                     >
@@ -250,20 +253,20 @@
                 @endif
 
                 {{-- Content - positioned at bottom --}}
-                <div class="container relative z-10 mx-auto px-4 pb-16 text-center">
+                <div class="container relative z-30 mx-auto px-4 pb-20 md:pb-16 text-center">
                     @if($slide->use_logo_as_title && $slide->hero_logo)
                         <img
                             src="{{ asset('storage/' . $slide->hero_logo) }}"
                             alt="Praia do Norte"
-                            class="mx-auto mb-4 w-auto"
+                            class="mx-auto mb-4 w-auto max-h-20 md:max-h-none"
                             style="height: {{ $slide->logo_height ?? 120 }}px;"
                         />
                     @else
-                        <h1 class="mb-4 text-5xl font-bold md:text-7xl">
+                        <h1 class="mb-4 text-4xl font-bold md:text-7xl">
                             {{ $slideTitle }}
                         </h1>
                     @endif
-                    <p class="mb-8 text-xl md:text-2xl">
+                    <p class="mb-6 text-lg md:mb-8 md:text-2xl">
                         {{ $slideSubtitle }}
                     </p>
                     @if($slideCtaText)
