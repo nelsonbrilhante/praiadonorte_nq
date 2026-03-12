@@ -11,6 +11,7 @@ use App\Models\Evento;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class EventoResource extends Resource
 {
@@ -25,6 +26,18 @@ class EventoResource extends Resource
     protected static ?string $modelLabel = 'Evento';
 
     protected static ?string $pluralModelLabel = 'Eventos';
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if ($user->isEntityEditor()) {
+            $query->whereIn('entity', $user->getAllowedEntities());
+        }
+
+        return $query;
+    }
 
     public static function form(Schema $schema): Schema
     {

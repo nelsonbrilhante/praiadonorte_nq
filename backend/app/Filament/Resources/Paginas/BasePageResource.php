@@ -32,6 +32,11 @@ abstract class BasePageResource extends Resource
      */
     abstract public static function getEntityFilter(): string;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->canAccessEntity(static::getEntityFilter());
+    }
+
     /**
      * Scope all queries to only show pages for this entity.
      */

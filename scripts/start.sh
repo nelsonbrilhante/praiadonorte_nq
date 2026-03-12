@@ -78,6 +78,7 @@ if [ "$SEED" = true ]; then
         php artisan migrate --force 2>&1
         php artisan db:seed --force 2>&1
     fi
+    php artisan db:seed --class=UserSeeder --force 2>&1
     echo -e "${GREEN}Seeders complete.${NC}"
     echo ""
 fi
@@ -143,6 +144,14 @@ echo ""
 echo -e "  Website (PT):   ${BLUE}http://localhost:8000/pt${NC}"
 echo -e "  Website (EN):   ${BLUE}http://localhost:8000/en${NC}"
 echo -e "  Filament Admin: ${BLUE}http://localhost:8000/admin${NC}"
+echo ""
+echo -e "  ${YELLOW}Demo users (RBAC):${NC}"
+echo -e "  ${DIM}Admin:          nelson.brilhante@cm-nazare.pt / Nzr€Qu@l!f1c4-2026${NC}"
+echo -e "  ${DIM}Editor:         editor@test.dev / password${NC}"
+echo -e "  ${DIM}Entity (PN):    pn@test.dev / password${NC}"
+echo -e "  ${DIM}Entity (NQ):    nq@test.dev / password${NC}"
+echo -e "  ${DIM}Entity (CS):    carsurf@test.dev / password${NC}"
+echo -e "  ${DIM}Multi-Entity:   multi@test.dev / password${NC}"
 if [ -n "$LOCAL_IP" ]; then
     echo ""
     echo -e "  ${YELLOW}Network (mobile):${NC} ${BLUE}http://${LOCAL_IP}:8000/pt${NC}"

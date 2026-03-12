@@ -23,6 +23,11 @@ use Filament\Tables\Table;
 
 class DocumentResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->canAccessEntity('nazare-qualifica');
+    }
+
     protected static ?string $model = Document::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-arrow-down';

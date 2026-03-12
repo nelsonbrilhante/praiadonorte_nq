@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login(Login::class)
+            ->profile(isSimple: false)
             ->brandName('Nazaré Qualifica')
             ->brandLogo(asset('images/logos/nq-horizontal.svg'))
             ->darkModeBrandLogo(asset('images/logos/nq-horizontal-white.svg'))
@@ -123,7 +124,7 @@ class AdminPanelProvider extends PanelProvider
                     ->collapsed(),
                 NavigationGroup::make('Nazaré Qualifica')
                     ->collapsed(),
-                NavigationGroup::make('Website')
+                NavigationGroup::make('Configurações')
                     ->collapsed(),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
@@ -154,7 +155,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationItem::make('Ver Website')
                     ->url('/pt', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-globe-alt')
-                    ->group('Website')
+                    ->group('Configurações')
                     ->sort(999),
             ]);
     }

@@ -21,6 +21,11 @@ use Filament\Tables\Table;
 
 class CorporateBodyResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->canAccessEntity('nazare-qualifica');
+    }
+
     protected static ?string $model = CorporateBody::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-user-group';

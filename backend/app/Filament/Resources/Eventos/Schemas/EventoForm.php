@@ -35,8 +35,7 @@ class EventoForm
                                             ->required()
                                             ->maxLength(255)
                                             ->live(onBlur: true)
-                                            ->afterStateUpdated(fn ($state, callable $set) =>
-                                                $set('slug', Str::slug($state))),
+                                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
                                         Textarea::make('excerpt.pt')
                                             ->label('Resumo (PT)')
                                             ->rows(2)
@@ -122,12 +121,25 @@ class EventoForm
                             ->schema([
                                 Select::make('entity')
                                     ->label('Entidade')
-                                    ->options([
-                                        'praia-norte' => 'Praia do Norte',
-                                        'carsurf' => 'Carsurf',
-                                        'nazare-qualifica' => 'Nazaré Qualifica',
-                                    ])
-                                    ->default('praia-norte')
+                                    ->options(function () {
+                                        $all = [
+                                            'praia-norte' => 'Praia do Norte',
+                                            'carsurf' => 'Carsurf',
+                                            'nazare-qualifica' => 'Nazaré Qualifica',
+                                        ];
+                                        $allowed = auth()->user()->getAllowedEntities();
+
+                                        return $allowed === null
+                                            ? $all
+                                            : array_intersect_key($all, array_flip($allowed));
+                                    })
+                                    ->default(function () {
+                                        $allowed = auth()->user()->getAllowedEntities();
+
+                                        return $allowed === null ? 'praia-norte' : ($allowed[0] ?? 'praia-norte');
+                                    })
+                                    ->disabled(fn () => auth()->user()->isEntityEditor() && count(auth()->user()->getAllowedEntities()) === 1)
+                                    ->dehydrated()
                                     ->required(),
                                 Select::make('category')
                                     ->label('Categoria')

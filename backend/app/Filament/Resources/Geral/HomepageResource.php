@@ -24,6 +24,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class HomepageResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->canAccessEntity('praia-norte');
+    }
+
     protected static ?string $model = Pagina::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-home';

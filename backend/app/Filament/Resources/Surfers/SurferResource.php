@@ -14,6 +14,11 @@ use Filament\Tables\Table;
 
 class SurferResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->canAccessEntity('praia-norte');
+    }
+
     protected static ?string $model = Surfer::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-user-group';

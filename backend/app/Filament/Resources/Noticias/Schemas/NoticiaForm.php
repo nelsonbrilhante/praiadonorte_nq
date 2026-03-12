@@ -7,8 +7,8 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
@@ -35,8 +35,7 @@ class NoticiaForm
                                             ->required()
                                             ->maxLength(255)
                                             ->live(onBlur: true)
-                                            ->afterStateUpdated(fn ($state, callable $set) =>
-                                                $set('slug', Str::slug($state))),
+                                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
                                         RichEditor::make('content.pt')
                                             ->label('Conteúdo (PT)')
                                             ->required()
@@ -88,12 +87,25 @@ class NoticiaForm
                                     ->maxLength(255),
                                 Select::make('entity')
                                     ->label('Entidade')
-                                    ->options([
-                                        'praia-norte' => 'Praia do Norte',
-                                        'carsurf' => 'Carsurf',
-                                        'nazare-qualifica' => 'Nazaré Qualifica',
-                                    ])
-                                    ->default('praia-norte')
+                                    ->options(function () {
+                                        $all = [
+                                            'praia-norte' => 'Praia do Norte',
+                                            'carsurf' => 'Carsurf',
+                                            'nazare-qualifica' => 'Nazaré Qualifica',
+                                        ];
+                                        $allowed = auth()->user()->getAllowedEntities();
+
+                                        return $allowed === null
+                                            ? $all
+                                            : array_intersect_key($all, array_flip($allowed));
+                                    })
+                                    ->default(function () {
+                                        $allowed = auth()->user()->getAllowedEntities();
+
+                                        return $allowed === null ? 'praia-norte' : ($allowed[0] ?? 'praia-norte');
+                                    })
+                                    ->disabled(fn () => auth()->user()->isEntityEditor() && count(auth()->user()->getAllowedEntities()) === 1)
+                                    ->dehydrated()
                                     ->required(),
                             ]),
                         TagsInput::make('tags')

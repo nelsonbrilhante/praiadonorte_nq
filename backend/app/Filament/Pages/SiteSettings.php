@@ -6,25 +6,37 @@ use App\Models\SiteSetting;
 use BackedEnum;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Tabs;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use UnitEnum;
 
 class SiteSettings extends Page
 {
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cog-6-tooth';
-    protected static string | UnitEnum | null $navigationGroup = 'Website';
+    public static function canAccess(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
+
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Configurações';
+
     protected static ?int $navigationSort = 998;
+
     protected static ?string $navigationLabel = 'Definições';
+
     protected static ?string $title = 'Definições do Site';
+
     protected static ?string $slug = 'site-settings';
 
     protected string $view = 'filament.pages.site-settings';
 
     public bool $maintenance_mode = false;
+
     public ?string $maintenance_message_pt = '';
+
     public ?string $maintenance_message_en = '';
 
     public function mount(): void

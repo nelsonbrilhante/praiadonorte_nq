@@ -20,6 +20,11 @@ use Illuminate\Support\Str;
 
 class DocumentCategoryResource extends Resource
 {
+    public static function canAccess(): bool
+    {
+        return auth()->user()->canAccessEntity('nazare-qualifica');
+    }
+
     protected static ?string $model = DocumentCategory::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-folder';

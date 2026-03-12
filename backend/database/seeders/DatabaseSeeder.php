@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         // Create/update admin user (idempotent — safe to run multiple times)
         User::updateOrCreate(
             ['email' => 'nelson.brilhante@cm-nazare.pt'],
-            ['name' => 'Nelson Brilhante', 'password' => 'Nzr€Qu@l!f1c4-2026']
+            ['name' => 'Nelson Brilhante', 'password' => 'Nzr€Qu@l!f1c4-2026', 'role' => 'admin']
         );
 
         // Ensure maintenance mode is ON (won't override if already set)
@@ -48,6 +48,11 @@ class DatabaseSeeder extends Seeder
             ]);
         } else {
             $this->command?->info('Content already exists, skipping seeders.');
+        }
+
+        // Seed test users in non-production environments
+        if (! app()->isProduction()) {
+            $this->call(UserSeeder::class);
         }
     }
 }

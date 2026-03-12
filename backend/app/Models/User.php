@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,8 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'role',
+        'entities',
     ];
 
     /**
@@ -45,11 +48,46 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => Role::class,
+            'entities' => 'array',
         ];
     }
 
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === Role::Admin;
+    }
+
+    public function isEditor(): bool
+    {
+        return $this->role === Role::Editor;
+    }
+
+    public function isEntityEditor(): bool
+    {
+        return $this->role === Role::EntityEditor;
+    }
+
+    public function canAccessEntity(string $entity): bool
+    {
+        if ($this->isAdmin() || $this->isEditor()) {
+            return true;
+        }
+
+        return in_array($entity, $this->entities ?? []);
+    }
+
+    public function getAllowedEntities(): ?array
+    {
+        if ($this->isAdmin() || $this->isEditor()) {
+            return null;
+        }
+
+        return $this->entities ?? [];
     }
 }

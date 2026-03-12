@@ -11,6 +11,7 @@ use App\Models\Noticia;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class NoticiaResource extends Resource
 {
@@ -25,6 +26,18 @@ class NoticiaResource extends Resource
     protected static ?string $modelLabel = 'Notícia';
 
     protected static ?string $pluralModelLabel = 'Notícias';
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if ($user->isEntityEditor()) {
+            $query->whereIn('entity', $user->getAllowedEntities());
+        }
+
+        return $query;
+    }
 
     public static function form(Schema $schema): Schema
     {
