@@ -102,6 +102,12 @@ logs/
 .claude/
 
 # ===================
+# Git Worktrees
+# ===================
+
+.worktrees/
+
+# ===================
 # Test Content (large files)
 # ===================
 
