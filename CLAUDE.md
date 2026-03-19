@@ -40,6 +40,9 @@ composer test                  # Clear config + run tests
 php artisan test               # Run tests directly
 php artisan test --filter=ExampleTest  # Run single test
 
+# Code formatting
+./vendor/bin/pint              # Laravel Pint (PSR-12 + Laravel style)
+
 # Build
 npm run build                  # Production asset build
 
@@ -49,7 +52,7 @@ php artisan app:download-documents         # Download 102 PDFs across 13 categor
 php artisan app:import-wordpress {dump}    # Import surfers/news from WordPress DB dump
 ```
 
-### WordPress/WooCommerce (from `wordpress/`)
+### WordPress/WooCommerce (from `wordpress/`, MariaDB 11, WP 6.8 on PHP 8.3)
 
 ```bash
 make setup      # Full automated setup: Docker build, WP install, WooCommerce, seed 5 products, update backend/.env
@@ -78,7 +81,7 @@ make reset      # Teardown + fresh setup
 
 ## Architecture
 
-**Stack**: Laravel 12 + Blade + Livewire 3 + Alpine.js + Tailwind CSS 4 + Filament 4.x + MySQL 8.0 + PHP 8.3
+**Stack**: Laravel 12 + Blade + Livewire 3 + Alpine.js + Tailwind CSS 4 + Filament 4.x + PHP 8.4 (production) / ^8.2 (minimum). Local dev defaults to SQLite; production uses MySQL 8.0. Node 20 for asset builds.
 
 **Why monolithic**: No API surface to secure, no CORS, session-based auth, direct Eloquent queries, single deployment to VPS.
 
@@ -143,7 +146,7 @@ use Filament\Actions\EditAction;        // Correct (v4)
 use Filament\Tables\Actions\EditAction; // Wrong (v3)
 ```
 
-**Do not use `->viteTheme()`** in AdminPanelProvider — it breaks Filament CSS loading.
+**Filament admin theme**: `AdminPanelProvider` uses `->viteTheme('resources/css/filament/admin.css')` for custom admin styling.
 
 ### Content Models
 
@@ -195,7 +198,7 @@ Uses `@tailwindcss/vite` plugin (Tailwind v4 native Vite integration).
 
 ### Production Deployment
 
-**Laravel Dockerfile** (project root) — Multi-stage build: Composer (PHP deps) → Node (Vite assets) → PHP 8.4-FPM Alpine with Nginx + Supervisor. Runs PHP-FPM, Nginx, queue worker, database seeder, and content downloader. Entrypoint creates `.env` from Docker env vars, runs migrations, caches config, publishes Livewire assets.
+**Laravel Dockerfile** (project root) — Multi-stage build: Composer 2 (PHP deps) → Node 20 (Vite assets) → PHP 8.4-FPM Alpine with Nginx + Supervisor. Runs PHP-FPM, Nginx, queue worker, database seeder, and content downloader. Entrypoint creates `.env` from Docker env vars, runs migrations, caches config, publishes Livewire assets. Production drivers: `CACHE_STORE=database`, `SESSION_DRIVER=database`, `QUEUE_CONNECTION=database`.
 
 **WordPress Dockerfile** (`wordpress/coolify/Dockerfile`) — Production WordPress with Kadence child theme, shipping plugin, and custom entrypoint. Uses sentinel file mechanism to protect production data (uploads, plugin settings, theme customizations) from being overwritten on redeploys.
 

@@ -7,9 +7,52 @@
 
 ## Última Sessão
 
-- **Data**: 2026-03-04 (sessão 4)
-- **Resumo**: Shipping E2E verificado + SMTP email configurado e testado com sucesso
+- **Data**: 2026-03-18 (sessão 6)
+- **Resumo**: Backup automático pré-deploy no CI/CD + relatório estatístico 7-16 Mar já existente
 - **Branch**: `main`
+
+### O que foi feito:
+
+1. **Script de backup pré-deploy** (`scripts/pre-deploy-backup.sh`)
+   - Corre no VPS antes de cada deploy via GitHub Actions
+   - Faz dump MySQL (Laravel) + MariaDB (WordPress) + uploads WordPress + logs Nginx
+   - Sem credenciais hardcoded — lê variáveis de ambiente dos containers Docker
+   - Comprime tudo num `.tar.gz` com timestamp
+   - Rotação automática: mantém últimos 10 backups
+   - Symlink `latest-backup.tar.gz` para fácil download pelo CI/CD
+
+2. **CI/CD actualizado** (`.github/workflows/deploy.yml`)
+   - Novo job `backup` corre antes do `deploy` (dependency: `needs: backup`)
+   - Se o backup falhar, o deploy **não acontece**
+   - Backup guardado como GitHub artifact (retenção 90 dias)
+   - Requer novos GitHub Secrets: `VPS_SSH_KEY` e `VPS_HOST`
+
+3. **Relatório estatístico 7-16 Mar** (já existia de sessão anterior)
+   - `docs/reports/nginx-access-report-2026-03-07-to-16.md` — Markdown
+   - `docs/reports/nq-access-report-2026-03-07-to-16.pdf` — PDF
+   - `docs/reports/relatorio_acessos_nazare_qualifica_07-16-mar.docx` — DOCX
+
+4. **SSH key para GitHub Actions** — configurada e testada
+   - Chave Ed25519 gerada, adicionada ao VPS `authorized_keys`, e guardada como GitHub Secret
+   - GitHub Secrets `VPS_SSH_KEY` e `VPS_HOST` configurados
+   - Backup testado manualmente no VPS: Laravel DB (780K) + WordPress DB (4.1M) + uploads (57M) + Nginx logs (136K linhas) = arquivo 56M
+
+### Sessão anterior (2026-03-11, sessão 5):
+
+### O que foi feito:
+
+1. **Relatório de acessos completo** (`docs/reports/nginx-access-report-2026-03-07-to-10.md`)
+   - Recolhidos logs de ambos os containers (Nginx Laravel + Apache WordPress)
+   - Relatório reescrito para não-técnicos com dados de ambas as plataformas
+   - ~1.300 visitantes únicos, 2.418 page views (7-10 Mar)
+
+2. **Plano desenhado e aprovado** (`docs/plans/plano-pdf-umami-relatorio-semanal.md`)
+   - **Parte 1**: PDF do regulamento do estacionamento editável pelo Filament (sem perda de dados)
+   - **Parte 2**: Umami Analytics (self-hosted) + email semanal automatizado (Resend + destinatários configuráveis no backoffice)
+   - **Parte 3**: Assinatura "Crafted with ❤️ by Nelson Brilhante" no footer
+   - Estado: **pendente implementação**
+
+### Sessão anterior (2026-03-04, sessão 4):
 
 ### O que foi feito:
 
@@ -163,10 +206,16 @@ backend/app/Filament/Resources/
 2. [ ] Campo NIF/CIF/NIE nas facturas
 3. [ ] Locais de levantamento em loja física (pickup locations)
 
+### Prioridade Alta — Plano Pendente (ver `docs/plans/plano-pdf-umami-relatorio-semanal.md`)
+4. [ ] PDF Regulamento Estacionamento editável no Filament
+5. [ ] Umami Analytics (Docker local + Coolify produção)
+6. [ ] Email semanal automatizado (Resend + scheduler)
+7. [ ] Assinatura developer no footer
+
 ### Prioridade Alta — Conteúdo
-4. [ ] Rever e corrigir texto de surfers e notícias (PT-PT, AO90, formatação)
-5. [ ] Traduzir conteúdo para EN (notícias, eventos, surfers)
-6. [ ] Melhorar distribuição de cards na edição de surfers no backend
+8. [ ] Rever e corrigir texto de surfers e notícias (PT-PT, AO90, formatação)
+9. [ ] Traduzir conteúdo para EN (notícias, eventos, surfers)
+10. [ ] Melhorar distribuição de cards na edição de surfers no backend
 
 ### Prioridade Média — QA
 7. [ ] Testes funcionais de todas as páginas

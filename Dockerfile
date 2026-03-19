@@ -172,6 +172,15 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 
+[program:scheduler]
+command=/bin/sh -c "while true; do php /var/www/html/artisan schedule:run --verbose --no-interaction; sleep 60; done"
+autostart=true
+autorestart=true
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+
 SUPERVISOR
 
 WORKDIR /var/www/html
@@ -203,7 +212,7 @@ COPY <<'ENTRYPOINT' /usr/local/bin/entrypoint.sh
 set -e
 
 echo "==> Creating .env from Docker environment variables..."
-printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_|WOOCOMMERCE_)' | sort | sed 's/=\(.*\)/="\1"/' > /var/www/html/.env
+printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_|WOOCOMMERCE_|RESEND_|UMAMI_|STATS_)' | sort | sed 's/=\(.*\)/="\1"/' > /var/www/html/.env
 
 echo "==> Resolving WooCommerce store via Traefik (hairpin NAT fix)..."
 TRAEFIK_IP=$(getent hosts coolify-proxy 2>/dev/null | awk '{print $1}' || true)

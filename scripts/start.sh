@@ -135,7 +135,7 @@ else
 fi
 
 # Detect local network IP
-LOCAL_IP=$(ifconfig 2>/dev/null | grep "inet " | grep -v 127.0.0.1 | grep -v "inet 10\." | awk '{print $2}' | head -1)
+LOCAL_IP=$(for iface in en0 en1 en2 en3 en4 en5 en6 en7 en8 en9; do ifconfig "$iface" 2>/dev/null | grep "inet " | grep -v 127.0.0.1 | grep -v "inet 10\." | awk '{print $2}'; done | head -1)
 
 # Summary
 echo ""

@@ -176,13 +176,14 @@
             </div>
         </div>
 
-        {{-- NQ Logo --}}
-        <div class="mt-10">
+        {{-- NQ Logo + Developer credit --}}
+        <div class="mt-10 flex items-end justify-between">
             <a href="{{ LaravelLocalization::localizeURL('/') }}">
                 <img src="{{ asset('images/logos/nq-horizontal-white.svg') }}"
                      alt="Nazaré Qualifica"
                      class="h-12 opacity-60" />
             </a>
+            <p class="text-xs text-white/20">Crafted with ❤️ by <a href="https://nelsonbrilhante.com" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-white/40">Nelson Brilhante</a></p>
         </div>
 
         {{-- Copyright bar with legal links --}}

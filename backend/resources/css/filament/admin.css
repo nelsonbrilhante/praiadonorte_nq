@@ -485,6 +485,17 @@
     border-color: #ef4444 !important;
 }
 
+/* ===== FORM SIDEBAR LAYOUT FIXES ===== */
+
+/* Sidebar fixa ao fazer scroll (estilo WordPress) */
+@media (min-width: 1024px) {
+    .fi-sc.fi-sc-has-gap > :last-child:has(> .fi-sc-section) {
+        position: sticky;
+        top: 1rem;
+        align-self: start;
+    }
+}
+
 /* ===== RESPONSIVO - Mobile ===== */
 @media (max-width: 768px) {
     #login-branding-panel {

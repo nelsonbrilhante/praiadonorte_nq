@@ -5,9 +5,9 @@ namespace App\Filament\Resources\Eventos\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
@@ -55,9 +55,8 @@ class EventosTable
                         default => 'gray',
                     })
                     ->searchable(),
-                IconColumn::make('featured')
-                    ->label('Destaque')
-                    ->boolean(),
+                ToggleColumn::make('featured')
+                    ->label('Destaque'),
                 TextColumn::make('created_at')
                     ->label('Criado')
                     ->dateTime('d/m/Y')

@@ -37,4 +37,11 @@ class SiteSetting extends Model
 
         return $msg ? json_decode($msg, true) : null;
     }
+
+    public static function getJson(string $key, mixed $default = null): mixed
+    {
+        $value = static::get($key);
+
+        return $value ? json_decode($value, true) ?? $default : $default;
+    }
 }

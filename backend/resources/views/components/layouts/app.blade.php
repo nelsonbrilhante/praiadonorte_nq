@@ -60,6 +60,12 @@
 
     {{-- JSON-LD Structured Data --}}
     @stack('json-ld')
+
+    {{-- Umami Analytics (GDPR-compliant, no cookies) --}}
+    @if(config('services.umami.website_id') && !auth()->check())
+    <script defer src="{{ config('services.umami.url') }}/script.js"
+            data-website-id="{{ config('services.umami.website_id') }}"></script>
+    @endif
 </head>
 <body class="min-h-screen bg-background font-sans {{ App\Models\SiteSetting::isMaintenanceMode() && auth()->check() ? 'pt-6' : '' }}">
     {{-- Maintenance Banner (visible to authenticated users only) --}}

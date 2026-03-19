@@ -11,12 +11,13 @@
 
     {{-- Hero Slider --}}
     <x-praia-norte.hero-slider
-        :slides="$homepage?->heroSlides ?? collect()"
+        :slides="$heroSlides"
         :interval="$homepage?->slider_interval ?? 8"
         :autoplay="$homepage?->slider_autoplay ?? true"
     />
 
     {{-- News Section --}}
+    @if($noticias->isNotEmpty())
     <section class="relative py-16 bg-background">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-10">
@@ -28,7 +29,7 @@
 
             {{-- Magazine layout: featured + 2 side cards --}}
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                @forelse($noticias as $index => $noticia)
+                @foreach($noticias as $index => $noticia)
                     @if($index === 0)
                         {{-- Featured article (large) --}}
                         <a href="{{ LaravelLocalization::localizeURL('/noticias/' . $noticia->slug) }}"
@@ -82,25 +83,14 @@
                             </div>
                         </a>
                     @endif
-                @empty
-                    @for($i = 0; $i < 3; $i++)
-                        <div class="{{ $i === 0 ? 'md:row-span-2' : '' }} relative overflow-hidden rounded-2xl"
-                             style="--stagger-index: {{ $i }}">
-                            <div class="relative {{ $i === 0 ? 'h-64 md:h-full md:min-h-[420px]' : 'h-48 md:h-[200px]' }} gradient-ocean-deep">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                <div class="absolute bottom-0 left-0 right-0 p-6">
-                                    <div class="h-6 w-3/4 rounded bg-white/20 mb-2"></div>
-                                    <div class="h-4 w-1/2 rounded bg-white/10"></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endfor
-                @endforelse
+                @endforeach
             </div>
         </div>
     </section>
+    @endif
 
     {{-- Surfer Wall Section (light museum gallery) --}}
+    @if($surfers->isNotEmpty())
     <section class="section-ocean-light py-16 md:py-20">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-10">
@@ -232,6 +222,7 @@
             @endif
         </div>
     </section>
+    @endif
 
     {{-- Entities Section --}}
     <section class="py-16 md:py-20">
@@ -241,8 +232,9 @@
                 <a href="{{ LaravelLocalization::localizeURL('/praia-norte/sobre') }}"
                    class="group relative block overflow-hidden rounded-2xl"
                    style="--stagger-index: 0">
-                    <div class="relative h-64 md:h-72 gradient-ocean-deep">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div class="relative h-64 md:h-72">
+                        <img src="{{ asset('images/forte/intro-aerea.jpg') }}" alt="" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
                         <div class="absolute bottom-0 p-6">
                             <img src="{{ asset('images/logos/LOGOTIPO PN.png') }}" alt="Praia do Norte" class="h-10 mb-3 brightness-0 invert" />
                             <p class="text-sm text-white/80">
@@ -260,8 +252,9 @@
                 <a href="{{ LaravelLocalization::localizeURL('/carsurf') }}"
                    class="group relative block overflow-hidden rounded-2xl"
                    style="--stagger-index: 1">
-                    <div class="relative h-64 md:h-72" style="background-color: #004d2a;">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div class="relative h-64 md:h-72">
+                        <img src="{{ asset('images/carsurf/instalacoes-02.jpg') }}" alt="" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
                         <div class="absolute bottom-0 p-6">
                             <img src="{{ asset('images/logos/CARSURF_001.png') }}" alt="Carsurf" class="h-10 mb-3 brightness-0 invert" />
                             <p class="text-sm text-white/80">
@@ -279,8 +272,9 @@
                 <a href="{{ LaravelLocalization::localizeURL('/nazare-qualifica/sobre') }}"
                    class="group relative block overflow-hidden rounded-2xl"
                    style="--stagger-index: 2">
-                    <div class="relative h-64 md:h-72" style="background-color: #3d2800;">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div class="relative h-64 md:h-72">
+                        <img src="{{ asset('images/nq/ale.jpg') }}" alt="" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
                         <div class="absolute bottom-0 p-6">
                             <picture>
                                 <source media="(min-width: 768px)" srcset="{{ asset('images/logos/imagem-grafica-nq-white-name.svg') }}" type="image/svg+xml">
@@ -301,6 +295,7 @@
     </section>
 
     {{-- Events Section --}}
+    @if($eventos->isNotEmpty())
     <section class="relative py-16 md:py-20">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-10">
@@ -310,7 +305,7 @@
                 </x-ui.button>
             </div>
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                @forelse($eventos as $index => $evento)
+                @foreach($eventos as $index => $evento)
                     @php
                         $startDate = $evento->start_date;
                         $day = $startDate->format('d');
@@ -344,24 +339,9 @@
                             </p>
                         </div>
                     </a>
-                @empty
-                    @for($i = 0; $i < 2; $i++)
-                        <div class="flex overflow-hidden rounded-xl border bg-card dark:border-white/10"
-                             style="--stagger-index: {{ $i }}">
-                            <div class="flex w-28 shrink-0 items-center justify-center bg-ocean">
-                                <div class="text-center text-white">
-                                    <p class="text-3xl font-bold leading-none">15</p>
-                                    <p class="mt-1 text-sm font-medium uppercase tracking-wider opacity-80">Jan</p>
-                                </div>
-                            </div>
-                            <div class="flex flex-1 flex-col justify-center p-5">
-                                <div class="h-5 w-3/4 rounded bg-muted mb-2"></div>
-                                <div class="h-4 w-1/2 rounded bg-muted/50"></div>
-                            </div>
-                        </div>
-                    @endfor
-                @endforelse
+                @endforeach
             </div>
         </div>
     </section>
+    @endif
 </x-layouts.app>

@@ -54,5 +54,8 @@ class DatabaseSeeder extends Seeder
         if (! app()->isProduction()) {
             $this->call(UserSeeder::class);
         }
+
+        // Seed legal content (idempotent — safe to run multiple times)
+        $this->call(LegalContentSeeder::class);
     }
 }

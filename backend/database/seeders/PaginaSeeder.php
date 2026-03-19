@@ -434,6 +434,7 @@ class PaginaSeeder extends Seeder
                         'features' => ['3 parking floors', 'Open 24 hours', 'Nazaré city center', 'Surveillance and security'],
                         'contact' => ['phone' => '+351 262 550 010', 'email' => 'geral@nazarequalifica.pt'],
                     ],
+                    'documents' => ['regulamento' => null],
                 ],
                 'entity' => 'nazare-qualifica',
                 'published' => true,

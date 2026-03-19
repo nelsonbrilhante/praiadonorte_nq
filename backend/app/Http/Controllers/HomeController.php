@@ -40,6 +40,36 @@ class HomeController extends Controller
             ->where('published', true)
             ->first();
 
-        return view('pages.home', compact('noticias', 'eventos', 'surfers', 'homepage', 'locale'));
+        // Fetch featured news with cover images for hero slider
+        $featuredNoticias = Noticia::where('featured', true)
+            ->where('published_at', '<=', now())
+            ->whereNotNull('cover_image')
+            ->orderBy('published_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        // Convert featured news to virtual hero slides
+        $newsSlides = $featuredNoticias->map(function ($noticia) {
+            return (object) [
+                'active' => true,
+                'video_url' => null,
+                'fallback_image' => $noticia->cover_image,
+                'is_live' => false,
+                'audio_enabled' => false,
+                'hero_logo' => null,
+                'use_logo_as_title' => false,
+                'logo_height' => null,
+                'title' => $noticia->title,
+                'subtitle' => $noticia->excerpt ?? ['pt' => '', 'en' => ''],
+                'cta_text' => ['pt' => 'Ler mais', 'en' => 'Read more'],
+                'cta_url' => ['pt' => '/noticias/' . $noticia->slug, 'en' => '/noticias/' . $noticia->slug],
+            ];
+        });
+
+        // Merge manual hero slides with featured news slides
+        $heroSlides = collect($homepage?->heroSlides ?? [])
+            ->concat($newsSlides);
+
+        return view('pages.home', compact('noticias', 'eventos', 'surfers', 'homepage', 'heroSlides', 'locale'));
     }
 }

@@ -5,9 +5,9 @@ namespace App\Filament\Resources\Noticias\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
@@ -46,9 +46,8 @@ class NoticiasTable
                         default => 'gray',
                     })
                     ->searchable(),
-                IconColumn::make('featured')
-                    ->label('Destaque')
-                    ->boolean(),
+                ToggleColumn::make('featured')
+                    ->label('Destaque'),
                 TextColumn::make('published_at')
                     ->label('Publicado')
                     ->dateTime('d/m/Y H:i')

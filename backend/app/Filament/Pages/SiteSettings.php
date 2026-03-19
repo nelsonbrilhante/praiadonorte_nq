@@ -5,9 +5,11 @@ namespace App\Filament\Pages;
 use App\Models\SiteSetting;
 use BackedEnum;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 use UnitEnum;
@@ -38,6 +40,8 @@ class SiteSettings extends Page
     public ?string $maintenance_message_pt = '';
 
     public ?string $maintenance_message_en = '';
+    public bool $stats_weekly_enabled = false;
+    public ?string $stats_weekly_recipients = '';
 
     public function mount(): void
     {
@@ -46,6 +50,9 @@ class SiteSettings extends Page
         $message = SiteSetting::getMaintenanceMessage();
         $this->maintenance_message_pt = $message['pt'] ?? '';
         $this->maintenance_message_en = $message['en'] ?? '';
+
+        $this->stats_weekly_enabled = SiteSetting::get('stats_weekly_enabled', '0') === '1';
+        $this->stats_weekly_recipients = SiteSetting::get('stats_weekly_recipients', '');
     }
 
     public function form(Schema $schema): Schema
@@ -79,6 +86,22 @@ class SiteSettings extends Page
                             ]),
                     ])
                     ->columnSpanFull(),
+
+                Section::make('Relatório Semanal de Estatísticas')
+                    ->description('Envio automático de relatório semanal por email (segunda-feira às 8h)')
+                    ->icon('heroicon-o-chart-bar')
+                    ->schema([
+                        Toggle::make('stats_weekly_enabled')
+                            ->label('Ativar relatório semanal')
+                            ->helperText('Quando ativo, um relatório com estatísticas do website é enviado todas as segundas-feiras.')
+                            ->onColor('success')
+                            ->offColor('gray'),
+                        TextInput::make('stats_weekly_recipients')
+                            ->label('Destinatários')
+                            ->helperText('Emails separados por vírgula. Ex: presidente@cm-nazare.pt, diretor@nazarequalifica.pt')
+                            ->placeholder('email1@example.com, email2@example.com'),
+                    ])
+                    ->collapsible(),
             ]);
     }
 
@@ -92,6 +115,9 @@ class SiteSettings extends Page
         ]);
 
         SiteSetting::set('maintenance_message', $message ? json_encode($message) : null);
+
+        SiteSetting::set('stats_weekly_enabled', $this->stats_weekly_enabled ? '1' : '0');
+        SiteSetting::set('stats_weekly_recipients', $this->stats_weekly_recipients ?: '');
 
         Notification::make()
             ->title('Definições guardadas')

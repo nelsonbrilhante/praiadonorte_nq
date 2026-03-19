@@ -5,7 +5,47 @@ on:
     branches: [main]
 
 jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (for backup script)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/pre-deploy-backup.sh
+          sparse-checkout-cone-mode: false
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Copy backup script to VPS
+        run: |
+          scp -i ~/.ssh/deploy_key scripts/pre-deploy-backup.sh \
+            root@${{ secrets.VPS_HOST }}:/tmp/pre-deploy-backup.sh
+
+      - name: Run pre-deploy backup
+        run: |
+          ssh -i ~/.ssh/deploy_key root@${{ secrets.VPS_HOST }} \
+            "chmod +x /tmp/pre-deploy-backup.sh && /tmp/pre-deploy-backup.sh"
+
+      - name: Download backup from VPS
+        run: |
+          scp -i ~/.ssh/deploy_key \
+            root@${{ secrets.VPS_HOST }}:/root/backups/latest-backup.tar.gz \
+            /tmp/backup.tar.gz
+
+      - name: Upload backup as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-deploy-backup-${{ github.sha }}
+          path: /tmp/backup.tar.gz
+          retention-days: 90
+
   deploy:
+    needs: backup
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Coolify Deploy

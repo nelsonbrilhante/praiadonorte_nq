@@ -5,6 +5,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\ForecastController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\LojaController;
 
 /*
@@ -179,15 +180,7 @@ Route::group([
     })->name('contacto');
 
     // Legal pages
-    Route::get('/privacidade', function () {
-        return view('pages.privacidade');
-    })->name('privacidade');
-
-    Route::get('/termos', function () {
-        return view('pages.termos');
-    })->name('termos');
-
-    Route::get('/cookies', function () {
-        return view('pages.cookies');
-    })->name('cookies');
+    Route::get('/privacidade', [LegalController::class, 'privacy'])->name('privacidade');
+    Route::get('/termos', [LegalController::class, 'terms'])->name('termos');
+    Route::get('/cookies', [LegalController::class, 'cookies'])->name('cookies');
 });
