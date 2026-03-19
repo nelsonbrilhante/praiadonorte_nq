@@ -40,6 +40,7 @@ class UserResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
+            ->columns(1)
             ->components([
                 Section::make('Dados')
                     ->schema([
@@ -61,8 +62,7 @@ class UserResource extends Resource
                             ->dehydrated(fn (?string $state): bool => filled($state))
                             ->minLength(8)
                             ->maxLength(255),
-                    ])
-                    ->columns(2),
+                    ]),
 
                 Section::make('Permissões')
                     ->schema([
