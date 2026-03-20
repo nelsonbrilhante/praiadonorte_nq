@@ -226,6 +226,9 @@
                                 <a href="{{ LaravelLocalization::localizeURL('/carsurf/formularios') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.pages.forms') }}
                                 </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/carsurf/reservas') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.pages.reservations') }}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -452,6 +455,9 @@
                             </a>
                             <a href="{{ LaravelLocalization::localizeURL('/carsurf/formularios') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.pages.forms') }}
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/carsurf/reservas') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.pages.reservations') }}
                             </a>
                         </div>
                     </div>

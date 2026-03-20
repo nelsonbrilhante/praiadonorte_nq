@@ -7,6 +7,9 @@ use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\LojaController;
+use App\Models\ContactMessage;
+use App\Mail\CarsurfReservation;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,6 +108,38 @@ Route::group([
         Route::get('/formularios', function () {
             return view('pages.carsurf.formularios');
         })->name('formularios');
+
+        Route::get('/reservas', function () {
+            return view('pages.carsurf.reservas');
+        })->name('reservas');
+
+        Route::post('/reservas', function (\Illuminate\Http\Request $request) {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'phone' => 'nullable|string|max:50',
+                'message' => 'required|string|max:5000',
+            ]);
+
+            ContactMessage::create([
+                'entity' => 'carsurf',
+                'type' => 'reserva',
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'] ?? null,
+                'message' => $validated['message'],
+            ]);
+
+            Mail::to('geral@carsurf.nazare.pt')
+                ->queue(new CarsurfReservation(
+                    senderName: $validated['name'],
+                    senderEmail: $validated['email'],
+                    senderPhone: $validated['phone'] ?? null,
+                    senderMessage: $validated['message'],
+                ));
+
+            return redirect()->back()->with('success', __('messages.carsurf.reservas.form.success'));
+        })->name('reservas.submit');
     });
 
     // Nazare Qualifica

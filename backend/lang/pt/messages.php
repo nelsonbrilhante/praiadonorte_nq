@@ -181,6 +181,7 @@ return [
         'about' => 'Sobre',
         'facilities' => 'Instalações',
         'forms' => 'Formulários',
+        'reservations' => 'Reservas',
         'services' => 'Serviços',
     ],
     'about' => [
@@ -400,7 +401,7 @@ return [
             'subtitle' => 'Formulários de Cedência do Ginásio',
             'intro' => [
                 'title' => 'Formulários de Cedência',
-                'text' => 'Os formulários abaixo destinam-se a formalizar o pedido de cedência do ginásio do Carsurf. Após o preenchimento, devem ser enviados para o email tiago.barbosa@cm-nazare.pt, para análise e decisão.',
+                'text' => 'Os formulários abaixo destinam-se a formalizar o pedido de cedência do ginásio do Carsurf. Após o preenchimento, devem ser enviados para o email indicado na página de contacto, para análise e decisão.',
             ],
             'documentsTitle' => 'Formulários Disponíveis',
             'download' => 'Descarregar PDF',
@@ -418,6 +419,28 @@ return [
                 'title' => 'Precisa de Ajuda?',
                 'subtitle' => 'Entre em contacto connosco para qualquer questão sobre os formulários.',
                 'button' => 'Contactar',
+            ],
+        ],
+        'reservas' => [
+            'title' => 'Reservas',
+            'subtitle' => 'Alojamento, guarda de pranchas e estágios desportivos',
+            'form' => [
+                'title' => 'Pedido de Reserva',
+                'description' => 'Preencha o formulário abaixo para solicitar uma reserva de alojamento, guarda de pranchas ou estágio desportivo.',
+                'name' => 'Nome',
+                'email' => 'Email',
+                'phone' => 'Telefone',
+                'message' => 'Mensagem',
+                'submit' => 'Enviar pedido',
+                'success' => 'O seu pedido de reserva foi enviado com sucesso! Entraremos em contacto brevemente.',
+                'error' => 'Erro ao enviar o pedido. Por favor, tente novamente.',
+            ],
+            'info' => [
+                'title' => 'Contacto Direto',
+                'email' => 'Email',
+                'phone' => 'Telefone',
+                'address' => 'Morada',
+                'note' => 'O pedido de reserva será analisado pela equipa do Carsurf, que entrará em contacto consigo para confirmar a disponibilidade e condições.',
             ],
         ],
         'team' => [

@@ -181,6 +181,7 @@ return [
         'about' => 'About',
         'facilities' => 'Facilities',
         'forms' => 'Forms',
+        'reservations' => 'Reservations',
         'services' => 'Services',
     ],
     'about' => [
@@ -400,7 +401,7 @@ return [
             'subtitle' => 'Gym Assignment Forms',
             'intro' => [
                 'title' => 'Assignment Forms',
-                'text' => 'The forms below are intended to formalize the request for gym assignment at Carsurf. After completing them, they must be sent to tiago.barbosa@cm-nazare.pt for analysis and decision.',
+                'text' => 'The forms below are intended to formalize the request for gym assignment at Carsurf. After completing them, they must be sent to the email indicated on the contact page for analysis and decision.',
             ],
             'documentsTitle' => 'Available Forms',
             'download' => 'Download PDF',
@@ -418,6 +419,28 @@ return [
                 'title' => 'Need Help?',
                 'subtitle' => 'Get in touch with us for any questions about the forms.',
                 'button' => 'Contact Us',
+            ],
+        ],
+        'reservas' => [
+            'title' => 'Reservations',
+            'subtitle' => 'Accommodation, surfboard storage and sports camps',
+            'form' => [
+                'title' => 'Reservation Request',
+                'description' => 'Fill out the form below to request accommodation, surfboard storage or a sports camp.',
+                'name' => 'Name',
+                'email' => 'Email',
+                'phone' => 'Phone',
+                'message' => 'Message',
+                'submit' => 'Send request',
+                'success' => 'Your reservation request has been sent successfully! We will get in touch shortly.',
+                'error' => 'Error sending request. Please try again.',
+            ],
+            'info' => [
+                'title' => 'Direct Contact',
+                'email' => 'Email',
+                'phone' => 'Phone',
+                'address' => 'Address',
+                'note' => 'The reservation request will be reviewed by the Carsurf team, who will contact you to confirm availability and conditions.',
             ],
         ],
         'team' => [
