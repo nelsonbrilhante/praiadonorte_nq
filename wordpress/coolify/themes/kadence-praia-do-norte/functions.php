@@ -887,3 +887,23 @@ add_action('wp_footer', function () {
     </script>
     <?php
 });
+
+/**
+ * Umami Analytics tracking (GDPR-compliant, no cookies).
+ * Only loads for non-authenticated visitors.
+ */
+add_action('wp_head', function () {
+    if (is_admin() || is_user_logged_in()) {
+        return;
+    }
+    $umami_url = getenv('UMAMI_URL') ?: 'https://analytics.nazarequalifica.pt:3000';
+    $website_id = getenv('UMAMI_STORE_WEBSITE_ID') ?: '';
+    if (empty($website_id)) {
+        return;
+    }
+    printf(
+        '<script defer src="%s/script.js" data-website-id="%s"></script>' . "\n",
+        esc_url(rtrim($umami_url, '/')),
+        esc_attr($website_id)
+    );
+}, 1);
