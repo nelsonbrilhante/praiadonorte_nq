@@ -5,6 +5,9 @@
 # Credentials
 .credentials.md
 
+# Raw server logs (large files, not for git)
+docs/reports/raw-logs/
+
 # macOS
 .DS_Store
 .AppleDouble

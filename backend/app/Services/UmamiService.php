@@ -117,7 +117,7 @@ class UmamiService
     private function headers(): array
     {
         return [
-            'x-umami-api-key' => $this->apiKey,
+            'Authorization' => "Bearer {$this->apiKey}",
             'Accept' => 'application/json',
         ];
     }
