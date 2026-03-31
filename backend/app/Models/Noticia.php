@@ -20,6 +20,7 @@ class Noticia extends Model
         'entity',
         'tags',
         'featured',
+        'show_in_hero',
         'published_at',
     ];
 
@@ -29,6 +30,7 @@ class Noticia extends Model
         'excerpt' => 'array',
         'tags' => 'array',
         'featured' => 'boolean',
+        'show_in_hero' => 'boolean',
         'published_at' => 'datetime',
     ];
 }

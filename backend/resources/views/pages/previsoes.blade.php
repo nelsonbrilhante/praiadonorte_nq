@@ -293,87 +293,19 @@
         </div>
     </section>
 
-    {{-- Webcams Section --}}
-    <section class="border-t bg-muted/10 py-12">
-        <div class="container mx-auto px-4">
-            <h2 class="mb-6 text-2xl font-bold reveal-up" x-data x-intersect.once="$el.classList.add('is-visible')">{{ __('messages.forecast.webcams.title') }}</h2>
-            <div class="grid gap-6 md:grid-cols-2">
-                {{-- Praia do Norte Webcam --}}
-                <x-ui.card class="overflow-hidden">
-                    <x-ui.card-header>
-                        <x-ui.card-title class="flex items-center gap-2">
-                            <span class="relative flex h-3 w-3">
-                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-                                <span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
-                            </span>
-                            {{ __('messages.forecast.webcams.praiaDoNorte') }}
-                        </x-ui.card-title>
-                        <x-ui.card-description>
-                            {{ $locale === 'pt' ? 'Vista ao vivo da Praia do Norte - Ondas Gigantes' : 'Live view of Praia do Norte - Giant Waves' }}
-                        </x-ui.card-description>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
-                            <div class="flex h-full flex-col items-center justify-center gap-4 p-4 text-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                                    <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                                    <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                                </svg>
-                                <p class="text-sm text-muted-foreground">
-                                    {{ $locale === 'pt' ? 'Clique para ver a webcam em janela externa' : 'Click to view webcam in external window' }}
-                                </p>
-                                <x-ui.button variant="outline" href="https://www.surfline.com/surf-report/praia-do-norte/584204214e65fad6a7709c4f" target="_blank">
-                                    {{ $locale === 'pt' ? 'Ver Webcam' : 'View Webcam' }}
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                        <polyline points="15 3 21 3 21 9"/>
-                                        <line x1="10" y1="14" x2="21" y2="3"/>
-                                    </svg>
-                                </x-ui.button>
-                            </div>
-                        </div>
-                    </x-ui.card-content>
-                </x-ui.card>
-
-                {{-- Forte Webcam --}}
-                <x-ui.card class="overflow-hidden">
-                    <x-ui.card-header>
-                        <x-ui.card-title class="flex items-center gap-2">
-                            <span class="relative flex h-3 w-3">
-                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-                                <span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
-                            </span>
-                            {{ __('messages.forecast.webcams.forte') }}
-                        </x-ui.card-title>
-                        <x-ui.card-description>
-                            {{ $locale === 'pt' ? 'Vista do Forte de Sao Miguel Arcanjo' : 'View from Fort Sao Miguel Arcanjo' }}
-                        </x-ui.card-description>
-                    </x-ui.card-header>
-                    <x-ui.card-content>
-                        <div class="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
-                            <div class="flex h-full flex-col items-center justify-center gap-4 p-4 text-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                                    <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                                    <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-                                </svg>
-                                <p class="text-sm text-muted-foreground">
-                                    {{ $locale === 'pt' ? 'Clique para ver a webcam em janela externa' : 'Click to view webcam in external window' }}
-                                </p>
-                                <x-ui.button variant="outline" href="https://beachcam.meo.pt/livecams/nazare-norte/" target="_blank">
-                                    {{ $locale === 'pt' ? 'Ver Webcam' : 'View Webcam' }}
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                        <polyline points="15 3 21 3 21 9"/>
-                                        <line x1="10" y1="14" x2="21" y2="3"/>
-                                    </svg>
-                                </x-ui.button>
-                            </div>
-                        </div>
-                    </x-ui.card-content>
-                </x-ui.card>
-            </div>
+    {{-- Webcams Link --}}
+    <section class="border-t bg-muted/10 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/webcams') }}" class="inline-flex items-center gap-2 rounded-lg bg-ocean/10 px-6 py-3 text-sm font-medium text-ocean-deep hover:bg-ocean/20 transition-colors">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500"></span>
+                </span>
+                {{ __('messages.webcams.title') }}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"/>
+                </svg>
+            </a>
         </div>
     </section>
 </x-layouts.app>

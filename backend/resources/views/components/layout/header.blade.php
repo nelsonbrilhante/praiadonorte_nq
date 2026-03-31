@@ -189,6 +189,9 @@
                                 <a href="{{ LaravelLocalization::localizeURL('/praia-norte/previsoes') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
                                     {{ __('messages.navigation.forecast') }}
                                 </a>
+                                <a href="{{ LaravelLocalization::localizeURL('/praia-norte/webcams') }}" class="block rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors dark:text-white">
+                                    {{ __('messages.navigation.webcams') }}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -438,6 +441,9 @@
                             <a href="{{ LaravelLocalization::localizeURL('/praia-norte/previsoes') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
                                 {{ __('messages.navigation.forecast') }}
                             </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/webcams') }}" @click="fullMenuOpen = false" class="block text-lg text-white/60 hover:text-white transition-colors">
+                                {{ __('messages.navigation.webcams') }}
+                            </a>
                         </div>
                     </div>
 
@@ -491,6 +497,12 @@
                                     <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
                                 </svg>
                                 <span class="text-sm font-medium text-white">{{ __('messages.navigation.forecast') }}</span>
+                            </a>
+                            <a href="{{ LaravelLocalization::localizeURL('/praia-norte/webcams') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-ocean mb-3">
+                                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><circle cx="10" cy="13" r="2"/><path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22"/>
+                                </svg>
+                                <span class="text-sm font-medium text-white">{{ __('messages.navigation.webcams') }}</span>
                             </a>
                             <a href="{{ LaravelLocalization::localizeURL(LaravelLocalization::getCurrentLocale() === 'pt' ? '/loja' : '/shop') }}" @click="fullMenuOpen = false" class="group block rounded-xl bg-white/5 p-4 hover:bg-white/10 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-ocean mb-3">

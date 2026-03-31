@@ -118,6 +118,10 @@ class NoticiaForm
                                 Toggle::make('featured')
                                     ->label('Destaque')
                                     ->default(false),
+                                Toggle::make('show_in_hero')
+                                    ->label('Mostrar no Hero Slider')
+                                    ->helperText('Aparece como slide no hero da homepage')
+                                    ->default(false),
                                 DateTimePicker::make('published_at')
                                     ->label('Data de Publicação')
                                     ->default(now()),

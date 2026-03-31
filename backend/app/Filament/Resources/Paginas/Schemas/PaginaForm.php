@@ -835,6 +835,86 @@ class PaginaForm
                                     ->visible(fn ($get) => $get('entity') === 'nazare-qualifica' && in_array($get('slug'), ['carsurf', 'estacionamento', 'forte', 'ale']))
                                     ->collapsible(),
 
+                                // ========== FORTE - HORÁRIO DE FUNCIONAMENTO (entity=praia-norte, slug=forte) ==========
+                                Section::make('Horário de Funcionamento')
+                                    ->description('Horário, preço e informações de visita do Forte')
+                                    ->icon('heroicon-o-clock')
+                                    ->schema([
+                                        Tabs::make('Horário Idiomas')
+                                            ->tabs([
+                                                Tab::make('Português')
+                                                    ->icon('heroicon-o-flag')
+                                                    ->schema([
+                                                        Grid::make(2)->schema([
+                                                            TextInput::make('content.pt.horario.abertura')
+                                                                ->label('Abertura')
+                                                                ->placeholder('9:30')
+                                                                ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                    $set('content.pt.horario.abertura', $record?->content['pt']['horario']['abertura'] ?? $state)),
+                                                            TextInput::make('content.pt.horario.encerramento')
+                                                                ->label('Encerramento')
+                                                                ->placeholder('20:30')
+                                                                ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                    $set('content.pt.horario.encerramento', $record?->content['pt']['horario']['encerramento'] ?? $state)),
+                                                        ]),
+                                                        Grid::make(2)->schema([
+                                                            TextInput::make('content.pt.horario.ultima_entrada')
+                                                                ->label('Última Entrada')
+                                                                ->placeholder('20:00')
+                                                                ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                    $set('content.pt.horario.ultima_entrada', $record?->content['pt']['horario']['ultima_entrada'] ?? $state)),
+                                                            TextInput::make('content.pt.horario.preco')
+                                                                ->label('Preço de Entrada')
+                                                                ->placeholder('3€')
+                                                                ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                    $set('content.pt.horario.preco', $record?->content['pt']['horario']['preco'] ?? $state)),
+                                                        ]),
+                                                        TextInput::make('content.pt.horario.nota')
+                                                            ->label('Nota Adicional')
+                                                            ->placeholder('Ex: Menores de 12 anos: gratuito')
+                                                            ->columnSpanFull()
+                                                            ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                $set('content.pt.horario.nota', $record?->content['pt']['horario']['nota'] ?? $state)),
+                                                    ]),
+                                                Tab::make('English')
+                                                    ->icon('heroicon-o-globe-alt')
+                                                    ->schema([
+                                                        Grid::make(2)->schema([
+                                                            TextInput::make('content.en.horario.abertura')
+                                                                ->label('Opening')
+                                                                ->placeholder('9:30')
+                                                                ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                    $set('content.en.horario.abertura', $record?->content['en']['horario']['abertura'] ?? $state)),
+                                                            TextInput::make('content.en.horario.encerramento')
+                                                                ->label('Closing')
+                                                                ->placeholder('20:30')
+                                                                ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                    $set('content.en.horario.encerramento', $record?->content['en']['horario']['encerramento'] ?? $state)),
+                                                        ]),
+                                                        Grid::make(2)->schema([
+                                                            TextInput::make('content.en.horario.ultima_entrada')
+                                                                ->label('Last Entry')
+                                                                ->placeholder('20:00')
+                                                                ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                    $set('content.en.horario.ultima_entrada', $record?->content['en']['horario']['ultima_entrada'] ?? $state)),
+                                                            TextInput::make('content.en.horario.preco')
+                                                                ->label('Entry Price')
+                                                                ->placeholder('3€')
+                                                                ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                    $set('content.en.horario.preco', $record?->content['en']['horario']['preco'] ?? $state)),
+                                                        ]),
+                                                        TextInput::make('content.en.horario.nota')
+                                                            ->label('Additional Note')
+                                                            ->placeholder('E.g. Children under 12: free')
+                                                            ->columnSpanFull()
+                                                            ->afterStateHydrated(fn ($state, $set, $record) =>
+                                                                $set('content.en.horario.nota', $record?->content['en']['horario']['nota'] ?? $state)),
+                                                    ]),
+                                            ]),
+                                    ])
+                                    ->visible(fn ($get) => $get('entity') === 'praia-norte' && $get('slug') === 'forte')
+                                    ->collapsible(),
+
                                 // SEO Section
                                 Section::make('SEO')
                                     ->schema([

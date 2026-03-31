@@ -12,6 +12,7 @@ return [
         'events' => 'Eventos',
         'surferWall' => 'Surfer Wall',
         'forecast' => 'Previsões',
+        'webcams' => 'Webcams',
         'shop' => 'Loja',
         'contact' => 'Contacto',
     ],
@@ -258,6 +259,12 @@ return [
             'history' => 'Interior histórico do Forte de S. Miguel Arcanjo',
             'salaIh' => 'Sala do Instituto Hidrográfico — maquete do fundo marítimo',
             'surferWall' => 'Sala de exposição Surfer Wall com pranchas de surf',
+        ],
+        'horario' => [
+            'title' => 'Horário de Funcionamento',
+            'schedule' => 'Horário',
+            'last_entry' => 'Última Entrada',
+            'entry_price' => 'Entrada',
         ],
         'cta' => [
             'title' => 'Descubra Mais',
@@ -786,5 +793,18 @@ return [
     'theme' => [
         'switchToDark' => 'Mudar para modo escuro',
         'switchToLight' => 'Mudar para modo claro',
+    ],
+    'webcams' => [
+        'title' => 'Webcams ao Vivo',
+        'subtitle' => 'Acompanhe as condições do mar em tempo real na Nazaré',
+        'source' => 'Fonte',
+        'unavailable' => 'Transmissão temporariamente indisponível',
+        'watch_external' => 'Ver no BeachCam',
+        'close' => 'Fechar',
+        'cameras' => [
+            'panoramica' => 'Nazaré | Praia do Norte Panorâmica',
+            'canhao' => 'Nazaré | Praia do Norte',
+            'vila' => 'Nazaré | Praia da Vila',
+        ],
     ],
 ];

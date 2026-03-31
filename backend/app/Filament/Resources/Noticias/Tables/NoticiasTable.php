@@ -48,6 +48,8 @@ class NoticiasTable
                     ->searchable(),
                 ToggleColumn::make('featured')
                     ->label('Destaque'),
+                ToggleColumn::make('show_in_hero')
+                    ->label('Hero'),
                 TextColumn::make('published_at')
                     ->label('Publicado')
                     ->dateTime('d/m/Y H:i')

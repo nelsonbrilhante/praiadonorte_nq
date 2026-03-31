@@ -40,8 +40,8 @@ class HomeController extends Controller
             ->where('published', true)
             ->first();
 
-        // Fetch featured news with cover images for hero slider
-        $featuredNoticias = Noticia::where('featured', true)
+        // Fetch news marked for hero slider
+        $featuredNoticias = Noticia::where('show_in_hero', true)
             ->where('published_at', '<=', now())
             ->whereNotNull('cover_image')
             ->orderBy('published_at', 'desc')

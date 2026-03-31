@@ -83,6 +83,10 @@ Route::group([
         Route::get('/hidrografico', function () {
             return view('pages.hidrografico');
         })->name('hidrografico');
+
+        Route::get('/webcams', function () {
+            return view('pages.webcams');
+        })->name('webcams');
     });
 
     // Shop / Loja (/pt/loja, /en/shop)

@@ -12,6 +12,7 @@ return [
         'events' => 'Events',
         'surferWall' => 'Surfer Wall',
         'forecast' => 'Forecast',
+        'webcams' => 'Webcams',
         'shop' => 'Shop',
         'contact' => 'Contact',
     ],
@@ -258,6 +259,12 @@ return [
             'history' => 'Historic interior of the Fort of São Miguel Arcanjo',
             'salaIh' => 'Hydrographic Institute Room — seabed scale model',
             'surferWall' => 'Surfer Wall exhibition room with surfboards',
+        ],
+        'horario' => [
+            'title' => 'Opening Hours',
+            'schedule' => 'Schedule',
+            'last_entry' => 'Last Entry',
+            'entry_price' => 'Admission',
         ],
         'cta' => [
             'title' => 'Discover More',
@@ -786,5 +793,18 @@ return [
     'theme' => [
         'switchToDark' => 'Switch to dark mode',
         'switchToLight' => 'Switch to light mode',
+    ],
+    'webcams' => [
+        'title' => 'Live Webcams',
+        'subtitle' => 'Watch real-time sea conditions in Nazaré',
+        'source' => 'Source',
+        'unavailable' => 'Stream temporarily unavailable',
+        'watch_external' => 'Watch on BeachCam',
+        'close' => 'Close',
+        'cameras' => [
+            'panoramica' => 'Nazaré | Praia do Norte Panoramic',
+            'canhao' => 'Nazaré | Praia do Norte',
+            'vila' => 'Nazaré | Praia da Vila',
+        ],
     ],
 ];

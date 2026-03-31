@@ -107,6 +107,59 @@
         </div>
     </section>
 
+    {{-- Horário de Funcionamento --}}
+    @php
+        $localeHorario = $page->content[$locale]['horario'] ?? null;
+        $horario = ($localeHorario && ($localeHorario['abertura'] ?? null)) ? $localeHorario : ($page->content['pt']['horario'] ?? null);
+    @endphp
+    @if($horario && ($horario['abertura'] ?? false))
+    <section class="gradient-ocean-deep py-6 text-white">
+        <div class="container mx-auto px-4">
+            <div class="mx-auto max-w-4xl">
+                <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-8 md:gap-12">
+                    {{-- Title --}}
+                    <span class="text-sm font-semibold uppercase tracking-wider opacity-80">{{ __('messages.forte.horario.title') }}</span>
+                    {{-- Divider (desktop) --}}
+                    <span class="hidden sm:block h-8 w-px bg-white/30"></span>
+                    {{-- Horário --}}
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <span class="text-sm opacity-70">{{ __('messages.forte.horario.schedule') }}:</span>
+                        <span class="font-semibold">{{ $horario['abertura'] }} – {{ $horario['encerramento'] }}</span>
+                    </div>
+                    {{-- Última Entrada --}}
+                    @if($horario['ultima_entrada'] ?? false)
+                    <span class="hidden sm:block h-8 w-px bg-white/30"></span>
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+                        </svg>
+                        <span class="text-sm opacity-70">{{ __('messages.forte.horario.last_entry') }}:</span>
+                        <span class="font-semibold">{{ $horario['ultima_entrada'] }}</span>
+                    </div>
+                    @endif
+                    {{-- Preço --}}
+                    @if($horario['preco'] ?? false)
+                    <span class="hidden sm:block h-8 w-px bg-white/30"></span>
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/>
+                        </svg>
+                        <span class="text-sm opacity-70">{{ __('messages.forte.horario.entry_price') }}:</span>
+                        <span class="font-semibold">{{ $horario['preco'] }}</span>
+                    </div>
+                    @endif
+                </div>
+                @if($horario['nota'] ?? false)
+                <p class="mt-2 text-center text-xs opacity-60">{{ $horario['nota'] }}</p>
+                @endif
+            </div>
+        </div>
+    </section>
+    @endif
+
     {{-- Stats --}}
     <section class="bg-muted/10 py-12">
         <div class="container mx-auto px-4">
@@ -117,7 +170,7 @@
                         <p class="text-sm text-muted-foreground">{{ __('messages.forte.stats.year') }}</p>
                     </div>
                     <div class="text-center">
-                        <div class="text-4xl font-bold text-ocean">650k+</div>
+                        <div class="text-4xl font-bold text-ocean">3M+</div>
                         <p class="text-sm text-muted-foreground">{{ __('messages.forte.stats.visitors') }}</p>
                     </div>
                     <div class="text-center">

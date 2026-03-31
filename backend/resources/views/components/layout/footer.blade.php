@@ -39,6 +39,11 @@
                             {{ __('messages.navigation.forecast') }}
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ LaravelLocalization::localizeURL('/praia-norte/webcams') }}" class="text-white/60 transition-colors hover:text-white">
+                            {{ __('messages.navigation.webcams') }}
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
