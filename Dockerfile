@@ -212,7 +212,7 @@ COPY <<'ENTRYPOINT' /usr/local/bin/entrypoint.sh
 set -e
 
 echo "==> Creating .env from Docker environment variables..."
-printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_|WOOCOMMERCE_|RESEND_|UMAMI_|STATS_)' | sort | sed 's/=\(.*\)/="\1"/' > /var/www/html/.env
+printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAIL_|REDIS_|BROADCAST_|WOOCOMMERCE_|RESEND_|UMAMI_|STATS_|R2_)' | sort | sed 's/=\(.*\)/="\1"/' > /var/www/html/.env
 
 echo "==> Resolving WooCommerce store via Traefik (hairpin NAT fix)..."
 TRAEFIK_IP=$(getent hosts coolify-proxy 2>/dev/null | awk '{print $1}' || true)

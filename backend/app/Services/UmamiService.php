@@ -27,10 +27,19 @@ class UmamiService
         $cacheKey = "umami_stats_{$websiteId}_{$startDate}_{$endDate}";
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($websiteId, $startDate, $endDate) {
-            return $this->request("api/websites/{$websiteId}/stats", [
+            $data = $this->request("api/websites/{$websiteId}/stats", [
                 'startAt' => $this->toTimestamp($startDate),
                 'endAt' => $this->toTimestamp($endDate),
             ]);
+
+            if ($data === null) {
+                return null;
+            }
+
+            // Normalise flat format (pageviews: 5588) → nested (pageviews: {value: 5588})
+            return collect($data)->mapWithKeys(function ($v, $k) {
+                return [$k => is_int($v) || is_float($v) ? ['value' => $v] : $v];
+            })->all();
         });
     }
 

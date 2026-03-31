@@ -42,5 +42,9 @@ return [
         'api_key' => env('UMAMI_API_KEY'),
     ],
 
+    'r2' => [
+        'public_url' => env('R2_PUBLIC_URL', ''),
+    ],
+
 ];
 

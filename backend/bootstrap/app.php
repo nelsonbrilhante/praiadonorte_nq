@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withSchedule(function (Schedule $schedule): void {
         $schedule->command('stats:send-weekly')
-            ->weeklyOn(1, '08:00') // Monday at 8:00
+            ->weeklyOn(1, '12:00') // Monday at 12:00 (noon)
             ->when(fn () => SiteSetting::get('stats_weekly_enabled', '0') === '1');
     })
     ->withMiddleware(function (Middleware $middleware): void {
