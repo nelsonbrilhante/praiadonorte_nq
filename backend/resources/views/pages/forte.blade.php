@@ -2,7 +2,11 @@
     $locale = app('laravellocalization')->getCurrentLocale();
 @endphp
 
-<x-layouts.app>
+<x-layouts.app
+    :seo_title="__('messages.forte.title') . ' | ' . __('messages.metadata.title')"
+    :seo_description="Str::limit(__('messages.forte.subtitle'), 160)"
+    :og_image="asset('images/forte/intro-aerea.jpg')"
+>
     {{-- Hero --}}
     <x-praia-norte.page-hero title="{{ __('messages.forte.title') }}" subtitle="{{ __('messages.forte.subtitle') }}" entity="praia-norte" image="{{ $page->hero_image ? asset('storage/' . $page->hero_image) : '' }}" />
 

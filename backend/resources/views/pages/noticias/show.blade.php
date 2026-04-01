@@ -1,16 +1,24 @@
-<x-layouts.app>
-    @php
-        // Helper function to get localized field
-        $getLocalized = function($field, $locale) {
-            if (is_array($field)) {
-                return ($field[$locale] ?? null) ?: ($field['pt'] ?? '');
-            }
-            return $field ?? '';
-        };
+@php
+    // Helper function to get localized field
+    $getLocalized = function($field, $locale) {
+        if (is_array($field)) {
+            return ($field[$locale] ?? null) ?: ($field['pt'] ?? '');
+        }
+        return $field ?? '';
+    };
 
-        $title = $getLocalized($noticia->title, $locale);
-        $content = $getLocalized($noticia->content, $locale);
-        $excerpt = $getLocalized($noticia->excerpt, $locale);
+    $title = $getLocalized($noticia->title, $locale);
+    $content = $getLocalized($noticia->content, $locale);
+    $excerpt = $getLocalized($noticia->excerpt, $locale);
+@endphp
+
+<x-layouts.app
+    :seo_title="$title . ' | ' . __('messages.metadata.title')"
+    :seo_description="$excerpt ?: Str::limit(strip_tags($content), 160)"
+    :og_image="$noticia->cover_image ? asset('storage/' . $noticia->cover_image) : null"
+    og_type="article"
+>
+    @php
 
         $entityColors = [
             'praia-norte' => 'bg-ocean text-white',
@@ -39,11 +47,6 @@
         $entityColor = $entityColors[$noticia->entity] ?? 'bg-muted';
         $entityLabel = $entityLabels[$noticia->entity] ?? $noticia->entity;
     @endphp
-
-    @push('head')
-        <title>{{ $title }} | {{ __('messages.metadata.title') }}</title>
-        <meta name="description" content="{{ $excerpt }}">
-    @endpush
 
     {{-- Full-bleed Hero --}}
     <section class="relative h-[50vh] min-h-[400px] overflow-hidden">

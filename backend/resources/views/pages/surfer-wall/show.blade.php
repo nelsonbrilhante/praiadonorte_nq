@@ -25,12 +25,11 @@
     };
 @endphp
 
-<x-layouts.app>
-    @push('head')
-        <title>{{ $surfer->name }} | Nazaré Qualifica</title>
-        <meta name="description" content="{{ Str::limit(strip_tags($getLocalized($surfer->bio, $locale)), 160) }}">
-    @endpush
-
+<x-layouts.app
+    :seo_title="$surfer->name . ' | ' . __('messages.metadata.title')"
+    :seo_description="Str::limit(strip_tags($getLocalized($surfer->bio, $locale)), 160)"
+    :og_image="$surfer->photo ? asset('storage/' . $surfer->photo) : null"
+>
     {{-- Hero Section --}}
     <section class="relative overflow-hidden gradient-ocean-deep py-12 md:py-20 text-white">
         {{-- Board image as hero background --}}

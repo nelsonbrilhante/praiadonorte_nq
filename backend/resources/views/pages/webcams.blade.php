@@ -20,7 +20,11 @@
     ];
 @endphp
 
-<x-layouts.app>
+<x-layouts.app
+    :seo_title="__('messages.webcams.title') . ' | ' . __('messages.metadata.title')"
+    :seo_description="__('messages.webcams.subtitle')"
+    :og_image="asset('images/forte/intro-aerea.jpg')"
+>
     {{-- HLS.js library --}}
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
 

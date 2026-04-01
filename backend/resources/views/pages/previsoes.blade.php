@@ -12,7 +12,10 @@
     $wetsuitRec = $current ? ForecastService::getWetsuitRecommendation($current['waterTemperature'], $locale) : null;
 @endphp
 
-<x-layouts.app>
+<x-layouts.app
+    :seo_title="__('messages.forecast.title') . ' | ' . __('messages.metadata.title')"
+    :seo_description="__('messages.forecast.subtitle')"
+>
     {{-- Hero --}}
     <x-praia-norte.page-hero title="{{ __('messages.forecast.title') }}" subtitle="{{ __('messages.forecast.subtitle') }}" entity="praia-norte">
         <div class="flex items-center gap-3">

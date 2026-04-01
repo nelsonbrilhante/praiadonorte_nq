@@ -1,15 +1,11 @@
-<x-layouts.app>
+<x-layouts.app
+    :seo_title="$product['name'] . ' | ' . __('messages.shop.title') . ' | ' . __('messages.metadata.title')"
+    :seo_description="Str::limit(strip_tags($product['short_description']), 160)"
+    :og_image="($product['featured_image']['src'] ?? null)"
+>
     @php
         $lojaRoute = $locale === 'pt' ? '/loja' : '/shop';
     @endphp
-
-    @push('head')
-        <title>{{ $product['name'] }} | {{ __('messages.shop.title') }} | {{ __('messages.metadata.title') }}</title>
-        <meta name="description" content="{{ strip_tags($product['short_description']) }}">
-        @if($product['featured_image'])
-            <meta property="og:image" content="{{ $product['featured_image']['src'] }}">
-        @endif
-    @endpush
 
     {{-- Breadcrumbs --}}
     <x-ui.breadcrumbs :items="[

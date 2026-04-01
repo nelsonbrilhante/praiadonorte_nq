@@ -49,10 +49,17 @@
     ];
 
     $title = $getLocalized($evento->title, $locale);
+    $excerpt = $getLocalized($evento->excerpt ?? [], $locale);
+    $description = $getLocalized($evento->description ?? [], $locale);
     $isPast = $evento->start_date->isPast();
 @endphp
 
-<x-layouts.app>
+<x-layouts.app
+    :seo_title="$title . ' | ' . __('messages.metadata.title')"
+    :seo_description="$excerpt ?: Str::limit(strip_tags($description), 160)"
+    :og_image="$evento->image ? asset('storage/' . $evento->image) : null"
+    og_type="article"
+>
     {{-- Full-bleed Hero --}}
     <section class="relative h-[50vh] min-h-[400px] overflow-hidden">
         @if($evento->image)

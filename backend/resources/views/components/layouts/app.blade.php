@@ -1,3 +1,4 @@
+@props(['seo_title' => null, 'seo_description' => null, 'og_image' => null, 'og_type' => null])
 <!DOCTYPE html>
 <html lang="{{ LaravelLocalization::getCurrentLocale() }}">
 <head>
