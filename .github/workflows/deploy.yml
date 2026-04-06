@@ -58,3 +58,19 @@ jobs:
             --header "Host: coolify.nelsonbrilhante.com" \
             --insecure \
             --fail --silent --show-error
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Wait for deploy and connect Laravel to Umami network
+        run: |
+          echo "Waiting 90s for Coolify deploy to complete..."
+          sleep 90
+          ssh -i ~/.ssh/deploy_key root@${{ secrets.VPS_HOST }} \
+            'LARAVEL_CONTAINER=$(docker ps --format "{{.Names}}" | grep "o4ck0w8woo4s88gg4gkg04gs") && \
+             docker network connect sgswk40kg008ks4cccgos0w0 "$LARAVEL_CONTAINER" 2>/dev/null || true && \
+             echo "Connected $LARAVEL_CONTAINER to Umami network"'

@@ -37,6 +37,7 @@ return [
 
     'umami' => [
         'url' => env('UMAMI_URL', 'http://localhost:3000'),
+        'internal_url' => env('UMAMI_INTERNAL_URL', env('UMAMI_URL', 'http://localhost:3000')),
         'website_id' => env('UMAMI_WEBSITE_ID'),
         'store_website_id' => env('UMAMI_STORE_WEBSITE_ID'),
         'api_key' => env('UMAMI_API_KEY'),

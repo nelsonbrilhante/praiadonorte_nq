@@ -14,7 +14,7 @@ class UmamiService
 
     public function __construct()
     {
-        $this->baseUrl = rtrim(config('services.umami.url', ''), '/');
+        $this->baseUrl = rtrim(config('services.umami.internal_url', ''), '/');
         $this->apiKey = config('services.umami.api_key');
         $this->cacheTtl = 300; // 5 minutes
     }
