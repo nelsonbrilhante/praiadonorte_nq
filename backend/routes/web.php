@@ -194,7 +194,8 @@ Route::group([
         })->name('ale');
 
         Route::get('/contraordenacoes', function () {
-            return view('pages.nazare-qualifica.contraordenacoes');
+            $documents = \App\Models\ContraOrdenacaoDocument::orderBy('order')->get();
+            return view('pages.nazare-qualifica.contraordenacoes', compact('documents'));
         })->name('contraordenacoes');
 
         Route::get('/contraordenacoes/identificacao-de-condutor', function () {
