@@ -217,11 +217,11 @@ printenv | grep -E '^(APP_|DB_|LOG_|CACHE_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|MAI
 echo "==> Resolving WooCommerce store via Traefik (hairpin NAT fix)..."
 TRAEFIK_IP=$(getent hosts coolify-proxy 2>/dev/null | awk '{print $1}' || true)
 if [ -n "$TRAEFIK_IP" ]; then
-    echo "$TRAEFIK_IP store.praiadonortenazare.pt store-nq.nelsonbrilhante.com" >> /etc/hosts
+    echo "$TRAEFIK_IP store.praiadonortenazare.pt store-nq.nelsonbrilhante.com analytics.nazarequalifica.pt" >> /etc/hosts
     echo "    Added store domains -> $TRAEFIK_IP (Traefik)"
 else
     echo "    WARNING: Could not resolve coolify-proxy, trying static fallback"
-    echo "10.0.1.6 store.praiadonortenazare.pt store-nq.nelsonbrilhante.com" >> /etc/hosts
+    echo "10.0.1.6 store.praiadonortenazare.pt store-nq.nelsonbrilhante.com analytics.nazarequalifica.pt" >> /etc/hosts
 fi
 
 echo "==> Fixing storage permissions after volume mount..."
