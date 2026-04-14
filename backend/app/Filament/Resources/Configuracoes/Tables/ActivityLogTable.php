@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Configuracoes\Tables;
 
+use App\Models\User;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
@@ -26,7 +27,6 @@ class ActivityLogTable
                     ->limit(60),
                 TextColumn::make('causer.name')
                     ->label('Utilizador')
-                    ->searchable()
                     ->default('—')
                     ->placeholder('Sistema'),
                 TextColumn::make('subject_type')
@@ -58,7 +58,16 @@ class ActivityLogTable
                     ]),
                 SelectFilter::make('causer_id')
                     ->label('Utilizador')
-                    ->relationship('causer', 'name'),
+                    ->options(fn (): array => User::orderBy('name')->pluck('name', 'id')->toArray())
+                    ->query(function (Builder $query, array $data): Builder {
+                        if (blank($data['value'] ?? null)) {
+                            return $query;
+                        }
+
+                        return $query
+                            ->where('causer_type', User::class)
+                            ->where('causer_id', $data['value']);
+                    }),
                 SelectFilter::make('subject_type')
                     ->label('Tipo de Conteúdo')
                     ->options([
