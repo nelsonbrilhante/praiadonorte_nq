@@ -4,10 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
 
 class SiteSetting extends Model
 {
+    use LogsActivity;
+
     protected $fillable = ['key', 'value'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->setDescriptionForEvent(fn (string $eventName) => match ($eventName) {
+                'created' => 'Definição criada',
+                'updated' => 'Definição atualizada',
+                'deleted' => 'Definição eliminada',
+                default => "Definição {$eventName}",
+            });
+    }
 
     public static function get(string $key, mixed $default = null): mixed
     {

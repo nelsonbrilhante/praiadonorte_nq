@@ -238,6 +238,10 @@ php /var/www/html/artisan migrate --force --no-interaction 2>&1 || {
 echo "==> Ensuring maintenance mode is active..."
 php /var/www/html/artisan tinker --execute="\\App\\Models\\SiteSetting::firstOrCreate(['key' => 'maintenance_mode'], ['value' => '1']);" 2>&1 || true
 
+echo "==> Logging deploy marker to activity log..."
+GIT_SHA_VAL="${GIT_SHA:-unknown}"
+php /var/www/html/artisan tinker --execute="activity('deploy')->event('deploy')->withProperties(['git_sha' => '${GIT_SHA_VAL}', 'deployed_at' => now()->toIso8601String()])->log('Deploy realizado');" 2>&1 || true
+
 echo "==> Creating storage symlink..."
 php /var/www/html/artisan storage:link --force 2>&1 || true
 

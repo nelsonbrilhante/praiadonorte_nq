@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('stats:send-weekly')
             ->weeklyOn(1, '12:00') // Monday at 12:00 (noon)
             ->when(fn () => SiteSetting::get('stats_weekly_enabled', '0') === '1');
+
+        // Prune old activity log entries (respects config/activitylog.php clean_after_days)
+        $schedule->command('activitylog:clean')->daily();
     })
     ->withMiddleware(function (Middleware $middleware): void {
         // Trust all proxies (container behind Cloudflare + Traefik)

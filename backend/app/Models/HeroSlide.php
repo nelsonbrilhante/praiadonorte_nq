@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
 
 class HeroSlide extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'pagina_id',
         'order',
@@ -38,5 +42,19 @@ class HeroSlide extends Model
     public function pagina(): BelongsTo
     {
         return $this->belongsTo(Pagina::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->setDescriptionForEvent(fn (string $eventName) => match ($eventName) {
+                'created' => 'Hero Slide criado',
+                'updated' => 'Hero Slide atualizado',
+                'deleted' => 'Hero Slide eliminado',
+                default => "Hero Slide {$eventName}",
+            });
     }
 }

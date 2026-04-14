@@ -9,11 +9,13 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Support\LogOptions;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, LogsActivity, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -89,5 +91,19 @@ class User extends Authenticatable implements FilamentUser
         }
 
         return $this->entities ?? [];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'email', 'role', 'entities'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->setDescriptionForEvent(fn (string $eventName) => match ($eventName) {
+                'created' => 'Utilizador criado',
+                'updated' => 'Utilizador atualizado',
+                'deleted' => 'Utilizador eliminado',
+                default => "Utilizador {$eventName}",
+            });
     }
 }
