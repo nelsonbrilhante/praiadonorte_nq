@@ -165,6 +165,7 @@ stderr_logfile_maxbytes=0
 
 [program:queue-worker]
 command=php /var/www/html/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+user=www-data
 autostart=true
 autorestart=true
 stdout_logfile=/dev/stdout
@@ -174,6 +175,7 @@ stderr_logfile_maxbytes=0
 
 [program:scheduler]
 command=/bin/sh -c "while true; do php /var/www/html/artisan schedule:run --verbose --no-interaction; sleep 60; done"
+user=www-data
 autostart=true
 autorestart=true
 stdout_logfile=/dev/stdout
@@ -197,7 +199,8 @@ COPY --from=node-builder /build/public/build ./public/build
 # Note: livewire:publish --assets runs in entrypoint (needs .env/APP_KEY)
 
 # Set permissions for storage and cache
-RUN mkdir -p storage/framework/{sessions,views,cache} \
+# Note: /bin/sh in Alpine (ash) does NOT expand brace patterns — paths must be explicit
+RUN mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data \
     && mkdir -p storage/logs \
     && mkdir -p bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
