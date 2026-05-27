@@ -178,6 +178,7 @@
         @endphp
 
         <div
+            @if($index > 0) x-cloak @endif
             x-show="currentSlide === {{ $index }}"
             x-transition:enter="transition-opacity ease-out duration-1000"
             x-transition:enter-start="opacity-0"
