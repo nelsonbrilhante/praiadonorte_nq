@@ -260,7 +260,7 @@ function searchSpotlight() {
                 return result.excerpt;
             }
             if (result.location) return result.location;
-            if (result.nationality) return result.nationality;
+            if (result.aka) return result.aka;
             if (result.entity) return result.entity;
             return '';
         }

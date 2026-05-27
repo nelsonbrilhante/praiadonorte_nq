@@ -66,7 +66,7 @@ class SearchSpotlight extends Component
 
         // Search Surfers
         $surfers = Surfer::where('name', 'like', "%{$this->query}%")
-            ->orWhere('nationality', 'like', "%{$this->query}%")
+            ->orWhere('aka', 'like', "%{$this->query}%")
             ->orderBy('name')
             ->limit(3)
             ->get();
@@ -76,7 +76,7 @@ class SearchSpotlight extends Component
                 'type' => 'surfer',
                 'icon' => 'user',
                 'title' => $surfer->name,
-                'description' => $surfer->nationality,
+                'description' => $surfer->aka,
                 'url' => LaravelLocalization::localizeURL('/praia-norte/surfer-wall/' . $surfer->slug),
             ];
         }

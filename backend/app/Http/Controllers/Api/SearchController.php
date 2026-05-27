@@ -75,12 +75,12 @@ class SearchController extends Controller
         $surfers = Surfer::where(function ($q) use ($query) {
             $q->where('name', 'LIKE', "%{$query}%")
                 ->orWhere('bio', 'LIKE', "%{$query}%")
-                ->orWhere('nationality', 'LIKE', "%{$query}%");
+                ->orWhere('aka', 'LIKE', "%{$query}%");
         })
             ->orderBy('featured', 'desc')
             ->orderBy('name', 'asc')
             ->limit($limit)
-            ->get(['id', 'slug', 'name', 'nationality', 'featured']);
+            ->get(['id', 'slug', 'name', 'aka', 'featured']);
 
         foreach ($surfers as $surfer) {
             $results[] = [
@@ -88,7 +88,7 @@ class SearchController extends Controller
                 'id' => $surfer->id,
                 'slug' => $surfer->slug,
                 'title' => ['pt' => $surfer->name, 'en' => $surfer->name],
-                'nationality' => $surfer->nationality,
+                'aka' => $surfer->aka,
                 'featured' => $surfer->featured,
                 'url' => "/praia-norte/surfer-wall/{$surfer->slug}",
             ];
