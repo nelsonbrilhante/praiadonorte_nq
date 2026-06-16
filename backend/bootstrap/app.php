@@ -7,6 +7,11 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
+    // Laravel 12 enables event auto-discovery by default. Auth/model event listeners
+    // are registered explicitly in AppServiceProvider::boot(), so discovery would
+    // register them a second time and duplicate every audit-log entry. Disable it so
+    // the explicit registration is the single source of truth.
+    ->withEvents(discover: false)
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
@@ -18,8 +23,10 @@ return Application::configure(basePath: dirname(__DIR__))
             ->weeklyOn(1, '12:00') // Monday at 12:00 (noon)
             ->when(fn () => SiteSetting::get('stats_weekly_enabled', '0') === '1');
 
-        // Prune old activity log entries (respects config/activitylog.php clean_after_days)
-        $schedule->command('activitylog:clean')->daily();
+        // Prune old activity log entries (respects config/activitylog.php clean_after_days).
+        // --force is required because the command uses ConfirmableTrait and would otherwise
+        // abort with "APPLICATION IN PRODUCTION" (exit 1) on every non-interactive run.
+        $schedule->command('activitylog:clean --force')->daily();
     })
     ->withMiddleware(function (Middleware $middleware): void {
         // Trust all proxies (container behind Cloudflare + Traefik)

@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\NoticiaController;
 use App\Http\Controllers\Api\PaginaController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SurferController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware('throttle:60,1')->group(function () {
 
     // Notícias (News)
     Route::get('/noticias', [NoticiaController::class, 'index']);
@@ -42,11 +41,4 @@ Route::prefix('v1')->group(function () {
     // Search
     Route::get('/search', [SearchController::class, 'search']);
 
-});
-
-// Authenticated routes (for future use)
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
 });

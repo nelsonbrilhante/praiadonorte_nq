@@ -97,6 +97,13 @@ server {
     add_header X-XSS-Protection "0" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+    # HSTS: force HTTPS for 1 year (the app is HTTPS-only behind Cloudflare/Traefik).
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    # CSP in report-only first — Filament/Livewire/Alpine rely on inline + eval, so
+    # enforcing blindly would break the admin panel. Review browser violation reports,
+    # then tighten (remove 'unsafe-inline'/'unsafe-eval' via nonces) and promote to
+    # the enforcing Content-Security-Policy header.
+    add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" always;
 
     # Vite-built assets (hash-versioned, cache forever)
     location /build/ {

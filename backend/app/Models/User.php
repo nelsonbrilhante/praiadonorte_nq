@@ -9,8 +9,8 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -57,7 +57,9 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        // Only users with a recognised role may reach the admin panel.
+        // Per-resource canAccess() still applies on top of this gate.
+        return in_array($this->role, [Role::Admin, Role::Editor, Role::EntityEditor], true);
     }
 
     public function isAdmin(): bool

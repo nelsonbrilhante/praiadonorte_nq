@@ -10,7 +10,7 @@ class SurferController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Surfer::with('surfboards');
+        $query = Surfer::query();
 
         if ($request->has('featured')) {
             $query->where('featured', true);
@@ -23,8 +23,7 @@ class SurferController extends Controller
 
     public function show(string $slug)
     {
-        $surfer = Surfer::with('surfboards')
-            ->where('slug', $slug)
+        $surfer = Surfer::where('slug', $slug)
             ->firstOrFail();
 
         return response()->json($surfer);
@@ -32,8 +31,7 @@ class SurferController extends Controller
 
     public function featured()
     {
-        $surfers = Surfer::with('surfboards')
-            ->where('featured', true)
+        $surfers = Surfer::where('featured', true)
             ->orderBy('order', 'asc')
             ->get();
 
