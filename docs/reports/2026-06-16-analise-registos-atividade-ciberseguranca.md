@@ -9,11 +9,13 @@
 
 ## Sumário executivo
 
+> **Estado pós-execução (2026-06-16):** fixes A1/B1/B2 + segurança C5/C8(parcial)/C9/C3/C7/C2 commitados (`122778b`), **deployados** em produção e **verificados** (1 listener por evento de auth; `activitylog:clean --force` corre com sucesso; HSTS presente; `/api/v1/surfers` devolve 200). Os **53 duplicados** existentes foram **removidos** (135 → 82, 0 grupos duplicados; backup em `/root/db-backups/activity_log-precleanup-20260616-124829.sql`). Recomendações **ainda por fazer**: C1 (trustProxies — arquitetural, requer escalação), C6 (tamper-resistance da BD), C4 (cookies de sessão), C10/C11, e promover a CSP de report-only para enforcing.
+
 | # | Achado | Severidade | Estado |
 |---|--------|------------|--------|
-| A1 | **Duplicação** de TODOS os registos de auth (e alguns de modelo) — ~40% do audit log são duplicados | Alta | ✅ **Corrigido** (código); falta deploy + limpeza |
-| B1 | Comando agendado `activitylog:clean` **falha todos os dias** (retention nunca corre) | Alta | ✅ **Corrigido** (código); falta deploy |
-| B2 | `Auth guard [sanctum] is not defined` — rota morta `/api/v1/user` da era Next.js | Média | ✅ **Corrigido** (código); falta deploy |
+| A1 | **Duplicação** de TODOS os registos de auth (e alguns de modelo) — ~40% do audit log são duplicados | Alta | ✅ **Corrigido + deployado + duplicados limpos** |
+| B1 | Comando agendado `activitylog:clean` **falha todos os dias** (retention nunca corre) | Alta | ✅ **Corrigido + deployado** |
+| B2 | `Auth guard [sanctum] is not defined` — rota morta `/api/v1/user` da era Next.js | Média | ✅ **Corrigido + deployado** |
 | B3 | 168× "Livewire encountered corrupt data" — ruído pós-deploy ("página expirou") | Média | ⚠️ A monitorizar |
 | B4 | Forecast API (open-meteo) — timeouts/DNS intermitentes (14 erros) | Baixa | ℹ️ Tratado com cache/try-catch |
 | C5 | **`canAccessPanel()` devolve `true` para qualquer utilizador** — painel `/admin` sem gate por role | Alta | 📋 Recomendação |
