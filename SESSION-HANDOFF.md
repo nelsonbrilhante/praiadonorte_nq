@@ -7,108 +7,158 @@
 
 ## Última Sessão
 
-- **Data**: 2026-03-18 (sessão 6)
-- **Resumo**: Backup automático pré-deploy no CI/CD + relatório estatístico 7-16 Mar já existente
-- **Branch**: `main`
+- **Data**: 2026-06-17 (sessão 14)
+- **Resumo**: (1) **Avaliação de migração** do `nazarequalifica.pt` para o alojamento **PTisp cPanel partilhado** (`vm01.cm-nazare.pt`, o mesmo do projeto `20260616_portal_fornecedor`) + **comunicação defensiva à administração**. Conclusão: não é "mudar de servidor", é **re-plataformar** (Docker→cPanel; Umami inviável; loja WooCommerce é projeto à parte; downgrade de recursos/controlo). (2) **Fix responsivo do hero (mobile)** + espaçamento "Últimas Notícias" — **deployed e verificado em produção, sem perda de dados**.
+- **Branch**: `main` — `9b45c7e` deployed e verificado. (Nota: o commit local antigo `454ec3d` continua por integrar conforme histórico.)
+
+### O que foi feito:
+1. **Fix CSS responsivo (commit `9b45c7e`, deployed)** — no mobile o título do hero sobrepunha o header fixo. `hero-slider.blade.php`: hero `h-[70dvh]`→`h-[85dvh]`, título `text-4xl`→`text-2xl`+`line-clamp-3`, excerto `text-base`+`line-clamp-2` (desktop intacto via `md:`). `home.blade.php`: secção notícias `py-10 md:py-16`, título `mb-6 md:mb-10`. **Verificado a 375px em produção; backup automático da BD correu antes do deploy; migrate no-op; seeds saltados por sentinela.**
+2. **Avaliação migração PTisp + comunicação** (documentos **locais, NÃO commitados** — sensíveis): `docs/reports/2026-06-17-avaliacao-migracao-ptisp-pn-nq.md` e `docs/reports/2026-06-17-comunicacao-administracao-migracao.md`.
+
+### Migração PTisp — estado e pendentes:
+- Destino **não tem SSH ativo** (ticket PTisp aberto 2026-06-16), sem Docker, reseller (não root), 2 GB/1 core partilhado. **Migração NÃO deve iniciar** sem: SSH ativo, decisão sobre Umami (sem destino no cPanel) e plano para a loja WooCommerce.
+- **Track record validado** para a comunicação: projeto desde 2025-12-03 (~6 meses), produção desde 2026-03-02 (~3,5 meses), **zero incidentes**.
+- Comunicação dirigida a **Conselho de Gerência NQ (Álvaro Festas) + Executivo CMN** — **por rever/enviar pelo user** (eu não enviei nada). Confirmar nomes/cargos antes de formalizar.
+
+### Documentos criados (sessão 14):
+- `docs/reports/2026-06-17-avaliacao-migracao-ptisp-pn-nq.md` (local, não commitado)
+- `docs/reports/2026-06-17-comunicacao-administracao-migracao.md` (local, não commitado)
+
+---
+
+## Sessão 13 (2026-06-16) — resumo arquivado
+
+- **Data**: 2026-06-16 (sessão 13)
+- **Resumo**: Auditoria dos registos de atividade (audit log Spatie + logs da aplicação) em produção + análise de cibersegurança. **Resolvida a duplicação do audit log (bug #18)**: causa raiz confirmada por REPRODUÇÃO — o Laravel 12 ativa event auto-discovery por omissão, que registava o `LogAuthEvents` além do registo explícito no `AppServiceProvider` → cada evento de auth gravado 2× (~40% do audit log). **Resolvido o bug #19** (`activitylog:clean` falhava diariamente por faltar `--force`). + 4 quick-wins de segurança + limpeza de 53 duplicados em produção. **1 deploy verificado (`122778b`); backups feitos; sem perda de dados.**
+- **Branch**: `main` — `122778b` deployed e verificado. (1 commit local não-pushed: `454ec3d`, só doc de estado do relatório.)
+
+### O que foi feito (resolvido + verificado em produção):
+1. **Duplicação do audit log (commit `122778b`)** — `->withEvents(discover: false)` em `bootstrap/app.php` desativa a auto-discovery (registo explícito = única fonte de verdade). Verificado: 1 listener por evento de auth. **53 duplicados removidos** (135→82, 0 grupos). Resolve bug #18.
+2. **`activitylog:clean --force`** — faltava `--force` (ConfirmableTrait exige-o em produção) → falhava todas as noites. Verificado: corre com sucesso. Resolve bug #19.
+3. **Rota morta `/api/v1/user`** (`auth:sanctum` sem sanctum instalado) removida; **`/api/v1/surfers*`** já não dá 500 (relação `surfboards` removida).
+4. **Segurança (deployed):** C5 gate do `/admin` por role; C3 `throttle:60,1` na API pública; C7 máscara de email no audit (GDPR); C2 HSTS + CSP report-only.
+
+### Segurança — diagnóstico (sem indício de compromisso):
+- Nenhuma conta desconhecida entrou; integridade do audit 100% (IP+user-agent sempre presentes). Tentativas falhadas externas = bots a sondar `/admin`, nenhuma visou o email real do admin. Único IP com falhas+sucessos = o próprio admin via VPN.
+
+### Estado pendente (backlog registado no Notion):
+- **C1 `trustProxies('*')`** — IPs do audit/rate-limit falsificáveis; **arquitetural, escalar (Regra 2)**. + C4 `SESSION_SECURE_COOKIE`, C6 tamper-resistance do audit a nível de BD, C10/C11, promover CSP report-only→enforcing. Ver tarefa Notion "Follow-up auditoria" + `docs/reports/2026-06-16-analise-registos-atividade-ciberseguranca.md`.
+- Env Coolify ainda por alinhar: `CACHE_STORE`/`SESSION_DRIVER=database`, `APP_URL`.
+- Push do commit local `454ec3d` no próximo deploy.
+
+### Notion (Relatórios COO, PRJ-8):
+- Sessões 10/11/12/13 registadas (Done) + tarefa **"Follow-up auditoria — pendentes de segurança + config"** (Not started).
+
+### Documentos criados:
+- Relatório: `docs/reports/2026-06-16-analise-registos-atividade-ciberseguranca.md` (committed em `122778b`).
+
+---
+
+## Sessão 12 (2026-05-27) — resumo arquivado
+
+- **Data**: 2026-05-27 (sessão 12)
+- **Resumo**: Resolvido o 500 intermitente na autenticação + **restaurada a observabilidade de produção**. Causa raiz: logging partido — o scheduler corria como root e criava os logs diários root-owned, que o php-fpm (www-data) não conseguia escrever, mascarando erros (500) e perdendo todos os traces. Completado o fix estrutural pendente da sessão 11 (Dockerfile committed + deployed) + corrigidos 2 bugs visíveis ao utilizador (FOUC do hero slider; 500 na pesquisa). **3 deploys verificados, zero perda de dados.**
+- **Branch**: `main` — tudo committed e deployed. Container de produção: `0c7a6f8`.
+
+### O que foi feito (resolvido + verificado em produção):
+1. **Fix estrutural do logging (commit `10c0122`)** — scheduler + queue-worker passam a `user=www-data` no supervisor + fix do brace-expansion do ash. **Completou o pendente da sessão 11.** Verificado: scheduler corre como www-data; www-data escreve logs (antes `Permission denied`); traces reais capturados.
+2. **FOUC do hero slider (commit `76d9c38`)** — `x-cloak` nos slides inativos; slide 0 server-rendered. Sem texto sobreposto no primeiro paint.
+3. **Pesquisa 500 (commit `0c7a6f8`)** — `nationality` (coluna removida) → `aka` em SearchController + SearchSpotlight + frontend. **Resolve o bug conhecido #16.** Verificado: queries que davam 500 devolvem 200.
+4. **Investigação exaustiva** do 500 intermitente de login: não reproduzível (35+ tentativas), em clusters que recuperam sozinhos; traces antigos perdidos pelo logging partido. Observabilidade agora restaurada para o capturar na próxima ocorrência.
+
+### Estado pendente:
+- **500 intermitente de login**: não recorreu; observabilidade pronta para capturar o trace completo se voltar.
+- **2 bugs documentados como tarefa para 1-5 jun**: eventos de auth duplicados (dupla-registo do listener via `event:cache` + auto-discovery); `activitylog:clean` falha diária. Ver `docs/reports/2026-06-01-tarefa-bugs-pendentes-pn-nq.md`.
+- **Coolify env (ainda por fazer)**: `CACHE_STORE`/`SESSION_DRIVER` continuam `file` (CLAUDE.md diz `database`); `APP_URL` (detetado favicon mixed-content http).
+
+### Documentos criados (locais, não commitados — para passar ao ATLAS):
+- SIADAP3: `docs/reports/2026-05-27-siadap-intervencao-pn-nq.md` (objetivo provável O3)
+- Tarefa próxima semana: `docs/reports/2026-06-01-tarefa-bugs-pendentes-pn-nq.md`
+- Notion incidente: https://www.notion.so/36d576324ea68110a83cf12841d412b6
+
+---
+
+## Sessão 11 (2026-04-20) — resumo arquivado
+
+- **Data**: 2026-04-20 (sessão 11)
+- **Resumo**: Investigação + fix imediato do 500 em `/admin/site-settings` (permissões de storage root-owned) + envio dos relatórios semanais pedidos. Fix estrutural (Dockerfile) em curso, **aguarda validação + commit na próxima sessão**.
+- **Branch**: `main` (Dockerfile com alterações locais, não commitado)
+
+### Estado pendente (IMPORTANTE ler primeiro):
+- `Dockerfile` **alterado localmente mas não commitado** — não fazer push sem validação:
+  - `[program:queue-worker]` e `[program:scheduler]` passaram a ter `user=www-data`
+  - `mkdir storage/framework/{sessions,views,cache}` substituído por paths explícitos (fix bug latente: `ash` não expande chavetas)
+- Container em produção **remendado em runtime** via `chown -R www-data:www-data storage bootstrap/cache` — resolveu até Coolify fazer redeploy, em que **o remendo desaparece** e volta ao problema se o Dockerfile não for entretanto deployed.
 
 ### O que foi feito:
 
-1. **Script de backup pré-deploy** (`scripts/pre-deploy-backup.sh`)
-   - Corre no VPS antes de cada deploy via GitHub Actions
-   - Faz dump MySQL (Laravel) + MariaDB (WordPress) + uploads WordPress + logs Nginx
-   - Sem credenciais hardcoded — lê variáveis de ambiente dos containers Docker
-   - Comprime tudo num `.tar.gz` com timestamp
-   - Rotação automática: mantém últimos 10 backups
-   - Symlink `latest-backup.tar.gz` para fácil download pelo CI/CD
+1. **Envios manuais do relatório semanal 13-19/04**
+   - Teste para `nelsonbrilhante@gmail.com` (mesmo período do PDF Outlook já recebido)
+   - Individual para `alvaro.festas@nazarequalifica.pt`
+   - Individual para `carlos.filipe@nazarequalifica.pt`
+   - Comando usado: `docker exec o4ck0w8woo4s88gg4gkg04gs-112244361405 php artisan stats:send-weekly --email=<address>` (sem `--test` → usa janela Mon-Sun correcta)
 
-2. **CI/CD actualizado** (`.github/workflows/deploy.yml`)
-   - Novo job `backup` corre antes do `deploy` (dependency: `needs: backup`)
-   - Se o backup falhar, o deploy **não acontece**
-   - Backup guardado como GitHub artifact (retenção 90 dias)
-   - Requer novos GitHub Secrets: `VPS_SSH_KEY` e `VPS_HOST`
+2. **Investigação do 500 em `/admin/site-settings`** (era na carga da página, não no save)
+   - Root cause capturada: `file_put_contents(/var/www/html/storage/framework/cache/data/7b/c7/...): Permission denied`
+   - Chain: `SiteSettings::mount()` → `SiteSetting::get()` linha 32 → `Cache::remember()` → `FileStore::put()` em dir root-owned
+   - Causa subjacente: supervisor no Dockerfile inicia `scheduler` e `queue-worker` sem `user=www-data`, logo os processos corriam como root e criavam dirs de cache/log como root desde 2026-04-15 (primeira execução diária do `activitylog:clean` adicionado no commit `8fa1802` de 04-14)
 
-3. **Relatório estatístico 7-16 Mar** (já existia de sessão anterior)
-   - `docs/reports/nginx-access-report-2026-03-07-to-16.md` — Markdown
-   - `docs/reports/nq-access-report-2026-03-07-to-16.pdf` — PDF
-   - `docs/reports/relatorio_acessos_nazare_qualifica_07-16-mar.docx` — DOCX
+3. **Fix imediato aplicado em produção (runtime apenas, não persiste)**
+   - `chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache` no container
+   - `chmod -R 775` nos mesmos
+   - Eliminada a pasta literal `{sessions,views,cache}` que o `ash` tinha criado no container
+   - Validado: `/admin/site-settings` carrega; save com 4 emails persistido em produção às 13:42:16
 
-4. **SSH key para GitHub Actions** — configurada e testada
-   - Chave Ed25519 gerada, adicionada ao VPS `authorized_keys`, e guardada como GitHub Secret
-   - GitHub Secrets `VPS_SSH_KEY` e `VPS_HOST` configurados
-   - Backup testado manualmente no VPS: Laravel DB (780K) + WordPress DB (4.1M) + uploads (57M) + Nginx logs (136K linhas) = arquivo 56M
+4. **Destinatários gravados em produção (`site_settings.stats_weekly_recipients`)**:
+   ```
+   nelson.brilhante@cm-nazare.pt, alvaro.festas@nazarequalifica.pt,
+   joaquim.paulo@cm-nazare.pt, carlos.filipe@nazarequalifica.pt
+   ```
+   Próxima segunda-feira (27/04 12:00 UTC) o scheduler envia automaticamente para os 4. `nelsonbrilhante@gmail.com` NÃO está na lista (continua manual).
 
-### Sessão anterior (2026-03-11, sessão 5):
+5. **Desvios da config de produção vs CLAUDE.md detectados (não corrigidos)**:
+   - `CACHE_STORE=file` — CLAUDE.md diz `database`
+   - `SESSION_DRIVER=file` — CLAUDE.md diz `database`
+   - `APP_URL=https://nq.nelsonbrilhante.com` — devia ser `https://nazarequalifica.pt`
 
-### O que foi feito:
+6. **Permissões de logs já corrigidas**
+   - Ficheiros `laravel-2026-04-15.log` a `laravel-2026-04-20.log` passaram de `root:root 644` para `www-data:www-data 775`
 
-1. **Relatório de acessos completo** (`docs/reports/nginx-access-report-2026-03-07-to-10.md`)
-   - Recolhidos logs de ambos os containers (Nginx Laravel + Apache WordPress)
-   - Relatório reescrito para não-técnicos com dados de ambas as plataformas
-   - ~1.300 visitantes únicos, 2.418 page views (7-10 Mar)
+7. **Snapshot da VPS** feito pelo utilizador antes do chown (segurança).
 
-2. **Plano desenhado e aprovado** (`docs/plans/plano-pdf-umami-relatorio-semanal.md`)
-   - **Parte 1**: PDF do regulamento do estacionamento editável pelo Filament (sem perda de dados)
-   - **Parte 2**: Umami Analytics (self-hosted) + email semanal automatizado (Resend + destinatários configuráveis no backoffice)
-   - **Parte 3**: Assinatura "Crafted with ❤️ by Nelson Brilhante" no footer
-   - Estado: **pendente implementação**
+### Ficheiros modificados (não commitados):
+- `Dockerfile` — supervisor `user=www-data` + mkdir sem chavetas
 
-### Sessão anterior (2026-03-04, sessão 4):
+### Próximas tarefas (para amanhã):
 
-### O que foi feito:
+1. [ ] Validar manualmente todas as entradas do menu admin em produção (lista no plano):
+   Geral/Utilizadores, Geral/HeroSlides, Noticias, Eventos, Surfers, Paginas PN/Carsurf/NQ,
+   Documents, DocumentCategory, CorporateBody, ContraOrdenacao, ContactMessages,
+   LegalCompliance, ActivityLog, SiteSettings
+2. [ ] Commit + push do `Dockerfile` (trigger Coolify redeploy)
+3. [ ] No Coolify UI: mudar env vars `CACHE_STORE=database` e `SESSION_DRIVER=database` (+ considerar alinhar `APP_URL=https://nazarequalifica.pt`) — **requer clear cache após**
+4. [ ] Após redeploy: confirmar `docker exec ... ps aux | grep scheduler` mostra processo como `www-data`, não root
+5. [ ] Dia seguinte ao deploy: verificar após 00:00 UTC (activitylog:clean) e após Mon 12:00 UTC (stats:send-weekly) que dirs/ficheiros novos ficam com owner correcto
+6. [ ] (Opcional) Remover test probe se ainda existir: `SiteSetting` com key iniciada por `_____test_probe`
 
-1. **Shipping Rates E2E Verificado (Playwright)**
-   - Todos os produtos têm pesos atribuídos (0.3–0.5 kg)
-   - T-Shirt no carrinho → €6.80 shipping ✅
-   - Local Pickup "Recolha no Forte de S. Miguel Arcanjo" (grátis) disponível ✅
-   - Rate table funciona correctamente conforme plugin `pn-table-rate-shipping`
+### Plano detalhado (persistido):
+- `/Users/zumuha/.claude/plans/quiet-juggling-platypus.md`
 
-2. **SMTP Email Configurado**
-   - Conta `store@nazarequalifica.pt` criada no WHM (cPanel `nq`)
-   - Plugin `wp-mail-smtp` configurado no WP Admin via Playwright
-   - **SMTP host discovery**: `mail.nazarequalifica.pt` resolve para VPS (sem mail server) → testado `whm.cm-nazare.pt` (SSL cert mismatch) → **`vm01.cm-nazare.pt:465/SSL` funciona**
-   - Config final: `vm01.cm-nazare.pt`, porta 465, SSL, auth `store@nazarequalifica.pt`
-   - Test email enviado com sucesso para `zumuha@gmail.com` ✅
+### Infra:
+- **VPS snapshot** feito pelo utilizador antes da intervenção (22h, 2026-04-20)
+- Backup SQLite local: `backend/storage/app/backups/backup-20260420-142651.sqlite`
 
-3. **Entrypoint.sh actualizado (Phase 6.7)**
-   - Adicionado bloco SMTP config que corre em todos os deploys (não gated por IS_FIRST_RUN)
-   - Defaults: `vm01.cm-nazare.pt:465/ssl`
-   - Usa env vars: `SMTP_HOST`, `SMTP_PORT`, `SMTP_ENCRYPTION`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM`, `SMTP_FROM_NAME`
+---
 
-4. **WooCommerce Email Templates Verificados**
-   - "From" address actualizado de `admin@praiadonorte.pt` → `store@nazarequalifica.pt`
-   - "From" name: "Praia do Norte – Loja" ✅
-   - Recipient "New order": `nelsonbrilhante@gmail.com` ✅
-   - Recipients "Cancelled order" e "Failed order": actualizados de `admin@praiadonorte.pt` → `nelsonbrilhante@gmail.com`
-   - Todos os 14 email templates activos e configurados correctamente
+## Sessão 10 (2026-04-14) — resumo arquivado
 
-5. **Ficheiros modificados**
-   - `wordpress/coolify/entrypoint.sh` — Phase 6.7 SMTP config (defaults corrigidos para vm01.cm-nazare.pt:465/ssl)
-   - `.credentials.md` — Secção SMTP adicionada com credenciais e env vars correctos
+Sistema de Audit Log (spatie/laravel-activitylog v5) implementado + 3 bugs fixed
+(morphTo filter, OOM build, diff duplicado). Commits: `8fa1802`, `95e4ead`,
+`eb01b57`, `1a9ee01`. VPS: 4 GB swap permanente adicionado.
 
-### Acção pendente (manual):
-- **Coolify env vars**: Adicionar ao serviço WooCommerce no Coolify:
-  ```
-  SMTP_HOST=vm01.cm-nazare.pt
-  SMTP_PORT=465
-  SMTP_ENCRYPTION=ssl
-  SMTP_USER=store@nazarequalifica.pt
-  SMTP_PASSWORD=StoreNQ-2026!Smtp
-  SMTP_FROM=store@nazarequalifica.pt
-  SMTP_FROM_NAME=Praia do Norte - Loja
-  ```
-- **Redeploy WooCommerce** após adicionar env vars para que o entrypoint.sh aplique a config
-
-### Sessão anterior (2026-03-04, sessão 3):
-
-- Teste E2E Easypay WooCommerce — integração bloqueada por "Connection not validated by easypay"
-- Requer contacto com suporte Easypay
-
-### Sessão anterior (2026-03-04, sessão 2):
-
-- Migração de domínios — 4 novos domínios configurados e verificados
-- Store domain fix no Coolify, WP siteurl/home actualizado
-- Variáveis de ambiente Coolify actualizadas
-- Docker network fix
+Nota 2026-04-20: o scheduler `activitylog:clean daily` adicionado nessa sessão
+passou a correr diariamente como root (supervisor sem `user=www-data`) e
+criou dirs de cache/log root-owned — causa do 500 resolvido agora na sessão 11.
 
 ---
 
@@ -121,111 +171,59 @@
 | **Stack** | Laravel 12 + Filament 4.x + MySQL 8.0 + WooCommerce (Coolify) |
 | **Produção Laravel** | `nazarequalifica.pt` (+ `praiadonortenazare.pt`, `carsurf.nazare.pt`) |
 | **Produção WooCommerce** | `store.praiadonortenazare.pt` |
-| **Domínios antigos (activos)** | `nq.nelsonbrilhante.com`, `store-nq.nelsonbrilhante.com` |
-| **Dev Laravel** | `localhost:8000` |
-| **Dev WordPress** | `localhost:8080` |
-| **CI/CD** | Push to `main` → Coolify webhook (Laravel). WordPress deploy manual via Coolify. |
-
----
-
-## Filament Admin - Organização
-
-### Estrutura do Menu
-
-```
-📊 Dashboard
-
-🏠 Geral
-   └── Homepage
-
-🏋️ Carsurf
-   └── Páginas
-
-🏢 Nazaré Qualifica
-   └── Páginas
-
-📰 Conteúdo
-   ├── Notícias
-   └── Eventos
-
-🌊 Praia do Norte
-   ├── Páginas
-   └── Surfers
-
-🌐 Website
-   └── Ver Website (abre em nova aba)
-```
-
-**Nota**: Resource `Pranchas` (Surfboard) foi eliminada. Surfer foi simplificado com campos `aka`, `quote`, `board_image`, `social_media` directamente no modelo.
-
-### Resources por Entidade
-
-```
-backend/app/Filament/Resources/
-├── Geral/
-│   ├── HomepageResource.php
-│   └── Pages/
-├── Paginas/
-│   └── BasePageResource.php          # Classe base abstracta
-├── PraiaNorte/
-│   └── PraiaNortePageResource.php
-├── Carsurf/
-│   └── CarsurfPageResource.php
-├── NazareQualifica/
-│   └── NQPageResource.php
-└── Surfers/
-    ├── SurferResource.php
-    ├── Schemas/SurferForm.php
-    ├── Tables/SurfersTable.php
-    └── Pages/
-```
-
----
-
-## Content Models (actual)
-
-| Model | Campos Chave |
-|-------|-------------|
-| **Surfer** | name, slug, aka, bio (i18n), quote (i18n), photo, board_image, social_media, featured, order |
-| **Noticia** | title (i18n), slug, content (i18n), excerpt (i18n), cover_image, author, category, entity, tags, featured, published_at |
-| **Evento** | Dates, location, entity, gallery, schedule, partners |
-| **Pagina** | i18n content, entity, hero_image. `hasMany(HeroSlide)` |
-| **HeroSlide** | Homepage hero slides (até 5). Video/image, LIVE badge, auto-rotate |
-| **CorporateBody** | Corpos Sociais (NQ). Secções: conselho_gerencia, assembleia_geral, fiscal_unico |
-| **DocumentCategory** | i18n name/description, ordered. `hasMany(Document)` |
-| **Document** | PDF uploads per category, i18n title |
-
-**Nota**: Modelo `Surfboard` foi eliminado. Campos de surfboard movidos directamente para `Surfer` (`board_image`). Campos SEO removidos de `Noticia`.
+| **Analytics** | `analytics.nazarequalifica.pt` (Umami, operacional) |
+| **Email semanal** | Ativo, segundas-feiras 12:00 UTC. Destinatários: `nelson.brilhante@cm-nazare.pt`, `alvaro.festas@nazarequalifica.pt`, `joaquim.paulo@cm-nazare.pt`, `carlos.filipe@nazarequalifica.pt` |
+| **Audit Log** | ✅ Activo em produção — admin-only em Configurações → Registos de Atividade |
+| **CI/CD** | Push to `main` → Coolify webhook (simples, sem docker network connect). WordPress deploy manual. |
+| **VPS swap** | 4 GB permanente (prevenção OOM nos builds Docker) |
 
 ---
 
 ## Próximas Tarefas
 
-### Prioridade Alta — WooCommerce & Pagamentos
-1. [ ] Integrar Easypay com WooCommerce (Multibanco, MBWay, Cartão de Crédito)
-2. [ ] Campo NIF/CIF/NIE nas facturas
-3. [ ] Locais de levantamento em loja física (pickup locations)
+### Prioridade Alta — Fix estrutural do 500 admin
+- [x] ~~Commit/push do `Dockerfile` (scheduler/queue www-data)~~ — feito sessão 12 (commit `10c0122`, deployed + verificado)
+- [ ] Env vars Coolify ainda por alinhar: `CACHE_STORE=database`, `SESSION_DRIVER=database`, `APP_URL=https://nazarequalifica.pt` (este resolve o favicon mixed-content http) — requer clear cache após
+- [ ] Validação completa de todas as entradas do menu admin em produção
 
-### Prioridade Alta — Plano Pendente (ver `docs/plans/plano-pdf-umami-relatorio-semanal.md`)
-4. [ ] PDF Regulamento Estacionamento editável no Filament
-5. [ ] Umami Analytics (Docker local + Coolify produção)
-6. [ ] Email semanal automatizado (Resend + scheduler)
-7. [ ] Assinatura developer no footer
+### Prioridade Alta — Email Semanal
+1. [x] ~~Destinatários configurados no admin~~ — feito 2026-04-20 (site_settings persistido)
+2. [ ] Adicionar URLs novas ao `humanizeUrl()`: `/pt/praia-norte/webcams`, `/en/praia-norte/webcams`, `/en/praia-norte/previsoes`, `/pt/nazare-qualifica/contraordenacoes/identificacao-de-condutor`
+3. [ ] Validar próximo envio automático: Mon 2026-04-27 12:00 UTC deve enviar para os 4 destinatários
+
+### Prioridade Média — Audit Log (melhorias futuras)
+- [ ] Validar em produção durante algumas semanas
+- [ ] Considerar adicionar "Link para editar" no detalhe quando subject_type ainda existe
+- [ ] Dashboard widget com actividade recente na home do admin
+
+### Prioridade Alta — Umami Funcionalidades Avançadas
+4. [ ] Custom Events (data-umami-event nos botões) — spec em `docs/superpowers/specs/2026-04-01-umami-funcionalidades-avancadas-design.md`
+5. [ ] Performance Tracking (Core Web Vitals)
+6. [ ] Anti-adblock (stats.js + TRACKER_SCRIPT_NAME)
+7. [ ] Share Page (dashboard público para stakeholders)
+8. [ ] Guia UTM para equipa de comunicação
+
+### Prioridade Alta — WooCommerce & Pagamentos
+9. [ ] Integrar Easypay com WooCommerce (Multibanco, MBWay, Cartão de Crédito)
+10. [ ] Campo NIF/CIF/NIE nas facturas
 
 ### Prioridade Alta — Conteúdo
-8. [ ] Rever e corrigir texto de surfers e notícias (PT-PT, AO90, formatação)
-9. [ ] Traduzir conteúdo para EN (notícias, eventos, surfers)
-10. [ ] Melhorar distribuição de cards na edição de surfers no backend
+11. [ ] Traduzir conteúdo para EN (notícias, eventos, surfers)
 
 ### Prioridade Média — QA
-7. [ ] Testes funcionais de todas as páginas
-8. [ ] Verificar responsividade (mobile, tablet, desktop)
-9. [ ] Lighthouse audit (target: >90 em todas as métricas)
+12. [ ] Testes funcionais de todas as páginas
+13. [ ] Lighthouse audit (target: >90 em todas as métricas)
 
-### Prioridade Média — Segurança (Phase 5)
-10. [ ] Security headers (CSP, HSTS, X-Frame-Options)
-11. [ ] Rate limiting nas rotas públicas
-12. [ ] Input sanitization audit
+### Prioridade Média — Segurança
+14. [~] Security headers — sessão 13: HSTS ✅ + X-Frame-Options/X-Content-Type/Referrer/Permissions já ativos. **CSP em report-only — falta promover a enforcing.**
+15. [x] ~~Rate limiting nas rotas públicas~~ — sessão 13 (`throttle:60,1` em `/api/v1`).
+16b. [ ] **C1 `trustProxies('*')`** (arquitetural — escalar) + C4 SESSION_SECURE_COOKIE + C6 tamper-resistance do audit + C10/C11. Ver tarefa Notion "Follow-up auditoria" e `docs/reports/2026-06-16-analise-registos-atividade-ciberseguranca.md`.
+
+### Bugs conhecidos
+16. [x] ~~Coluna `nationality` removida do Surfer mas pesquisa spotlight ainda a referencia (erro 500)~~ — RESOLVIDO sessão 12 (commit `0c7a6f8`, `nationality`→`aka`)
+17. [~] Permissões de cache/log após redeploy — mitigado sessão 12 (scheduler/queue www-data + entrypoint cria dirs explícitos). Confirmar dirs de cache www-data após próximos redeploys.
+18. [x] ~~Eventos de auth duplicados~~ — RESOLVIDO sessão 13 (commit `122778b`): Laravel 12 event auto-discovery + registo explícito → duplo registo do listener. Fix: `->withEvents(discover: false)`. 53 duplicados limpos em produção.
+19. [x] ~~`activitylog:clean` falha diária (exit 1)~~ — RESOLVIDO sessão 13 (commit `122778b`): faltava `--force` (ConfirmableTrait).
 
 ---
 
@@ -234,93 +232,13 @@ backend/app/Filament/Resources/
 | Item | Estado | Notas |
 |------|--------|-------|
 | Formulário de Contacto backend | ⚠️ Não implementado | `action="#"` sem handler POST |
-| Easypay WooCommerce | 🔴 Bloqueado | Plugin instalado e configurado, mas "Connection not validated by easypay" bloqueia checkout. Requer suporte Easypay. |
-| Easypay Success URL bug | ⚠️ Bug plugin | `epEasypaySuccessApi` tem `wp-json/wp-json/...` duplicado |
+| Easypay WooCommerce | 🔴 Bloqueado | Plugin configurado, "Connection not validated" |
 | NIF/CIF em facturas | ⚠️ Não implementado | Campo custom no checkout |
-| Pickup locations | ⚠️ Não implementado | Local store pickup |
 | Conteúdo EN | ⚠️ Parcial | Estrutura i18n pronta, falta tradução |
-| Shipping WooCommerce | ✅ Verificado E2E | Plugin table-rate funcional, rates correctos, Local Pickup activo |
-| SMTP Email WooCommerce | ✅ Configurado | `vm01.cm-nazare.pt:465/SSL`, test email OK. Falta: adicionar env vars no Coolify + redeploy |
-
----
-
-## Arquivo — Sessões Anteriores (Dez 2025)
-
-<details>
-<summary>Sessões de Dezembro 2025 (clique para expandir)</summary>
-
-### 2025-12-19 — Merge Hero Slider + Dark Mode
-- PR #1 merged: Hero Slider + cleanup logos
-- Verificação dark mode (prefers-color-scheme)
-- Branch `feature/hero-slider` eliminada
-
-### 2025-12-18 — Hero Slider
-- Convertido Hero Section para slider com até 5 slides
-- Auto-rotação, pausa LIVE, transições fade
-- Indicadores pill/circular com progresso SVG
-- Filament Repeater com drag & drop
-
-### 2025-12-17 (tarde) — Fix botões + Contraordenações
-- Fix botões invisíveis (outline variant + bg-transparent)
-- Nova página Contraordenações NQ com 6 PDFs
-- Botões navegação no header Sobre NQ
-
-### 2025-12-17 (manhã) — Forecast API + uploads + favicon
-- Migração Forecast API (Open-Meteo Marine + Weather)
-- Fix FileUpload disk (local → public)
-- Favicon e app icons
-- Dark mode logo no header
-
-### 2025-12-16 (tarde) — Search fix + dark theme
-- Search Spotlight: Livewire → Alpine.js (fix 404)
-- Tema dark/light persistente com localStorage
-
-### 2025-12-16 (manhã) — Páginas legais + logo header
-- Páginas /privacidade, /termos, /cookies
-- Logo no header (transparente/sólido)
-- Botão idioma invertido (mostra destino)
-
-### 2025-12-15 — YouTube captcha fix
-- Embed youtube.com → youtube-nocookie.com
-
-### 2025-12-12 — Logo dinâmico Hero Section
-- Campos hero_logo, hero_use_logo, hero_logo_height
-- Toggle texto/imagem no admin + slider tamanho
-
-</details>
-
----
-
-## Notas Técnicas Importantes
-
-### Filament 4 - Namespaces
-
-```php
-// Correcto no Filament 4
-use Filament\Actions\EditAction;        // ✅
-use Filament\Actions\DeleteAction;      // ✅
-
-// Incorrecto (Filament 3)
-use Filament\Tables\Actions\EditAction; // ❌
-```
-
-### Entity Filter nas Queries
-
-Cada Resource de páginas filtra por `entity`:
-- `praia-norte` — Praia do Norte (exclui homepage)
-- `carsurf` — Carsurf
-- `nazare-qualifica` — Nazaré Qualifica
-- Homepage usa query `where('slug', 'homepage')` (sem filtro de entity)
-
-### Hidratação de Campos JSON Aninhados
-
-O Filament 4 não hidrata automaticamente campos com paths como `content.pt.intro.title`. Solução:
-
-```php
-TextInput::make('content.pt.intro.title')
-    ->afterStateHydrated(fn ($state, $set, $record) =>
-        $set('content.pt.intro.title', $record?->content['pt']['intro']['title'] ?? $state))
-```
+| Email semanal | ⚠️ Fix deployed | Hairpin NAT via Traefik — aguarda validação automática 20/04 |
+| Audit Log | ✅ Operacional | Admin-only; logs persistem entre deploys; retenção 365 dias |
+| Pesquisa spotlight | ✅ Resolvido | `nationality`→`aka` (sessão 12, commit `0c7a6f8`) |
+| WordPress Coolify rebuild | ⚠️ | Coolify tem bug — stop/start não recria container WP |
 
 ---
 
@@ -329,16 +247,17 @@ TextInput::make('content.pt.intro.title')
 ```bash
 # 1. Ler este ficheiro para contexto
 # 2. Iniciar servidor
-cd backend && composer dev    # Full dev environment (server + queue + logs + vite)
+cd backend && composer dev
 
 # 3. Aceder ao admin
 open http://localhost:8000/admin
 
 # 4. Produção
-# Laravel: nazarequalifica.pt (+ praiadonortenazare.pt, carsurf.nazare.pt)
+# Laravel: nazarequalifica.pt
 # WooCommerce: store.praiadonortenazare.pt
-# Antigos (ainda activos): nq.nelsonbrilhante.com, store-nq.nelsonbrilhante.com
+# Analytics: analytics.nazarequalifica.pt (admin / 8WFARCDXpwpjfbiTHH84)
 
-# 5. Continuar com tarefas prioritárias
-# 6. Actualizar este ficheiro no final da sessão
+# 5. Verificar se email de 13/04 chegou correctamente
+# 6. Se OK, adicionar mais destinatários no admin
+# 7. Actualizar este ficheiro no final da sessão
 ```
