@@ -154,7 +154,7 @@
             this.isMuted[index] = !this.isMuted[index];
         }
     }"
-    class="relative h-[70dvh] md:h-dvh overflow-hidden"
+    class="relative h-[85dvh] md:h-dvh overflow-hidden"
 >
     {{-- Slides --}}
     @foreach($activeSlides as $index => $slide)
@@ -263,11 +263,11 @@
                             style="height: {{ $slide->logo_height ?? 120 }}px;"
                         />
                     @else
-                        <h1 class="mb-4 text-4xl font-bold md:text-7xl">
+                        <h1 class="mb-3 text-2xl font-bold line-clamp-3 md:mb-4 md:text-7xl md:line-clamp-none">
                             {{ $slideTitle }}
                         </h1>
                     @endif
-                    <p class="mb-6 text-lg md:mb-8 md:text-2xl">
+                    <p class="mb-5 text-base line-clamp-2 md:mb-8 md:text-2xl md:line-clamp-none">
                         {{ $slideSubtitle }}
                     </p>
                     @if($slideCtaText)

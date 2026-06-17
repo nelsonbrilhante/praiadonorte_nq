@@ -18,9 +18,9 @@
 
     {{-- News Section --}}
     @if($noticias->isNotEmpty())
-    <section class="relative py-16 bg-background">
+    <section class="relative py-10 md:py-16 bg-background">
         <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center justify-between mb-6 md:mb-10">
                 <h2 class="text-3xl font-bold md:text-4xl">{{ __('messages.home.news.title') }}</h2>
                 <x-ui.button variant="outline" href="{{ LaravelLocalization::localizeURL('/noticias') }}">
                     {{ __('messages.home.news.viewAll') }}
