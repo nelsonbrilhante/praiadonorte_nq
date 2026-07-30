@@ -37,7 +37,10 @@ class CarsurfReservationController extends Controller
             'message' => $validated['message'],
         ]);
 
+        // Pinned to 'pt': the recipient is always the Portuguese Carsurf team,
+        // so an English visitor's submission must not produce an English email.
         Mail::to(SiteSetting::carsurfReservasRecipients())
+            ->locale('pt')
             ->queue(new CarsurfReservation(
                 senderName: $validated['name'],
                 senderEmail: $validated['email'],

@@ -12,6 +12,14 @@ class CarsurfReservation extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * Carsurf-only mail theme (resources/views/mail/carsurf.css).
+     *
+     * Scoped to this mailable so the rest of the platform's mail keeps the
+     * default theme.
+     */
+    public $theme = 'carsurf';
+
     public function __construct(
         public string $senderName,
         public string $senderEmail,
