@@ -108,6 +108,19 @@ Users browse products on the Laravel frontend (`/pt/loja`), click "Buy", get red
 - **Easypay platforms**: Backoffice (`backoffice.easypay.pt`), E-commerce platform (`e-commerce.easypay.pt`), Sandbox backoffice (`backoffice.test.easypay.pt`). The WooCommerce plugin page in the new backoffice requires special account permissions (may return 403). API keys can be found in Backoffice 1.0 → Web Services → Configuração Código.
 - **`ForecastService`** (`backend/app/Services/ForecastService.php`) — Surf forecast data service for the `/pt/previsao` page.
 
+### Transactional Email
+
+**Production sends via Resend, NOT SMTP.** `MAIL_MAILER=resend` + `RESEND_API_KEY` (a **send-only** key — it cannot query delivery status or verified domains, so don't try). The `MAIL_HOST` / `MAIL_PORT` / `MAIL_USERNAME` / `MAIL_PASSWORD` vars are still set in Coolify but are **ignored**. `.credentials.md` documents SMTP as if it were live — that section is stale.
+
+`MAIL_FROM_ADDRESS=no-reply@nazarequalifica.pt`, `MAIL_FROM_NAME=Nazaré Qualifica`. DMARC on `nazarequalifica.pt` is `p=reject` with strict SPF/DKIM alignment — a misaligned send is **rejected, not spam-foldered**. Resend passes via DKIM (`resend._domainkey`), not SPF. Don't change mail transport without reading the Notion entry linked in `SESSION-HANDOFF.md`.
+
+Three flows send mail: Carsurf reservations, the weekly statistics report, and password reset.
+
+- **Carsurf reservation recipients are admin-configurable** — `SiteSetting` key `carsurf_reservas_recipients` (Admin → Definições), comma-separated. `SiteSetting::carsurfReservasRecipients()` parses it, drops invalid addresses and falls back to `SiteSetting::CARSURF_RESERVAS_FALLBACK`. The **first** address is also the public `mailto:` on the reservations page. Never hardcode a recipient again.
+- **Per-mailable mail themes**: `CarsurfReservation` sets `public $theme = 'carsurf'`, resolved from `resources/views/mail/carsurf.css`. A theme is a plain `.css` file under `resources/views/` (`css` is a registered view extension) — **no `vendor:publish` needed**, and other mailables keep the default theme.
+- **Don't use `<x-mail::message>` for entity-specific mail** — it inherits `config('app.name')` and `config('app.url')`, which are platform-wide. Use `<x-mail::layout>` with your own header/footer slots, as `emails/carsurf-reservation.blade.php` does.
+- `lang/pt.json` holds Laravel's free-text translation keys (e.g. `All rights reserved.`). Without it those strings render in English inside Portuguese emails.
+
 ### Multi-Entity Content
 
 All content models include an `entity` field. **Always use hyphenated slugs**: `'praia-norte'`, `'carsurf'`, `'nazare-qualifica'`. The `docs/architecture/NAMING_CONVENTIONS.md` suggests underscores but the actual codebase uses hyphens everywhere.
@@ -147,6 +160,8 @@ use Filament\Tables\Actions\EditAction; // Wrong (v3)
 ```
 
 **Filament admin theme**: `AdminPanelProvider` uses `->viteTheme('resources/css/filament/admin.css')` for custom admin styling.
+
+**Custom Pages must call `$this->form->getState()` in `save()`** or validation silently never runs. A custom `Page` (not a Resource) that reads its public properties directly — `SiteSetting::set('x', $this->x)` — bypasses the schema entirely, so `->required()` and `->rules()` are decorative and invalid input is persisted without complaint. `Filament/Pages/SiteSettings.php` had this bug until 2026-07-30. If you add validation to a custom Page, add a test that asserts invalid input is rejected — the rule existing is not evidence it runs.
 
 ### Content Models
 
@@ -195,6 +210,21 @@ Vite with three entry points:
 3. `resources/css/filament/admin.css` — Filament admin custom theme
 
 Uses `@tailwindcss/vite` plugin (Tailwind v4 native Vite integration).
+
+### Testing
+
+Suite lives in `backend/tests/`, SQLite `:memory:` via `phpunit.xml`. Two traps will cost you an hour each if you don't know them:
+
+**Localized routes 404 under test.** `routes/web.php` wraps everything in `'prefix' => LaravelLocalization::setLocale()`. Under test that prefix resolves empty, so routes register as `carsurf/reservas` — **not** `pt/carsurf/reservas` — and `LocaleSessionRedirect` + `LaravelLocalizationRedirectFilter` bounce every request to `/pt`. Hit the **unprefixed** URI and skip those two middlewares:
+
+```php
+$this->withoutMiddleware([LocaleSessionRedirect::class, LaravelLocalizationRedirectFilter::class]);
+$this->post('/carsurf/reservas', $payload);   // not '/pt/carsurf/reservas'
+```
+
+See `tests/Feature/CarsurfReservationTest.php` for the working pattern.
+
+**Data-seeding migrations must suppress model events.** `2026_03_19_000001_seed_legal_content` runs `LegalContentSeeder`, which writes `SiteSetting` — and `SiteSetting` uses Spatie `LogsActivity`, whose `activity_log` table is only created by `2026_04_14_080804`. On a fresh database that ordering blew up with `no such table: activity_log`, which made **every** `RefreshDatabase` test impossible until 2026-07-30. Fixed by wrapping the seeder in `Model::withoutEvents()`. Note the installed spatie/laravel-activitylog has **no** `withoutLogs()` helper — use Eloquent's `withoutEvents()`. Apply the same wrapper to any future data migration touching a model with `LogsActivity`.
 
 ### Production Deployment
 

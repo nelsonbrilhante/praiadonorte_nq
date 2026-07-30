@@ -41,6 +41,12 @@
 4. **`stats_weekly_recipients` continua sem validação** — um typo parte o relatório semanal em silêncio. Agora que o `save()` valida, é uma linha.
 5. **`<title>` do email diz "Praia do Norte"** — codificado no layout do Laravel. **Deliberadamente não corrigido**: nenhum cliente de email mostra o `<title>`, e corrigi-lo exigiria forkar uma vista do vendor.
 
+### Troca de Resend para caixa dedicada — investigação registada no Notion:
+Avaliada a 2026-07-30 e **não executada**. Registo completo com factos verificados, bloqueador e passos de execução na **Caixa de Entrada da CENTRAL**:
+`https://app.notion.com/p/3ad576324ea681c29a22cb29c33032f9`
+
+Resumo do que lá está, para não se repetir a investigação: SMTP é viável (portas 465/587/25 abertas do container para `vm01.cm-nazare.pt`, Exim 4.99.5/cPanel), mas **não há credencial utilizável** — a password de `geral@carsurf.nazare.pt` no `.credentials.md` dá `535`, e a única que autentica é `store@nazarequalifica.pt`, que é a caixa da loja WooCommerce. O motivo da troca é de **conformidade**, não técnico: a Política de Privacidade não divulga o Resend como subcontratante. Recomendação registada: divulgar o Resend na política (resolve a conformidade) antes de considerar a troca de transporte. **Atenção ao DMARC `p=reject` com alinhamento estrito** — um envio mal alinhado é rejeitado, não vai para spam.
+
 ### Nota de configuração (corrige o `.credentials.md`):
 Produção envia por **Resend** (`MAIL_MAILER=resend` + `RESEND_API_KEY`), **não por SMTP**. As variáveis `MAIL_HOST=vm01.cm-nazare.pt` / `MAIL_PORT=465` / `MAIL_USERNAME` / `MAIL_PASSWORD` continuam definidas mas são **ignoradas**. `MAIL_FROM_ADDRESS=no-reply@nazarequalifica.pt` (o `.credentials.md` diz `geral@carsurf.nazare.pt` — desatualizado).
 
