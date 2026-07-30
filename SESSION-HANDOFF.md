@@ -7,6 +7,47 @@
 
 ## Última Sessão
 
+- **Data**: 2026-07-30 (sessão 15)
+- **Resumo**: Email do **formulário de reservas Carsurf**. (1) Auditado: o destinatário estava **fixo no código** em dois sítios, obrigando a deploy para mudar. (2) Passou a ser **configurável no painel** (`Definições → Formulário de Reservas Carsurf`) — o user já alterou em produção para `carsurf@nazarequalifica.pt`. (3) Corrigidos **4 defeitos de apresentação** do email (marca, link, idioma, cor). (4) Corrigidos **2 bugs pré-existentes** encontrados pelo caminho. **2 deploys verificados em produção; email renderizado dentro do container para validar.**
+- **Branch**: `main` — `3e4c3a8` deployed e verificado. Sem commits locais por empurrar (o antigo `36d5753` foi integrado nesta sessão).
+
+### O que foi feito:
+
+1. **Destinatário configurável (commit `4712c28`, deployed)** — chave `carsurf_reservas_recipients` no `SiteSetting`, editável no painel, aceita vários emails por vírgula; o primeiro é também o `mailto:` público da página. `SiteSetting::carsurfReservasRecipients()` faz o parse, descarta inválidos e recorre à constante `CARSURF_RESERVAS_FALLBACK` se nada válido sobrar — **uma reserva nunca fica sem destino**. As closures de `/carsurf/reservas` saíram do `routes/web.php` para `CarsurfReservationController` (torna o fallback testável).
+
+2. **Quatro correções ao email (commit `3e4c3a8`, deployed)** — o template usava `<x-mail::message>`, que herda `config('app.name')` e `config('app.url')`, ambos globais. Passou a `<x-mail::layout>` com cabeçalho e rodapé próprios:
+   - cabeçalho: `Praia do Norte` → **`CARSURF`**
+   - link: `nq.nelsonbrilhante.com` → **`https://carsurf.nazare.pt`** (explícito, já não depende de `APP_URL`)
+   - rodapé: `All rights reserved.` → **`Todos os direitos reservados.`**
+   - botão: `#18181b` → **`#127a99`**. O azul do logótipo (extraído de `CARSURF_001.png`) é `#18a2cc`, mas com texto branco dá 2,97:1 e reprovaria WCAG AA; `#127a99` é a mesma matiz (194°) escurecida até 4,92:1. O azul exacto ficou no filete decorativo do cabeçalho. **Tema aplicado só a este mailable** (`resources/views/mail/carsurf.css`); restantes emails no tema padrão.
+   - `lang/pt.json` **criado** (não existia): corrige o inglês também nos **outros** emails da plataforma (reposição de senha, relatório semanal).
+   - envio fixa `locale('pt')`: o destinatário é sempre a equipa Carsurf, submissão em inglês não deve gerar email inglês.
+
+3. **Bug pré-existente: validação do painel nunca corria** — `SiteSettings::save()` lia as propriedades públicas diretamente e nunca chamava `$this->form->getState()`, pelo que **nenhuma regra de validação desta página era aplicada** e valores inválidos eram gravados em silêncio. Corrigido, com testes de não-regressão a garantir que o modo de manutenção e o relatório semanal continuam a guardar.
+
+4. **Bug pré-existente: testes com BD eram impossíveis** — a migração `2026_03_19_000001_seed_legal_content` chama o `LegalContentSeeder`, que escreve `SiteSetting` (com `LogsActivity`), mas `activity_log` só nasce na migração `2026_04_14_080804`. Qualquer BD nova rebentava com `no such table: activity_log`. Resolvido com `Model::withoutEvents()` (o pacote spatie instalado **não** tem `withoutLogs()`). **Inerte em produção** — verificado que a migração já constava como executada (batch 6). O `ExampleTest` que vinha do Laravel também falhava desde sempre (assere 200 em `/`, que redireciona 302 para `/pt`).
+
+5. **Testes**: 1 a falhar → **21 a passar** (49 asserções). Novos: `CarsurfReservationTest` (destinatários, fallback, validação), `SiteSettingsPageTest` (validação + não-regressão), `CarsurfReservationEmailTest` (as 4 correções travadas).
+
+### Validado em produção:
+- Reserva de teste submetida pelo formulário às 10:01:55 → gravada, fila drenou, 0 falhas, 0 erros no log.
+- Email renderizado **dentro do container** após o deploy: 9 asserções (4 presenças + 5 ausências) todas OK.
+- Alteração do destinatário registada na auditoria (`activity_log` #184, autor id=2, 09:57:47).
+
+### Pendentes (por ordem de importância):
+1. **`APP_URL` em produção aponta para `nq.nelsonbrilhante.com`** — alimenta os **links de reposição de senha** e qualquer URL absoluto. É variável de ambiente no Coolify, com efeito em toda a plataforma; **escalado ao user, à espera de decisão**.
+2. **Entrega na caixa não confirmada** — a chave Resend é *send-only*, não deixa consultar estado de entrega nem domínios verificados. Se as mensagens não chegarem, suspeitar de **SPF/DKIM** de `nazarequalifica.pt` para o Resend, não do formulário.
+3. **`ContactMessage` não tem resource no Filament** — as submissões gravam na BD mas ninguém as vê no painel. Se um email falhar, o pedido fica invisível.
+4. **`stats_weekly_recipients` continua sem validação** — um typo parte o relatório semanal em silêncio. Agora que o `save()` valida, é uma linha.
+5. **`<title>` do email diz "Praia do Norte"** — codificado no layout do Laravel. **Deliberadamente não corrigido**: nenhum cliente de email mostra o `<title>`, e corrigi-lo exigiria forkar uma vista do vendor.
+
+### Nota de configuração (corrige o `.credentials.md`):
+Produção envia por **Resend** (`MAIL_MAILER=resend` + `RESEND_API_KEY`), **não por SMTP**. As variáveis `MAIL_HOST=vm01.cm-nazare.pt` / `MAIL_PORT=465` / `MAIL_USERNAME` / `MAIL_PASSWORD` continuam definidas mas são **ignoradas**. `MAIL_FROM_ADDRESS=no-reply@nazarequalifica.pt` (o `.credentials.md` diz `geral@carsurf.nazare.pt` — desatualizado).
+
+---
+
+## Sessão 14 (2026-06-17) — resumo arquivado
+
 - **Data**: 2026-06-17 (sessão 14)
 - **Resumo**: (1) **Avaliação de migração** do `nazarequalifica.pt` para o alojamento **PTisp cPanel partilhado** (`vm01.cm-nazare.pt`, o mesmo do projeto `20260616_portal_fornecedor`) + **comunicação defensiva à administração**. Conclusão: não é "mudar de servidor", é **re-plataformar** (Docker→cPanel; Umami inviável; loja WooCommerce é projeto à parte; downgrade de recursos/controlo). (2) **Fix responsivo do hero (mobile)** + espaçamento "Últimas Notícias" — **deployed e verificado em produção, sem perda de dados**.
 - **Branch**: `main` — `9b45c7e` deployed e verificado. (Nota: o commit local antigo `454ec3d` continua por integrar conforme histórico.)
@@ -184,12 +225,20 @@ criou dirs de cache/log root-owned — causa do 500 resolvido agora na sessão 1
 ### Prioridade Alta — Fix estrutural do 500 admin
 - [x] ~~Commit/push do `Dockerfile` (scheduler/queue www-data)~~ — feito sessão 12 (commit `10c0122`, deployed + verificado)
 - [ ] Env vars Coolify ainda por alinhar: `CACHE_STORE=database`, `SESSION_DRIVER=database`, `APP_URL=https://nazarequalifica.pt` (este resolve o favicon mixed-content http) — requer clear cache após
+  - **Confirmado na sessão 15**: `APP_URL` continua `https://nq.nelsonbrilhante.com` em produção. Consequências verificadas para além do favicon: alimenta os **links de reposição de senha** e era a causa do cabeçalho do email de reservas ligar ao domínio de testes (esse email já foi desacoplado da variável). **Escalado ao user; à espera de decisão** por afetar toda a plataforma.
 - [ ] Validação completa de todas as entradas do menu admin em produção
 
 ### Prioridade Alta — Email Semanal
 1. [x] ~~Destinatários configurados no admin~~ — feito 2026-04-20 (site_settings persistido)
 2. [ ] Adicionar URLs novas ao `humanizeUrl()`: `/pt/praia-norte/webcams`, `/en/praia-norte/webcams`, `/en/praia-norte/previsoes`, `/pt/nazare-qualifica/contraordenacoes/identificacao-de-condutor`
 3. [ ] Validar próximo envio automático: Mon 2026-04-27 12:00 UTC deve enviar para os 4 destinatários
+
+### Prioridade Média — Formulário de Reservas Carsurf (sessão 15)
+- [x] ~~Destinatário configurável no painel~~ — feito 2026-07-30 (`4712c28`, deployed; user já alterou para `carsurf@nazarequalifica.pt`)
+- [x] ~~Marca, link, idioma e cor do email~~ — feito 2026-07-30 (`3e4c3a8`, deployed e validado no container)
+- [ ] **Confirmar entrega na caixa** — a chave Resend é *send-only* e não permite consultar estado de entrega. Se não chegarem, verificar **SPF/DKIM** de `nazarequalifica.pt` para o Resend
+- [ ] **Resource Filament para `ContactMessage`** — as submissões gravam na BD mas não há ecrã no painel; se um email falhar, o pedido fica invisível
+- [ ] Validação no campo `stats_weekly_recipients` (relatório semanal) — continua sem validar; agora que o `save()` valida, é uma linha
 
 ### Prioridade Média — Audit Log (melhorias futuras)
 - [ ] Validar em produção durante algumas semanas
