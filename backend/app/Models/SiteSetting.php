@@ -4,12 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class SiteSetting extends Model
 {
     use LogsActivity;
+
+    /**
+     * Fallback recipient for Carsurf reservation requests.
+     *
+     * Used when `carsurf_reservas_recipients` is unset or holds no valid
+     * address, so a reservation is never sent nowhere.
+     */
+    public const CARSURF_RESERVAS_FALLBACK = 'geral@carsurf.nazare.pt';
 
     protected $fillable = ['key', 'value'];
 
@@ -54,6 +62,29 @@ class SiteSetting extends Model
         $msg = static::get('maintenance_message');
 
         return $msg ? json_decode($msg, true) : null;
+    }
+
+    /**
+     * Recipients for Carsurf reservation requests.
+     *
+     * Parses the comma-separated `carsurf_reservas_recipients` setting and
+     * keeps only valid addresses. Falls back to CARSURF_RESERVAS_FALLBACK when
+     * nothing valid remains.
+     *
+     * @return array<int, string>
+     */
+    public static function carsurfReservasRecipients(): array
+    {
+        $configured = (string) static::get('carsurf_reservas_recipients', '');
+
+        $recipients = collect(explode(',', $configured))
+            ->map(fn (string $email) => trim($email))
+            ->filter(fn (string $email) => filter_var($email, FILTER_VALIDATE_EMAIL) !== false)
+            ->unique()
+            ->values()
+            ->all();
+
+        return $recipients ?: [self::CARSURF_RESERVAS_FALLBACK];
     }
 
     public static function getJson(string $key, mixed $default = null): mixed

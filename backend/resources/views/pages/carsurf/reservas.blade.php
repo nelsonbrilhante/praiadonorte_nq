@@ -94,7 +94,7 @@
                                     </svg>
                                     <div>
                                         <p class="text-sm font-medium text-muted-foreground">{{ __('messages.carsurf.reservas.info.email') }}</p>
-                                        <a href="mailto:geral@carsurf.nazare.pt" class="font-medium text-performance hover:underline">geral@carsurf.nazare.pt</a>
+                                        <a href="mailto:{{ $contactEmail }}" class="font-medium text-performance hover:underline">{{ $contactEmail }}</a>
                                     </div>
                                 </div>
 

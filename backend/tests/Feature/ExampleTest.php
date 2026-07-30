@@ -8,12 +8,11 @@ use Tests\TestCase;
 class ExampleTest extends TestCase
 {
     /**
-     * A basic test example.
+     * The root URL has no content of its own — it redirects to the default
+     * locale, so a 302 to /pt is the correct response here.
      */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_the_root_url_redirects_to_the_default_locale(): void
     {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
+        $this->get('/')->assertRedirect('/pt');
     }
 }
